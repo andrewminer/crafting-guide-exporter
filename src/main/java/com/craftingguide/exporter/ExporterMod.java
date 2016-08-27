@@ -17,16 +17,18 @@ public class ExporterMod implements IRegistry {
     public static final String MODID   = "crafting-guide-exporter";
     public static final String VERSION = "1.0";
 
-	private ArrayList<IDumper>    _dumpers    = null;
-	private ArrayList<IExtension> _extensions = null;
-	private ArrayList<IGatherer>  _gatherers  = null;
-	private ModPackModel          _modPack    = null;
+	private ArrayList<IDumper>     _dumpers    = null;
+	private ArrayList<IEditor> _editors    = null;
+	private ArrayList<IExtension>  _extensions = null;
+	private ArrayList<IGatherer>   _gatherers  = null;
+	private ModPackModel           _modPack    = null;
 
 	// FML Event Handlers //////////////////////////////////////////////////////////////////////////////////////////////
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
 		this._dumpers    = new ArrayList<IDumper>();
+		this._editors    = new ArrayList<IEditor>();
 		this._extensions = new ArrayList<IExtension>();
 		this._gatherers  = new ArrayList<IGatherer>();
 		this._modPack    = new ModPackModel();
@@ -63,6 +65,10 @@ public class ExporterMod implements IRegistry {
 	public void registerDumper(IDumper dumper) {
 		this._dumpers.add(dumper);
 	}
+	
+	public void registerEditor(IEditor editor) {
+		this._editors.add(editor);
+	}
 
 	public void registerGatherer(IGatherer gatherer) {
 		this._gatherers.add(gatherer);
@@ -71,7 +77,12 @@ public class ExporterMod implements IRegistry {
 	// Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void _createExtensions() {
-		this._extensions.add(new CraftingGuideExtension());
-		this._extensions.add(new MinecraftExtension());
+		this._register(new CraftingGuideExtension());
+		this._register(new MinecraftExtension());
+	}
+	
+	private void _register(IExtension extension) {
+		this._extensions.add(extension);
+		extension.register(this);
 	}
 }

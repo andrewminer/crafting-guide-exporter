@@ -1,15 +1,32 @@
 package com.craftingguide.exporter.models;
 
-import net.minecraft.item.Item;
+import java.util.Comparator;
+
+import net.minecraft.item.ItemStack;
 
 public class ItemModel {
 
-	public String name = "";
+	public ItemModel(String id, ItemStack stack) {
+		this.id          = id;
+		this.displayName = stack.getDisplayName();
+		this.stack       = stack;
+	}
+	
+	// Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public static Comparator<ItemModel> SORT_BY_DISPLAY_NAME = new Comparator<ItemModel>() {
+
+		@Override
+		public int compare(ItemModel a, ItemModel b) {
+			return a.displayName.compareTo(b.displayName);
+		}
+	};
+	
+	// Properties //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public String id = "";
 
 	public String displayName = "";
-
-	public ItemModel(String name, Item item) {
-		this.name = name;
-		this.displayName = item.getUnlocalizedName();
-	}
+	
+	public ItemStack stack = null;
 }
