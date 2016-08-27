@@ -1,0 +1,22 @@
+[
+    {
+        "modid": "crafting-guide-exporter",
+        "name": "Crafting Guide Exporter",
+        "description": "Exports item and recipe data for use on http://crafting-guide.com",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "http://crafting-guide.com",
+        "updateUrl": "",
+        "authorList": [
+            "Andrew Miner"
+        ],
+        "credits": "by Andrew Miner",
+        "logoFile": "",
+        "screenshots": [
+
+        ],
+        "dependencies": [
+
+        ]
+    }
+]
