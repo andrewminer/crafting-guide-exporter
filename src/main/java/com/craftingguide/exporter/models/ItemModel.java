@@ -14,7 +14,6 @@ public class ItemModel {
     public ItemModel(String id, String displayName) {
         this.id = id;
         this.displayName = displayName;
-        this.recipes = new ArrayList<RecipeModel>();
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,7 +32,7 @@ public class ItemModel {
 
     public String displayName = "";
 
-    public ArrayList<RecipeModel> recipes = null;
+    public ArrayList<RecipeModel> recipes = new ArrayList<RecipeModel>();;
 
     public ItemStack rawStack = null;
 

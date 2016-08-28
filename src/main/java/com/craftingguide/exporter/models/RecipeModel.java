@@ -20,7 +20,7 @@ public class RecipeModel {
             }
         }
         if (maxCol < minCol) return 0;
-        return maxCol - minCol;
+        return maxCol - minCol + 1;
     }
 
     public int getHeight() {
@@ -36,7 +36,7 @@ public class RecipeModel {
             }
         }
         if (maxRow < minRow) return 0;
-        return maxRow - minRow;
+        return maxRow - minRow + 1;
     }
 
     public String getPattern() {
