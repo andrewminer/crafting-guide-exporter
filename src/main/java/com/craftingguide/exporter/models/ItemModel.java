@@ -7,10 +7,14 @@ import net.minecraft.item.ItemStack;
 public class ItemModel {
 
     public ItemModel(String id, ItemStack stack) {
-        this.id = id;
-        this.displayName = stack.getDisplayName();
-        this.recipes = new ArrayList<RecipeModel>();
+        this(id, stack.getDisplayName());
         this.rawStack = stack;
+    }
+
+    public ItemModel(String id, String displayName) {
+        this.id = id;
+        this.displayName = displayName;
+        this.recipes = new ArrayList<RecipeModel>();
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////

@@ -92,7 +92,7 @@ public class ModVersionDumper implements IDumper {
 
         if (recipe.tools.size() > 0) {
             printer.text("tools: ");
-            needsDelimiter = true;
+            needsDelimiter = false;
             for (ItemModel tool : recipe.tools) {
                 if (needsDelimiter) printer.text(", ");
                 needsDelimiter = true;
