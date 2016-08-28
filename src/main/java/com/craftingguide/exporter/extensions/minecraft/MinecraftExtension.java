@@ -10,6 +10,9 @@ public class MinecraftExtension implements IExtension {
     public void register(IRegistry registry) {
         registry.registerEditor(new RemoveUncraftableEditor());
         registry.registerEditor(new DisambiguateDisplayNameEditor());
+        registry.registerGatherer(new ShapedRecipeGatherer());
         registry.registerGatherer(new ShapelessRecipeGatherer());
+        registry.registerGatherer(new ShapedOreRecipeGatherer());
+        registry.registerGatherer(new ShapelessOreRecipeGatherer());
     }
 }

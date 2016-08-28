@@ -5,7 +5,6 @@ import com.craftingguide.exporter.extensions.minecraft.MinecraftExtension;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import java.util.ArrayList;
 
@@ -15,32 +14,15 @@ public class ExporterMod implements IRegistry {
     public static final String MODID   = "crafting-guide-exporter";
     public static final String VERSION = "1.0";
 
-    private ArrayList<IDumper>    _dumpers    = null;
-    private ArrayList<IEditor>    _editors    = null;
-    private ArrayList<IExtension> _extensions = null;
-    private ArrayList<IGatherer>  _gatherers  = null;
-    private ModPackModel          _modPack    = null;
-
-    // FML Event Handlers //////////////////////////////////////////////////////////////////////////////////////////////
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        this._dumpers = new ArrayList<IDumper>();
-        this._editors = new ArrayList<IEditor>();
-        this._extensions = new ArrayList<IExtension>();
-        this._gatherers = new ArrayList<IGatherer>();
-        this._modPack = new ModPackModel();
-
-        this._createExtensions();
-
-        System.out.println("Crafting Guide Exporter is now ready");
-    }
+    // Forge Event Handlers ////////////////////////////////////////////////////////////////////////////////////////////
 
     @EventHandler
     public void onPostInit(FMLPostInitializationEvent event) {
         try {
             System.out.println("Starting CraftingGuide export...");
+            long start = System.currentTimeMillis();
 
+            this._createExtensions();
             this._modPack.gatherItems();
 
             for (IGatherer gatherer : this._gatherers) {
@@ -55,7 +37,8 @@ public class ExporterMod implements IRegistry {
                 dumper.dump(this._modPack);
             }
 
-            System.out.println("Finished CraftingGuide export.");
+            long duration = System.currentTimeMillis() - start;
+            System.out.println("Finished CraftingGuide export after " + duration + "ms.");
         } catch (Throwable e) {
             System.err.println("Failed to process CraftingGuide export!");
             e.printStackTrace();
@@ -87,4 +70,12 @@ public class ExporterMod implements IRegistry {
         this._extensions.add(extension);
         extension.register(this);
     }
+
+    // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
+
+    private ArrayList<IDumper>    _dumpers    = new ArrayList<IDumper>();
+    private ArrayList<IEditor>    _editors    = new ArrayList<IEditor>();
+    private ArrayList<IExtension> _extensions = new ArrayList<IExtension>();
+    private ArrayList<IGatherer>  _gatherers  = new ArrayList<IGatherer>();
+    private ModPackModel          _modPack    = new ModPackModel();
 }

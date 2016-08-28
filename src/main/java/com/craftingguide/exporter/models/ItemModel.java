@@ -43,4 +43,9 @@ public class ItemModel {
         if (!this.id.equals(that.id)) return false;
         return true;
     }
+
+    @Override
+    public String toString() {
+        return this.id;
+    }
 }

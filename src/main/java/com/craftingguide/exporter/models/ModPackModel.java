@@ -66,6 +66,12 @@ public class ModPackModel {
         this._itemList = null;
     }
 
+    // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public String toString() {
+        return "ModPack[" + this._items.values().size() + "]";
+    }
+
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
     private HashMap<String, ItemModel> _items = null;

@@ -15,7 +15,7 @@ public class ItemStackModel {
 
     public static ItemStackModel convert(ItemStack itemStack, ModPackModel context) {
         String outputId = Item.itemRegistry.getNameForObject(itemStack.getItem());
-        if (itemStack.getItemDamage() > 0) {
+        if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < 16) {
             outputId += ":" + itemStack.getItemDamage();
         }
 
@@ -57,5 +57,10 @@ public class ItemStackModel {
         if (!this.item.equals(that.item)) return false;
         if (this.quantity != that.quantity) return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return this.item.toString() + "*" + this.quantity;
     }
 }

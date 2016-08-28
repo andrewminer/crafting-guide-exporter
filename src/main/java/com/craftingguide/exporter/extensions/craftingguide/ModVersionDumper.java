@@ -88,11 +88,7 @@ public class ModVersionDumper implements IDumper {
             printer.line("quantity: " + recipe.output.quantity);
         }
 
-        if (recipe.tools.size() == 0) {
-            if (recipe.isCraftingTableRequired()) {
-                printer.line("tools: Crafting Table");
-            }
-        } else {
+        if (recipe.tools.size() > 0) {
             printer.text("tools: ");
             needsDelimiter = true;
             for (ItemModel tool : recipe.tools) {

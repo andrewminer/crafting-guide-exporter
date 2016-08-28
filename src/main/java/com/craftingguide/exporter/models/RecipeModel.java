@@ -59,6 +59,27 @@ public class RecipeModel {
         return this.getWidth() > 2 || this.getHeight() > 2;
     }
 
+    // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        StringBuffer buffer = new StringBuffer("[");
+
+        boolean needsDelimiter = false;
+        for (ItemStackModel input : this.inputs) {
+            if (needsDelimiter) buffer.append(", ");
+            needsDelimiter = false;
+            buffer.append(input.toString());
+        }
+
+        buffer.append("]<");
+        buffer.append(this.getPattern());
+        buffer.append("> ==> ");
+        buffer.append(this.output.toString());
+
+        return buffer.toString();
+    }
+
     // Public Properties ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<ItemStackModel> extras = new ArrayList<ItemStackModel>();;
