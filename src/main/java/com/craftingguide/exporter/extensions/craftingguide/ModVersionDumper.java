@@ -69,7 +69,8 @@ public class ModVersionDumper implements IDumper {
         String versionSlug = slugify(mod.version);
         String versionDir = String.format(DUMP_DIR, modSlug, versionSlug);
 
-        if (!new File(versionDir).mkdirs()) {
+        File versionDirFile = new File(versionDir);
+        if (!versionDirFile.exists() && !versionDirFile.mkdirs()) {
             System.err.println("Could not create dump dir: " + versionDir);
             return;
         }
@@ -100,19 +101,28 @@ public class ModVersionDumper implements IDumper {
     }
 
     private void printRecipe(RecipeModel recipe, Printer printer) throws IOException {
+        boolean needsDelimiter = false;
+
         printer.line("recipe:");
         printer.indent();
 
+        if (recipe.extras.size() > 0) {
+            needsDelimiter = false;
+            printer.text("extras: ");
+            for (ItemStackModel extraStack : recipe.extras) {
+                if (needsDelimiter) printer.text(", ");
+                needsDelimiter = true;
+                this.printStack(extraStack, printer);
+            }
+            printer.line();
+        }
+
         printer.text("inputs: ");
-        boolean needsDelimiter = false;
+        needsDelimiter = false;
         for (ItemStackModel inputStack : recipe.inputs) {
             if (needsDelimiter) printer.text(", ");
             needsDelimiter = true;
-
-            if (inputStack.quantity > 1) {
-                printer.text(inputStack.quantity + " ");
-            }
-            printer.text(inputStack.item.displayName);
+            this.printStack(inputStack, printer);
         }
         printer.line();
 
@@ -134,5 +144,13 @@ public class ModVersionDumper implements IDumper {
         }
 
         printer.outdent();
+    }
+
+    private void printStack(ItemStackModel stack, Printer printer) throws IOException {
+        if (stack.quantity > 1) {
+            printer.text(stack.quantity + " ");
+        }
+        printer.text(stack.item.displayName);
+
     }
 }

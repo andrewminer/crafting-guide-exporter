@@ -55,6 +55,21 @@ public class RecipeModel {
         return buffer.toString();
     }
 
+    public int getQuantityRequired(String itemId) {
+        int result = 0;
+
+        for (int row = 0; row < this.inputGrid.length; row++) {
+            for (int col = 0; col < this.inputGrid[row].length; col++) {
+                ItemStackModel input = this.inputGrid[row][col];
+                if (input == null) continue;
+                if (!input.item.id.equals(itemId)) continue;
+                result += input.quantity;
+            }
+        }
+
+        return result;
+    }
+
     public boolean isCraftingTableRequired() {
         return this.getWidth() > 2 || this.getHeight() > 2;
     }
