@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 
-public class ShapelessRecipeGatherer implements IGatherer {
+public class ShapedRecipeGatherer implements IGatherer {
 
     // IGatherer Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -21,7 +21,7 @@ public class ShapelessRecipeGatherer implements IGatherer {
         for (IRecipe rawRecipe : recipes) {
             RecipeAdapter recipe = new RecipeAdapter(rawRecipe);
 
-            if (recipe.isShapeless()) {
+            if (recipe.isShaped()) {
                 RecipeModel recipeModel = this._convertRecipe(modPack, recipe);
                 if (recipeModel != null) {
                     modPack.addRecipe(recipeModel);
@@ -37,16 +37,19 @@ public class ShapelessRecipeGatherer implements IGatherer {
 
         int index = 0;
         for (ItemStack itemStack : recipe.getInputs()) {
-            ItemStackModel stackModel = ItemStackModel.convert(itemStack, modPack);
-            if (stackModel != null) {
-                if (model.inputs.indexOf(stackModel) == -1) {
-                    model.inputs.add(stackModel);
+            if (itemStack != null) {
+                ItemStackModel itemStackModel = ItemStackModel.convert(itemStack, modPack);
+                if (itemStackModel != null) {
+                    itemStackModel.quantity = 1;
+
+                    if (model.inputs.indexOf(itemStackModel) == -1) {
+                        model.inputs.add(itemStackModel);
+                    }
+                    this._insertIntoGrid(itemStackModel, recipe, model, index);
                 }
-                this._insertIntoGrid(stackModel, model, index);
             }
             index++;
         }
-        model.inputs.sort(ItemStackModel.SORT_BY_DISPLAY_NAME);
     }
 
     private void _addOutput(ModPackModel modPack, RecipeAdapter recipe, RecipeModel model) {
@@ -62,9 +65,9 @@ public class ShapelessRecipeGatherer implements IGatherer {
         return model;
     }
 
-    private void _insertIntoGrid(ItemStackModel itemStack, RecipeModel recipe, int index) {
-        int[] rows = { 1, 1, 0, 0, 1, 0, 2, 2, 2 };
-        int[] cols = { 1, 0, 1, 0, 2, 2, 0, 1, 2 };
-        recipe.inputGrid[rows[index]][cols[index]] = itemStack;
+    private void _insertIntoGrid(ItemStackModel stack, RecipeAdapter recipe, RecipeModel model, int index) {
+        int row = (int) (index / recipe.getWidth());
+        int col = index - (row * recipe.getWidth());
+        model.inputGrid[row][col] = stack;
     }
 }
