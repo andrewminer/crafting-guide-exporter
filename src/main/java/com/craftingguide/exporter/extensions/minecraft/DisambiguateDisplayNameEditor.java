@@ -36,6 +36,8 @@ public class DisambiguateDisplayNameEditor extends ItemRenamerEditor {
         MAPPINGS.put("minecraft:record_far", "Music Disc (far)");
         MAPPINGS.put("minecraft:record_strad", "Music Disc (strad)");
         MAPPINGS.put("minecraft:record_chirp", "Music Disc (chirp)");
+        MAPPINGS.put("minecraft:record_mall", "Music Disc (mall)");
+        MAPPINGS.put("minecraft:record_wait", "Music Disc (wait)");
         MAPPINGS.put("minecraft:nether_brick", "Nether Brick (block)");
         MAPPINGS.put("minecraft:netherbrick", "Nether Brick (item)");
         MAPPINGS.put("minecraft:stone_pressure_plate", "Pressure Plate (stone)");
