@@ -2,14 +2,19 @@ package com.craftingguide.exporter.models;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ModPackModel {
 
     public ModPackModel() {
         this._items = new HashMap<String, ItemModel>();
+        this._itemList = null;
+        this._oreDictionary = new HashMap<String, List<ItemModel>>();
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,8 +46,35 @@ public class ModPackModel {
         this._itemList = null;
     }
 
+    public void gatherOreDictionary() {
+        for (String oreName : OreDictionary.getOreNames()) {
+            ArrayList<ItemModel> entries = new ArrayList<ItemModel>();
+            for (ItemStack itemStack : OreDictionary.getOres(oreName)) {
+                ItemModel itemModel = this.getItem(itemStack);
+                if (itemModel != null) {
+                    entries.add(itemModel);
+                }
+            }
+            this._oreDictionary.put(oreName, entries);
+        }
+    }
+
+    public ItemModel getItem(ItemStack itemStack) {
+        String id = Item.itemRegistry.getNameForObject(itemStack.getItem());
+        if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < 16) {
+            id += ":" + itemStack.getItemDamage();
+        }
+        return this.getItem(id);
+    }
+
     public ItemModel getItem(String id) {
         ItemModel result = this._items.get(id);
+        if (result == null) {
+            List<ItemModel> oreEntries = this._oreDictionary.get(id);
+            if (oreEntries != null && oreEntries.size() > 0) {
+                result = oreEntries.get(0);
+            }
+        }
         if (result == null) {
             result = this._items.get(id + ":0");
         }
@@ -50,6 +82,10 @@ public class ModPackModel {
             System.err.println("Could not find an item for id: " + id);
         }
         return result;
+    }
+
+    public Map<String, List<ItemModel>> getOreDictionary() {
+        return this._oreDictionary;
     }
 
     public Iterable<ItemModel> getAllItems() {
@@ -77,4 +113,6 @@ public class ModPackModel {
     private HashMap<String, ItemModel> _items = null;
 
     private ArrayList<ItemModel> _itemList = null;
+
+    private HashMap<String, List<ItemModel>> _oreDictionary = null;
 }

@@ -1,6 +1,7 @@
 package com.craftingguide.exporter;
 
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
+import com.craftingguide.exporter.extensions.debug.DebugExtension;
 import com.craftingguide.exporter.extensions.minecraft.MinecraftExtension;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Mod;
@@ -24,6 +25,7 @@ public class ExporterMod implements IRegistry {
 
             this._createExtensions();
             this._modPack.gatherItems();
+            this._modPack.gatherOreDictionary();
 
             for (IGatherer gatherer : this._gatherers) {
                 gatherer.gather(this._modPack);
@@ -62,6 +64,7 @@ public class ExporterMod implements IRegistry {
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void _createExtensions() {
+        this._register(new DebugExtension());
         this._register(new CraftingGuideExtension());
         this._register(new MinecraftExtension());
     }

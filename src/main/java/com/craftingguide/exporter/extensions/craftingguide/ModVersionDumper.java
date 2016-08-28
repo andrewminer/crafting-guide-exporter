@@ -12,10 +12,6 @@ import java.io.IOException;
 
 public class ModVersionDumper implements IDumper {
 
-    private static String DUMP_DIR = "./dumps/crafting-guide";
-
-    private static String DUMP_FILE = "mod-version.cg";
-
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void dump(ModPackModel modPack) {
@@ -41,6 +37,12 @@ public class ModVersionDumper implements IDumper {
             } catch (Throwable e) {}
         }
     }
+
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static String DUMP_DIR = "./dumps/crafting-guide";
+
+    private static String DUMP_FILE = "mod-version.cg";
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
