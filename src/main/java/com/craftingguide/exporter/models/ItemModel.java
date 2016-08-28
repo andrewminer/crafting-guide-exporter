@@ -10,7 +10,7 @@ public class ItemModel {
         this.id = id;
         this.displayName = stack.getDisplayName();
         this.recipes = new ArrayList<RecipeModel>();
-        this.stack = stack;
+        this.rawStack = stack;
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ public class ItemModel {
 
     public ArrayList<RecipeModel> recipes = null;
 
-    public ItemStack stack = null;
+    public ItemStack rawStack = null;
 
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -13,5 +13,6 @@ public class MinecraftExtension implements IExtension {
 
         registry.registerEditor(new RemoveUncraftableEditor());
         registry.registerEditor(new DisambiguateDisplayNameEditor());
+        registry.registerEditor(new PotionNameEditor());
     }
 }
