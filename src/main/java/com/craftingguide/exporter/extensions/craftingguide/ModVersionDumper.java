@@ -3,44 +3,45 @@ package com.craftingguide.exporter.extensions.craftingguide;
 import com.craftingguide.exporter.IDumper;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
+import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
 import com.craftingguide.util.Printer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 public class ModVersionDumper implements IDumper {
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void dump(ModPackModel modPack) {
-        new File(DUMP_DIR).mkdirs();
-        File outputFile = new File(DUMP_DIR, DUMP_FILE);
-        FileWriter fileWriter = null;
-        Printer printer = null;
-
-        System.out.println("Writing mod-version.cg file to: " + DUMP_DIR + "/" + DUMP_FILE);
-        try {
-            fileWriter = new FileWriter(outputFile, false);
-            printer = new Printer(fileWriter);
-
-            printer.line("schema: 1");
-            printer.line();
-            this.printModPack(modPack, printer);
-        } catch (IOException e) {
-            System.err.println("Could not write to " + outputFile + ": ");
-            e.printStackTrace();
-        } finally {
-            try {
-                fileWriter.close();
-            } catch (Throwable e) {}
+        Map<String, List<ItemModel>> itemsByMod = modPack.getItemsByMod();
+        for (String modId : itemsByMod.keySet()) {
+            ModModel mod = modPack.getMod(modId);
+            this.printMod(mod, itemsByMod.get(modId));
         }
+    }
+
+    // Private Class Methods ///////////////////////////////////////////////////////////////////////////////////////////
+
+    private static String slugify(String text) {
+        if (text == null) return null;
+
+        String result = text.toLowerCase();
+        result = result.replaceAll("[^-a-zA-Z0-9._]", "_");
+        result = result.replaceAll("__+", "_");
+        result = result.replaceAll("^_", "");
+        result = result.replaceAll("_$", "");
+
+        return result;
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static String DUMP_DIR = "./dumps/crafting-guide";
+    private static String DUMP_DIR = "./dumps/crafting-guide/%1$s/versions/%2$s";
 
     private static String DUMP_FILE = "mod-version.cg";
 
@@ -61,9 +62,40 @@ public class ModVersionDumper implements IDumper {
         printer.line();
     }
 
-    private void printModPack(ModPackModel modPack, Printer printer) throws IOException {
-        for (ItemModel item : modPack.getAllItems()) {
-            this.printItem(item, printer);
+    private void printMod(ModModel mod, List<ItemModel> items) {
+        if (items.size() == 0) return;
+
+        String modSlug = slugify(mod.displayName);
+        String versionSlug = slugify(mod.version);
+        String versionDir = String.format(DUMP_DIR, modSlug, versionSlug);
+
+        if (!new File(versionDir).mkdirs()) {
+            System.err.println("Could not create dump dir: " + versionDir);
+            return;
+        }
+
+        File outputFile = new File(versionDir, DUMP_FILE);
+        FileWriter fileWriter = null;
+        Printer printer = null;
+
+        System.out.println("Writing to: " + versionDir + "/" + DUMP_FILE);
+        try {
+            fileWriter = new FileWriter(outputFile, false);
+            printer = new Printer(fileWriter);
+
+            printer.line("schema: 1");
+            printer.line();
+
+            for (ItemModel item : items) {
+                this.printItem(item, printer);
+            }
+        } catch (IOException e) {
+            System.err.println("Could not write to " + outputFile + ": ");
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.close();
+            } catch (Throwable e) {}
         }
     }
 

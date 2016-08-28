@@ -9,6 +9,7 @@ public class DebugExtension implements IExtension {
 
     @Override
     public void register(IRegistry registry) {
+        registry.registerDumper(new ModDumper());
         registry.registerDumper(new ItemDumper());
         registry.registerDumper(new OreDictionaryDumper());
     }

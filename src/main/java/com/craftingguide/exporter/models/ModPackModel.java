@@ -1,5 +1,7 @@
 package com.craftingguide.exporter.models;
 
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.ModContainer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ModPackModel {
-
-    public ModPackModel() {
-        this._items = new HashMap<String, ItemModel>();
-        this._itemList = null;
-        this._oreDictionary = new HashMap<String, List<ItemModel>>();
-    }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,6 +42,19 @@ public class ModPackModel {
         this._itemList = null;
     }
 
+    public void gatherMods() {
+        this._mods = new HashMap<String, ModModel>();
+        this._modList = null;
+
+        ModModel minecraft = new ModModel("minecraft", "Minecraft", Loader.MC_VERSION);
+        this._mods.put(minecraft.id, minecraft);
+
+        for (ModContainer rawMod : Loader.instance().getActiveModList()) {
+            ModModel model = new ModModel(rawMod);
+            this._mods.put(model.id, model);
+        }
+    }
+
     public void gatherOreDictionary() {
         for (String oreName : OreDictionary.getOreNames()) {
             ArrayList<ItemModel> entries = new ArrayList<ItemModel>();
@@ -57,6 +66,23 @@ public class ModPackModel {
             }
             this._oreDictionary.put(oreName, entries);
         }
+    }
+
+    public Iterable<ItemModel> getAllItems() {
+        if (this._itemList == null) {
+            this._itemList = new ArrayList<ItemModel>(this._items.values());
+            this._itemList.sort(ItemModel.SORT_BY_DISPLAY_NAME);
+        }
+
+        return this._itemList;
+    }
+
+    public Iterable<ModModel> getAllMods() {
+        if (this._modList == null) {
+            this._modList = new ArrayList<ModModel>(this._mods.values());
+            this._modList.sort(ModModel.SORT_BY_DISPLAY_NAME);
+        }
+        return this._modList;
     }
 
     public ItemModel getItem(ItemStack itemStack) {
@@ -84,17 +110,28 @@ public class ModPackModel {
         return result;
     }
 
-    public Map<String, List<ItemModel>> getOreDictionary() {
-        return this._oreDictionary;
-    }
+    public Map<String, List<ItemModel>> getItemsByMod() {
+        Map<String, List<ItemModel>> result = new HashMap<>();
 
-    public Iterable<ItemModel> getAllItems() {
-        if (this._itemList == null) {
-            this._itemList = new ArrayList<ItemModel>(this._items.values());
-            this._itemList.sort(ItemModel.SORT_BY_DISPLAY_NAME);
+        for (ModModel mod : this.getAllMods()) {
+            List<ItemModel> modItems = new ArrayList<ItemModel>();
+            result.put(mod.id, modItems);
+
+            for (ItemModel item : this.getAllItems()) {
+                if (!item.isFromMod(mod.id)) continue;
+                modItems.add(item);
+            }
         }
 
-        return this._itemList;
+        return result;
+    }
+
+    public ModModel getMod(String modId) {
+        return this._mods.get(modId);
+    }
+
+    public Map<String, List<ItemModel>> getOreDictionary() {
+        return this._oreDictionary;
     }
 
     public void removeItem(String id) {
@@ -110,9 +147,13 @@ public class ModPackModel {
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private HashMap<String, ItemModel> _items = null;
+    private List<ItemModel> _itemList = null;
 
-    private ArrayList<ItemModel> _itemList = null;
+    private Map<String, ItemModel> _items = new HashMap<>();
 
-    private HashMap<String, List<ItemModel>> _oreDictionary = null;
+    private List<ModModel> _modList = null;
+
+    private Map<String, ModModel> _mods = new HashMap<>();
+
+    private HashMap<String, List<ItemModel>> _oreDictionary = new HashMap<>();
 }

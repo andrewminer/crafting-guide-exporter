@@ -24,6 +24,8 @@ public class ExporterMod implements IRegistry {
             long start = System.currentTimeMillis();
 
             this._createExtensions();
+
+            this._modPack.gatherMods();
             this._modPack.gatherItems();
             this._modPack.gatherOreDictionary();
 

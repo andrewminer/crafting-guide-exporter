@@ -26,6 +26,16 @@ public class ItemModel {
         }
     };
 
+    // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean isFromMod(String modId) {
+        int index = this.id.indexOf(':');
+        if (index == -1) return false;
+
+        String myModPrefix = this.id.substring(0, index);
+        return myModPrefix.equals(modId);
+    }
+
     // Properties //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String id = "";

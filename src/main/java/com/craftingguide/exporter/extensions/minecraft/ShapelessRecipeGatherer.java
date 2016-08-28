@@ -23,9 +23,11 @@ public class ShapelessRecipeGatherer implements IGatherer {
 
             if (recipe.isShapeless()) {
                 RecipeModel recipeModel = this._convertRecipe(modPack, recipe);
-                if (recipeModel != null) {
-                    modPack.addRecipe(recipeModel);
-                }
+
+                if (recipeModel == null) continue;
+                if (recipeModel.output == null) continue;
+
+                modPack.addRecipe(recipeModel);
             }
         }
     }
