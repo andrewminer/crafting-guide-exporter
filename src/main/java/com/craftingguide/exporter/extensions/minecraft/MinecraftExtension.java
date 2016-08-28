@@ -12,7 +12,5 @@ public class MinecraftExtension implements IExtension {
         registry.registerEditor(new DisambiguateDisplayNameEditor());
         registry.registerGatherer(new ShapedRecipeGatherer());
         registry.registerGatherer(new ShapelessRecipeGatherer());
-        registry.registerGatherer(new ShapedOreRecipeGatherer());
-        registry.registerGatherer(new ShapelessOreRecipeGatherer());
     }
 }
