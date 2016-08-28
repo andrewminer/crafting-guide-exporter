@@ -1,19 +1,21 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
-import com.craftingguide.exporter.IDumper;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
 import com.craftingguide.util.Printer;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class ModVersionDumper implements IDumper {
+public class ModVersionDumper extends AbstractCraftingGuideDumper {
+
+    public ModVersionDumper(CraftingGuideFileManager fileManager) {
+        super(fileManager);
+    }
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -24,26 +26,6 @@ public class ModVersionDumper implements IDumper {
             this.printMod(mod, itemsByMod.get(modId));
         }
     }
-
-    // Private Class Methods ///////////////////////////////////////////////////////////////////////////////////////////
-
-    private static String slugify(String text) {
-        if (text == null) return null;
-
-        String result = text.toLowerCase();
-        result = result.replaceAll("[^-a-zA-Z0-9._]", "_");
-        result = result.replaceAll("__+", "_");
-        result = result.replaceAll("^_", "");
-        result = result.replaceAll("_$", "");
-
-        return result;
-    }
-
-    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
-
-    private static String DUMP_DIR = "./dumps/crafting-guide/%1$s/versions/%2$s";
-
-    private static String DUMP_FILE = "mod-version.cg";
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,24 +46,15 @@ public class ModVersionDumper implements IDumper {
 
     private void printMod(ModModel mod, List<ItemModel> items) {
         if (items.size() == 0) return;
+        if (!this.getFileManager().ensureDir(this.getFileManager().getModVersionDir(mod))) return;
 
-        String modSlug = slugify(mod.displayName);
-        String versionSlug = slugify(mod.version);
-        String versionDir = String.format(DUMP_DIR, modSlug, versionSlug);
-
-        File versionDirFile = new File(versionDir);
-        if (!versionDirFile.exists() && !versionDirFile.mkdirs()) {
-            System.err.println("Could not create dump dir: " + versionDir);
-            return;
-        }
-
-        File outputFile = new File(versionDir, DUMP_FILE);
+        String modVersionFile = this.getFileManager().getModVersionFile(mod);
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        System.out.println("Writing to: " + versionDir + "/" + DUMP_FILE);
+        System.out.println("Writing to: " + modVersionFile);
         try {
-            fileWriter = new FileWriter(outputFile, false);
+            fileWriter = new FileWriter(modVersionFile, false);
             printer = new Printer(fileWriter);
 
             printer.line("schema: 1");
@@ -91,7 +64,7 @@ public class ModVersionDumper implements IDumper {
                 this.printItem(item, printer);
             }
         } catch (IOException e) {
-            System.err.println("Could not write to " + outputFile + ": ");
+            System.err.println("Could not write to " + modVersionFile + ": ");
             e.printStackTrace();
         } finally {
             try {
@@ -151,6 +124,5 @@ public class ModVersionDumper implements IDumper {
             printer.text(stack.quantity + " ");
         }
         printer.text(stack.item.displayName);
-
     }
 }

@@ -2,13 +2,27 @@ package com.craftingguide.exporter.extensions.craftingguide;
 
 import com.craftingguide.exporter.IExtension;
 import com.craftingguide.exporter.IRegistry;
-import com.craftingguide.exporter.extensions.craftingguide.ModVersionDumper;
 
 public class CraftingGuideExtension implements IExtension {
 
-	// IExtension Methods /////////////////////////////////////////////////////////////////////////////////////////////
+    public CraftingGuideExtension() {
+        this.fileManager = new CraftingGuideFileManager("./dumps");
+    }
 
-	public void register(IRegistry registry) {
-		registry.registerDumper(new ModVersionDumper());
-	}
+    // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public CraftingGuideFileManager getFileManager() {
+        return this.fileManager;
+    }
+
+    // IExtension Methods //////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void register(IRegistry registry) {
+        registry.registerDumper(new ModVersionDumper(this.getFileManager()));
+        registry.registerDumper(new ItemIconDumper(this.getFileManager()));
+    }
+
+    // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
+
+    private CraftingGuideFileManager fileManager = null;
 }
