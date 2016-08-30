@@ -104,7 +104,7 @@ public class ItemIconDumperScreen extends GuiScreen {
             e.printStackTrace();
         } finally {
             this.setIsExporting(false);
-            Minecraft.getMinecraft().displayGuiScreen(null);
+            // Minecraft.getMinecraft().displayGuiScreen(null);
         }
     }
 
@@ -214,49 +214,6 @@ public class ItemIconDumperScreen extends GuiScreen {
         // END NEI
     }
 
-    private void drawItem(ItemModel item, int i, int j) {
-        FontRenderer fontRenderer = item.rawStack.getItem().getFontRenderer(item.rawStack);
-        TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
-        ItemStack itemStack = item.rawStack;
-        List<String> stackTraces = new ArrayList<String>();
-
-        // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
-        // BEGIN NEI
-
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-        float zLevel = DRAW_ITEMS.zLevel += 10000F;
-        try {
-            DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-            // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-
-            if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
-            if (isDrawing()) throw new IllegalStateException("Still drawing");
-        } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String stackTrace = itemStack + sw.toString();
-            if (!stackTraces.contains(stackTrace)) {
-                System.err.println("Error while rendering: " + itemStack);
-                e.printStackTrace();
-                stackTraces.add(stackTrace);
-            }
-
-            restoreMatrixStack();
-            if (isDrawing()) Tessellator.instance.draw();
-
-            DRAW_ITEMS.zLevel = zLevel;
-            DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, new ItemStack(Blocks.fire), i, j);
-        }
-
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        DRAW_ITEMS.zLevel = zLevel - 100;
-
-        // END NEI
-    }
-
     private void drawAllItems() {
         Minecraft minecraft = Minecraft.getMinecraft();
         Dimension d = new Dimension(minecraft.displayWidth, minecraft.displayHeight);
@@ -287,6 +244,49 @@ public class ItemIconDumperScreen extends GuiScreen {
         }
 
         GL11.glFlush();
+
+        // END NEI
+    }
+
+    private void drawItem(ItemModel item, int i, int j) {
+        FontRenderer fontRenderer = item.rawStack.getItem().getFontRenderer(item.rawStack);
+        TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
+        ItemStack itemStack = item.rawStack;
+        List<String> stackTraces = new ArrayList<String>();
+
+        // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
+        // BEGIN NEI
+
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+        float zLevel = DRAW_ITEMS.zLevel += 100F;
+        try {
+            DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+
+            if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
+            if (isDrawing()) throw new IllegalStateException("Still drawing");
+        } catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            e.printStackTrace(new PrintWriter(sw));
+            String stackTrace = itemStack + sw.toString();
+            if (!stackTraces.contains(stackTrace)) {
+                System.err.println("Error while rendering: " + itemStack);
+                e.printStackTrace();
+                stackTraces.add(stackTrace);
+            }
+
+            restoreMatrixStack();
+            if (isDrawing()) Tessellator.instance.draw();
+
+            DRAW_ITEMS.zLevel = zLevel;
+            DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, new ItemStack(Blocks.fire), i, j);
+        }
+
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        DRAW_ITEMS.zLevel = zLevel - 100;
 
         // END NEI
     }
