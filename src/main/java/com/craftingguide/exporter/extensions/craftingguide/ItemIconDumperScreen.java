@@ -12,6 +12,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
@@ -55,10 +56,6 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public CraftingGuideFileManager getFileManager() {
-        return this.fileManager;
-    }
-
     private void setFileManager(CraftingGuideFileManager newFileManager) {
         if (newFileManager == null) throw new IllegalArgumentException("newFileManager cannot be null");
         this.fileManager = newFileManager;
@@ -72,19 +69,11 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.isExporting = isExportComplete;
     }
 
-    public List<ItemModel> getItems() {
-        return this.items;
-    }
-
     private void setItems(List<ItemModel> newItems) {
         if (newItems == null) {
-            newItems = new ArrayList<ItemModel>();
+            newItems = new LinkedList<ItemModel>();
         }
-        this.items = newItems;
-    }
-
-    public ModModel getMod() {
-        return this.mod;
+        this.items = new LinkedList<>(newItems);
     }
 
     private void setMod(ModModel newMod) {
@@ -100,11 +89,13 @@ public class ItemIconDumperScreen extends GuiScreen {
             this.drawAllItems();
             this.exportAllItems();
         } catch (Throwable e) {
-            logger.error("Failed to render item icon dump for " + this.getMod().displayName);
-            e.printStackTrace();
+            logger.error("Failed to render item icon dump for " + this.mod.displayName, e);
+            Minecraft.getMinecraft().displayGuiScreen(null);
         } finally {
-            this.setIsExporting(false);
-            // Minecraft.getMinecraft().displayGuiScreen(null);
+            if (this.items.isEmpty()) {
+                this.setIsExporting(false);
+                Minecraft.getMinecraft().displayGuiScreen(null);
+            }
         }
     }
 
@@ -237,10 +228,10 @@ public class ItemIconDumperScreen extends GuiScreen {
         GL11.glEnable(GL12.GL_RESCALE_NORMAL);
         GL11.glColor4f(1, 1, 1, 1);
 
-        for (int i = 0; drawIndex < this.getItems().size() && i < fit; drawIndex++, i++) {
+        for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             int x = i % cols * 18;
             int y = i / cols * 18;
-            this.drawItem(this.getItems().get(drawIndex), x + 1, y + 1);
+            this.drawItem(this.items.get(drawIndex), x + 1, y + 1);
         }
 
         GL11.glFlush();
@@ -263,7 +254,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         float zLevel = DRAW_ITEMS.zLevel += 100F;
         try {
             DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-            // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
 
             if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
             if (isDrawing()) throw new IllegalStateException("Still drawing");
@@ -300,10 +291,9 @@ public class ItemIconDumperScreen extends GuiScreen {
         int rows = image.getHeight() / BOX_SIZE;
         int cols = image.getWidth() / BOX_SIZE;
         int fit = rows * cols;
-        int parseIndex = 0;
 
-        for (int i = 0; parseIndex < this.getItems().size() && i < fit; parseIndex++, i++) {
-            ItemModel item = this.getItems().get(parseIndex);
+        for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
+            ItemModel item = this.items.removeFirst();
 
             try {
                 int x = i % cols * BOX_SIZE;
@@ -320,9 +310,8 @@ public class ItemIconDumperScreen extends GuiScreen {
     }
 
     private void writeImage(BufferedImage image, ItemModel item) throws IOException {
-        ModModel mod = this.getMod();
-        if (!this.getFileManager().ensureDir(this.getFileManager().getItemDir(mod, item))) return;
-        File iconFile = new File(this.getFileManager().getItemIconFile(mod, item));
+        if (!this.fileManager.ensureDir(this.fileManager.getItemDir(this.mod, item))) return;
+        File iconFile = new File(this.fileManager.getItemIconFile(this.mod, item));
         ImageIO.write(image, "png", iconFile);
     }
 
@@ -332,7 +321,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private boolean isExporting = false;
 
-    private List<ItemModel> items = new ArrayList<ItemModel>();
+    private LinkedList<ItemModel> items = new LinkedList<>();
 
     private ModModel mod = null;
 }
