@@ -1,5 +1,6 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
+import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.IExtension;
 import com.craftingguide.exporter.IRegistry;
 

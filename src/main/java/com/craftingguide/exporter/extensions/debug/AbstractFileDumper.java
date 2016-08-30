@@ -6,6 +6,8 @@ import com.craftingguide.util.Printer;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public abstract class AbstractFileDumper implements IDumper {
 
@@ -20,14 +22,14 @@ public abstract class AbstractFileDumper implements IDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        System.out.println("Writing to: " + dumpDir + "/" + dumpFile);
+        logger.info("Writing to: " + dumpDir + "/" + dumpFile);
         try {
             fileWriter = new FileWriter(outputFile, false);
             printer = new Printer(fileWriter);
 
             this.dump(modPack, printer);
         } catch (IOException e) {
-            System.err.println("Could not write to " + outputFile + ": ");
+            logger.error("Could not write to " + outputFile + ": ", e);
             e.printStackTrace();
         } finally {
             try {
@@ -43,4 +45,8 @@ public abstract class AbstractFileDumper implements IDumper {
     protected abstract String getDumpDir();
 
     protected abstract String getDumpFile();
+
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static Logger logger = LogManager.getLogger();
 }

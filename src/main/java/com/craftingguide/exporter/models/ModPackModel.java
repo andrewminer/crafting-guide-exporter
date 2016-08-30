@@ -3,6 +3,7 @@ package com.craftingguide.exporter.models;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class ModPackModel {
         return this._itemList;
     }
 
-    public Iterable<ModModel> getAllMods() {
+    public Collection<ModModel> getAllMods() {
         if (this._modList == null) {
             this._modList = new ArrayList<ModModel>(this._mods.values());
             this._modList.sort(ModModel.SORT_BY_DISPLAY_NAME);

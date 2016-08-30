@@ -1,4 +1,4 @@
-package com.craftingguide.exporter.extensions.craftingguide;
+package com.craftingguide;
 
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;

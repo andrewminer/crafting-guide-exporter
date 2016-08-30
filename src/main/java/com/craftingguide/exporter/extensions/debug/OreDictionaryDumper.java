@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class OreDictionaryDumper implements IDumper {
 
@@ -21,15 +23,14 @@ public class OreDictionaryDumper implements IDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        System.out.println("Writing ore dictionary to: " + DUMP_DIR + "/" + DUMP_FILE);
+        logger.info("Writing ore dictionary to: " + DUMP_DIR + "/" + DUMP_FILE);
         try {
             fileWriter = new FileWriter(outputFile, false);
             printer = new Printer(fileWriter);
 
             this.printOreDictionary(modPack, printer);
         } catch (IOException e) {
-            System.err.println("Could not write to " + outputFile + ": ");
-            e.printStackTrace();
+            logger.error("Could not write to " + outputFile + ": ", e);
         } finally {
             try {
                 fileWriter.close();
@@ -42,6 +43,8 @@ public class OreDictionaryDumper implements IDumper {
     private static String DUMP_DIR = "./dumps/debug";
 
     private static String DUMP_FILE = "ore-dictionary.json";
+
+    private static Logger logger = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 

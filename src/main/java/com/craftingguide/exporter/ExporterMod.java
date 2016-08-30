@@ -1,50 +1,71 @@
 package com.craftingguide.exporter;
 
+import com.craftingguide.CraftingGuideException;
+import com.craftingguide.exporter.commands.CraftingGuideDumpCommand;
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
 import com.craftingguide.exporter.extensions.debug.DebugExtension;
 import com.craftingguide.exporter.extensions.minecraft.MinecraftExtension;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+import cpw.mods.fml.common.event.FMLInitializationEvent;
 import java.util.ArrayList;
+import net.minecraftforge.client.ClientCommandHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @Mod(modid = ExporterMod.MODID, version = ExporterMod.VERSION)
 public class ExporterMod implements IRegistry {
 
-    public static final String MODID   = "crafting-guide-exporter";
+    // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static final String MODID = "crafting-guide-exporter";
+
     public static final String VERSION = "1.0";
+
+    // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public void exportCraftingGuideData() throws CraftingGuideException {
+
+        try {
+            logger.info("Starting CraftingGuide export...");
+            long start = System.currentTimeMillis();
+
+            this.modPack.gatherMods();
+            this.modPack.gatherItems();
+            this.modPack.gatherOreDictionary();
+
+            for (IGatherer gatherer : this.gatherers) {
+                gatherer.gather(this.modPack);
+            }
+
+            for (IEditor editor : this.editors) {
+                editor.edit(this.modPack);
+            }
+
+            for (IDumper dumper : this.dumpers) {
+                dumper.dump(this.modPack);
+            }
+
+            long duration = System.currentTimeMillis() - start;
+            logger.info("Finished CraftingGuide export after " + duration + "ms.");
+        } catch (Throwable e) {
+            throw new CraftingGuideException("export failed", e);
+        }
+    }
 
     // Forge Event Handlers ////////////////////////////////////////////////////////////////////////////////////////////
 
     @EventHandler
-    public void onPostInit(FMLPostInitializationEvent event) {
+    public void init(FMLInitializationEvent event) {
         try {
-            System.out.println("Starting CraftingGuide export...");
-            long start = System.currentTimeMillis();
+            ClientCommandHandler.instance.registerCommand(new CraftingGuideDumpCommand(this));
 
-            this._createExtensions();
-
-            this._modPack.gatherMods();
-            this._modPack.gatherItems();
-            this._modPack.gatherOreDictionary();
-
-            for (IGatherer gatherer : this._gatherers) {
-                gatherer.gather(this._modPack);
-            }
-
-            for (IEditor editor : this._editors) {
-                editor.edit(this._modPack);
-            }
-
-            for (IDumper dumper : this._dumpers) {
-                dumper.dump(this._modPack);
-            }
-
-            long duration = System.currentTimeMillis() - start;
-            System.out.println("Finished CraftingGuide export after " + duration + "ms.");
+            this.register(new DebugExtension());
+            this.register(new CraftingGuideExtension());
+            this.register(new MinecraftExtension());
         } catch (Throwable e) {
-            System.err.println("Failed to process CraftingGuide export!");
+            System.err.println("Failed to initialize Crafting Guide Export!");
             e.printStackTrace();
         }
     }
@@ -52,35 +73,39 @@ public class ExporterMod implements IRegistry {
     // IRegistry Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 
     public void registerDumper(IDumper dumper) {
-        this._dumpers.add(dumper);
+        this.dumpers.add(dumper);
     }
 
     public void registerEditor(IEditor editor) {
-        this._editors.add(editor);
+        this.editors.add(editor);
     }
 
     public void registerGatherer(IGatherer gatherer) {
-        this._gatherers.add(gatherer);
+        this.gatherers.add(gatherer);
     }
+
+    // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public ModPackModel getModPack() {
+        return this.modPack;
+    }
+
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static Logger logger = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void _createExtensions() {
-        this._register(new DebugExtension());
-        this._register(new CraftingGuideExtension());
-        this._register(new MinecraftExtension());
-    }
-
-    private void _register(IExtension extension) {
-        this._extensions.add(extension);
+    private void register(IExtension extension) {
+        this.extensions.add(extension);
         extension.register(this);
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private ArrayList<IDumper>    _dumpers    = new ArrayList<IDumper>();
-    private ArrayList<IEditor>    _editors    = new ArrayList<IEditor>();
-    private ArrayList<IExtension> _extensions = new ArrayList<IExtension>();
-    private ArrayList<IGatherer>  _gatherers  = new ArrayList<IGatherer>();
-    private ModPackModel          _modPack    = new ModPackModel();
+    private ArrayList<IDumper>    dumpers    = new ArrayList<IDumper>();
+    private ArrayList<IEditor>    editors    = new ArrayList<IEditor>();
+    private ArrayList<IExtension> extensions = new ArrayList<IExtension>();
+    private ArrayList<IGatherer>  gatherers  = new ArrayList<IGatherer>();
+    private ModPackModel          modPack    = new ModPackModel();
 }

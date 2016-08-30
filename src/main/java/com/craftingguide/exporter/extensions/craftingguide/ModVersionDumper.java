@@ -1,5 +1,6 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
+import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModModel;
@@ -10,6 +11,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ModVersionDumper extends AbstractCraftingGuideDumper {
 
@@ -26,6 +29,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             this.printMod(mod, itemsByMod.get(modId));
         }
     }
+
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static Logger logger = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -52,7 +59,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        System.out.println("Writing to: " + modVersionFile);
+        logger.info("Writing to: " + modVersionFile);
         try {
             fileWriter = new FileWriter(modVersionFile, false);
             printer = new Printer(fileWriter);
@@ -64,7 +71,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
                 this.printItem(item, printer);
             }
         } catch (IOException e) {
-            System.err.println("Could not write to " + modVersionFile + ": ");
+            logger.error("Could not write to " + modVersionFile + ": ");
             e.printStackTrace();
         } finally {
             try {

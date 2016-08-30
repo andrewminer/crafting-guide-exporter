@@ -1,0 +1,4 @@
+cge.commands.cgexport.usage=Exports all the resources needed by http://crafting-guide.com
+cge.commands.cgexport.start=Starting a Crafting Guide export... this might take a while.
+cge.commands.cgexport.finish=Finished the Crafting Guide export!  Check the "exports/crafting-guide" directory.
+cge.commands.cgexport.error=Failed to export Crafting Guide data! Check the Minecraft log for details.
