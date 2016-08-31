@@ -132,13 +132,6 @@ public class ItemIconDumperScreen extends GuiScreen {
         return false;
     }
 
-    static {
-        try {
-            Field isDrawingField = Tessellator.class.getField("isDrawing");
-            isDrawingField.setAccessible(true);
-        } catch (Throwable t) {}
-    }
-
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
     private static int ICON_SIZE = 48; // must be first
@@ -154,8 +147,6 @@ public class ItemIconDumperScreen extends GuiScreen {
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private BufferedImage captureScreenshot() {
-        IntBuffer pixelBuffer = null;
-        int[] pixelValues = null;
 
         // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2buDUjx
         // BEGIN NEI
@@ -164,8 +155,9 @@ public class ItemIconDumperScreen extends GuiScreen {
         Dimension mcSize = getScreenSize();
         Dimension texSize = mcSize;
 
-        if (OpenGlHelper.isFramebufferEnabled()) texSize = new Dimension(fb.framebufferTextureWidth,
-            fb.framebufferTextureHeight);
+        if (OpenGlHelper.isFramebufferEnabled()) {
+            texSize = new Dimension(fb.framebufferTextureWidth, fb.framebufferTextureHeight);
+        }
 
         int k = texSize.width * texSize.height;
         if (pixelBuffer == null || pixelBuffer.capacity() < k) {
@@ -214,7 +206,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0.0D, d.width * 16D / ICON_SIZE, d.height * 16D / ICON_SIZE, 0.0D, 1000.0D, 3000.0D);
+        GL11.glOrtho(0, d.width * 16 / ICON_SIZE, d.height * 16 / ICON_SIZE, 0, 1000, 3000);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glClearColor(0, 0, 0, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
@@ -241,6 +233,9 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private void drawItem(ItemModel item, int i, int j) {
         FontRenderer fontRenderer = item.rawStack.getItem().getFontRenderer(item.rawStack);
+        if (fontRenderer == null) {
+            fontRenderer = Minecraft.getMinecraft().fontRenderer;
+        }
         TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
         ItemStack itemStack = item.rawStack;
         List<String> stackTraces = new ArrayList<String>();
@@ -251,10 +246,10 @@ public class ItemIconDumperScreen extends GuiScreen {
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
-        float zLevel = DRAW_ITEMS.zLevel += 100F;
+        float zLevel = DRAW_ITEMS.zLevel += 100;
         try {
             DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-            DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
 
             if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
             if (isDrawing()) throw new IllegalStateException("Still drawing");
@@ -324,4 +319,8 @@ public class ItemIconDumperScreen extends GuiScreen {
     private LinkedList<ItemModel> items = new LinkedList<>();
 
     private ModModel mod = null;
+
+    private IntBuffer pixelBuffer = null;
+
+    private int[] pixelValues = null;
 }
