@@ -16,6 +16,19 @@ public class ModPackModel {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public void addItem(ItemModel item) {
+        ItemModel existingItem = this.getItem(item.id);
+        if (existingItem != null) return;
+
+        this._items.put(item.id, item);
+        this._itemList = null;
+    }
+
+    public void removeItem(ItemModel item) {
+        this._items.remove(item.id);
+        this._itemList = null;
+    }
+
     public void addRecipe(RecipeModel recipe) {
         ItemModel item = this.getItem(recipe.output.item.id);
         item.recipes.add(recipe);
@@ -32,11 +45,11 @@ public class ModPackModel {
 
                 for (ItemStack stack : subItemStacks) {
                     String subTypeId = id + ":" + stack.getItemDamage();
-                    this._items.put(subTypeId, new ItemModel(subTypeId, stack));
+                    this.addItem(new ItemModel(subTypeId, stack));
                 }
             } else {
                 ItemStack stack = new ItemStack(item, 1, 0);
-                this._items.put(id, new ItemModel(id, stack));
+                this.addItem(new ItemModel(id, stack));
             }
         }
 

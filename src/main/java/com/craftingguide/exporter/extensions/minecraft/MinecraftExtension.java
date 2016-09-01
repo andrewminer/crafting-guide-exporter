@@ -11,10 +11,10 @@ public class MinecraftExtension implements IExtension {
         registry.registerGatherer(new ShapedRecipeGatherer());
         registry.registerGatherer(new ShapelessRecipeGatherer());
         registry.registerGatherer(new FurnaceRecipeGatherer());
+        registry.registerGatherer(new PotionRecipeGatherer());
 
         registry.registerEditor(new RemoveUncraftableEditor());
         registry.registerEditor(new DisambiguateDisplayNameEditor());
-        registry.registerEditor(new PotionNameEditor());
         registry.registerEditor(new AddCraftingTableEditor());
         registry.registerEditor(new AddContainerItemEditor());
     }

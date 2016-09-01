@@ -77,6 +77,18 @@ public class RecipeModel {
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof RecipeModel)) return false;
+        RecipeModel that = (RecipeModel) obj;
+        return this.toString().equals(that.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
+    }
+
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer("[");
 

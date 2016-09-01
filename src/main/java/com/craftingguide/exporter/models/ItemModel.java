@@ -2,7 +2,10 @@ package com.craftingguide.exporter.models;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
+import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 
 public class ItemModel {
 
@@ -28,12 +31,34 @@ public class ItemModel {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public List<PotionEffect> getEffectsAsPotion() {
+        if (!(this.rawStack.getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
+        ItemPotion rawPotion = (ItemPotion) this.rawStack.getItem();
+        return rawPotion.getEffects(this.rawStack);
+    }
+
+    public int getType() {
+        return this.rawStack.getItemDamage();
+    }
+
     public boolean isFromMod(String modId) {
         int index = this.id.indexOf(':');
         if (index == -1) return false;
 
         String myModPrefix = this.id.substring(0, index);
         return myModPrefix.equals(modId);
+    }
+
+    public boolean isPotion() {
+        return this.rawStack.getItem() instanceof ItemPotion;
+    }
+
+    public String getPotionEffect() {
+        return this.rawStack.getItem().getPotionEffect(this.rawStack);
+    }
+
+    public boolean isPotionIngredient() {
+        return this.rawStack.getItem().isPotionIngredient(this.rawStack);
     }
 
     // Properties //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,6 +84,6 @@ public class ItemModel {
 
     @Override
     public String toString() {
-        return this.id;
+        return this.displayName + " <" + this.id + ">";
     }
 }
