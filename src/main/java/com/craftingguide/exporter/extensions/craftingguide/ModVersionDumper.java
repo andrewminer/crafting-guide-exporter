@@ -59,7 +59,6 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        logger.info("Writing to: " + modVersionFile);
         try {
             fileWriter = new FileWriter(modVersionFile, false);
             printer = new Printer(fileWriter);

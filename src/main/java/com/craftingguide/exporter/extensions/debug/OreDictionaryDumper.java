@@ -23,7 +23,6 @@ public class OreDictionaryDumper implements IDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        logger.info("Writing ore dictionary to: " + DUMP_DIR + "/" + DUMP_FILE);
         try {
             fileWriter = new FileWriter(outputFile, false);
             printer = new Printer(fileWriter);

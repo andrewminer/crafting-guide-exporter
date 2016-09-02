@@ -22,7 +22,6 @@ public abstract class AbstractFileDumper implements IDumper {
         FileWriter fileWriter = null;
         Printer printer = null;
 
-        logger.info("Writing to: " + dumpDir + "/" + dumpFile);
         try {
             fileWriter = new FileWriter(outputFile, false);
             printer = new Printer(fileWriter);
