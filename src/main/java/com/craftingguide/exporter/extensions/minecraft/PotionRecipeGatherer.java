@@ -165,6 +165,7 @@ public class PotionRecipeGatherer implements IGatherer {
         recipe.inputGrid[0][1] = new ItemStackModel(ingredient, 1);
         recipe.inputGrid[2][0] = recipe.inputGrid[2][1] = recipe.inputGrid[2][2] = new ItemStackModel(input, 1);
         recipe.output = new ItemStackModel(output, 3);
+        recipe.tools.add(this.brewingStand);
 
         return recipe;
     }

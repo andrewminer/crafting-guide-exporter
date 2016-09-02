@@ -39,7 +39,6 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     private void printItem(ItemModel item, Printer printer) throws IOException {
         printer.line("item: " + item.displayName);
         printer.indent();
-        printer.line("minecraftId: " + item.id);
 
         if (item.recipes.size() > 0) {
             for (RecipeModel recipe : item.recipes) {
@@ -96,7 +95,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.line();
         }
 
-        printer.text("inputs: ");
+        printer.text("input: ");
         needsDelimiter = false;
         for (ItemStackModel inputStack : recipe.inputs) {
             if (needsDelimiter) printer.text(", ");

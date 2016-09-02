@@ -19,9 +19,12 @@ public class RemoveUncraftableEditor extends ItemRemoverEditor {
         PATTERNS.add(".*Monster Egg$");
         PATTERNS.add("^Spawn.*");
         PATTERNS.add("^tile.*");
+        PATTERNS.add("minecraft:carrots");
+        PATTERNS.add("minecraft:cocoa");
         PATTERNS.add("minecraft:flowing_lava");
         PATTERNS.add("minecraft:lit_furnace");
         PATTERNS.add("minecraft:portal");
+        PATTERNS.add("minecraft:potatoes");
         PATTERNS.add("minecraft:flowing_water");
     }
 }
