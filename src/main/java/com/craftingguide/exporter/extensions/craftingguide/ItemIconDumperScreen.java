@@ -89,7 +89,7 @@ public class ItemIconDumperScreen extends GuiScreen {
             this.drawAllItems();
             this.exportAllItems();
         } catch (Throwable e) {
-            logger.error("Failed to render item icon dump for " + this.mod.displayName, e);
+            logger.error("Failed to render item icon dump for " + this.mod.getDisplayName(), e);
             Minecraft.getMinecraft().displayGuiScreen(null);
         } finally {
             if (this.items.isEmpty()) {

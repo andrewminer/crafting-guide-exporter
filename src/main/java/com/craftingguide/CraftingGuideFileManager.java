@@ -33,11 +33,11 @@ public class CraftingGuideFileManager {
     }
 
     public String getModDir(ModModel mod) {
-        return asPath(this.getDumpDir(), slugify(mod.displayName));
+        return asPath(this.getDumpDir(), slugify(mod.getDisplayName()));
     }
 
     public String getModVersionDir(ModModel mod) {
-        return asPath(this.getModDir(mod), "versions", slugify(mod.version));
+        return asPath(this.getModDir(mod), "versions", slugify(mod.getVersion()));
     }
 
     public String getModVersionFile(ModModel mod) {

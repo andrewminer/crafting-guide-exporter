@@ -45,7 +45,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
         this.itemsByModId = modPack.getItemsByMod();
         this.remainingMods = null;
         for (ModModel mod : modPack.getAllMods()) {
-            List<ItemModel> items = this.itemsByModId.get(mod.id);
+            List<ItemModel> items = this.itemsByModId.get(mod.getId());
             if (items.isEmpty()) continue;
 
             if (this.remainingMods == null) {
@@ -68,7 +68,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
         }
 
         ModModel mod = this.remainingMods.removeFirst();
-        List<ItemModel> items = this.itemsByModId.get(mod.id);
+        List<ItemModel> items = this.itemsByModId.get(mod.getId());
 
         this.screen.dumpItems(mod, items);
     }

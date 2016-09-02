@@ -19,8 +19,9 @@ public class CraftingGuideExtension implements IExtension {
     // IExtension Methods //////////////////////////////////////////////////////////////////////////////////////////////
 
     public void register(IRegistry registry) {
-        registry.registerDumper(new ModVersionDumper(this.getFileManager()));
         registry.registerDumper(new ItemIconDumper(this.getFileManager()));
+        registry.registerDumper(new ModDumper(this.getFileManager()));
+        registry.registerDumper(new ModVersionDumper(this.getFileManager()));
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////

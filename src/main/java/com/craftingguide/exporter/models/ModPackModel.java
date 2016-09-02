@@ -17,10 +17,10 @@ public class ModPackModel {
 
         for (ModModel mod : this.getAllMods()) {
             List<ItemModel> modItems = new ArrayList<ItemModel>();
-            result.put(mod.id, modItems);
+            result.put(mod.getId(), modItems);
 
             for (ItemModel item : this.getAllItems()) {
-                if (!item.isFromMod(mod.id)) continue;
+                if (!item.isFromMod(mod.getId())) continue;
                 modItems.add(item);
             }
         }
@@ -31,15 +31,15 @@ public class ModPackModel {
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public ItemModel getItem(String id) {
-        ItemModel result = this._items.get(id);
+        ItemModel result = this.items.get(id);
         if (result == null) {
-            List<ItemModel> oreEntries = this._oreDictionary.get(id);
+            List<ItemModel> oreEntries = this.oreDictionary.get(id);
             if (oreEntries != null && oreEntries.size() > 0) {
                 result = oreEntries.get(0);
             }
         }
         if (result == null) {
-            result = this._items.get(id + ":0");
+            result = this.items.get(id + ":0");
         }
         return result;
     }
@@ -53,25 +53,25 @@ public class ModPackModel {
     }
 
     public Iterable<ItemModel> getAllItems() {
-        if (this._itemList == null) {
-            this._itemList = new ArrayList<ItemModel>(this._items.values());
-            this._itemList.sort(ItemModel.SORT_BY_DISPLAY_NAME);
+        if (this.itemList == null) {
+            this.itemList = new ArrayList<ItemModel>(this.items.values());
+            this.itemList.sort(ItemModel.SORT_BY_DISPLAY_NAME);
         }
 
-        return this._itemList;
+        return this.itemList;
     }
 
     public void addItem(ItemModel item) {
         ItemModel existingItem = this.getItem(item.id);
         if (existingItem != null) return;
 
-        this._items.put(item.id, item);
-        this._itemList = null;
+        this.items.put(item.id, item);
+        this.itemList = null;
     }
 
     public void removeItem(String id) {
-        this._items.remove(id);
-        this._itemList = null;
+        this.items.remove(id);
+        this.itemList = null;
     }
 
     public void removeItem(ItemModel item) {
@@ -79,34 +79,34 @@ public class ModPackModel {
     }
 
     public ModModel getMod(String modId) {
-        return this._mods.get(modId);
+        return this.mods.get(modId);
     }
 
     public Collection<ModModel> getAllMods() {
-        if (this._modList == null) {
-            this._modList = new ArrayList<ModModel>(this._mods.values());
-            this._modList.sort(ModModel.SORT_BY_DISPLAY_NAME);
+        if (this.modList == null) {
+            this.modList = new ArrayList<ModModel>(this.mods.values());
+            this.modList.sort(ModModel.SORT_BY_DISPLAY_NAME);
         }
-        return this._modList;
+        return this.modList;
     }
 
     public void addMod(ModModel mod) {
-        this._mods.put(mod.id, mod);
-        this._modList = null;
+        this.mods.put(mod.getId(), mod);
+        this.modList = null;
     }
 
     public void addOreEntry(String oreId, ItemModel item) {
-        List<ItemModel> oreItems = this._oreDictionary.get(oreId);
+        List<ItemModel> oreItems = this.oreDictionary.get(oreId);
         if (oreItems == null) {
             oreItems = new ArrayList<>();
-            this._oreDictionary.put(oreId, oreItems);
+            this.oreDictionary.put(oreId, oreItems);
         }
         if (oreItems.contains(item)) return;
         oreItems.add(item);
     }
 
     public Map<String, List<ItemModel>> getOreDictionary() {
-        return this._oreDictionary;
+        return this.oreDictionary;
     }
 
     public void addRecipe(RecipeModel recipe) {
@@ -117,18 +117,18 @@ public class ModPackModel {
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String toString() {
-        return "ModPack[" + this._items.values().size() + " items]";
+        return "ModPack[" + this.items.values().size() + " items]";
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private List<ItemModel> _itemList = null;
+    private List<ItemModel> itemList = null;
 
-    private Map<String, ItemModel> _items = new HashMap<>();
+    private Map<String, ItemModel> items = new HashMap<>();
 
-    private List<ModModel> _modList = null;
+    private List<ModModel> modList = null;
 
-    private Map<String, ModModel> _mods = new HashMap<>();
+    private Map<String, ModModel> mods = new HashMap<>();
 
-    private HashMap<String, List<ItemModel>> _oreDictionary = new HashMap<>();
+    private HashMap<String, List<ItemModel>> oreDictionary = new HashMap<>();
 }

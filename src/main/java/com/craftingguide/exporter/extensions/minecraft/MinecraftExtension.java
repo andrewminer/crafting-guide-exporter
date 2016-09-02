@@ -19,6 +19,7 @@ public class MinecraftExtension implements IExtension {
         registry.registerEditor(new RemoveUncraftableEditor());
         registry.registerEditor(new DisambiguateDisplayNameEditor());
         registry.registerEditor(new AddCraftingTableEditor());
+        registry.registerEditor(new ModEditor());
         registry.registerEditor(new AddContainerItemEditor(), Priority.LOW);
     }
 }
