@@ -247,8 +247,15 @@ public class ItemIconDumperScreen extends GuiScreen {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         float zLevel = DRAW_ITEMS.zLevel += 100;
+
         try {
-            DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            // Calling `renderItemAndEffectIntoGUI`, for some reason, fails to draw enchanted items properly (either not
+            // drawing them at all, or not drawing certain pieces of them). Calling the simple `renderItemIntoGUI`
+            // instead works as expected.
+            // DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+
+            // Disabled because, for Crafting Guide, we don't actually want the overlays.
             // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
 
             if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
