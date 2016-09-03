@@ -14,11 +14,11 @@ public class AddCraftingTableEditor implements IEditor {
         ItemModel craftingTable = modPack.getItem("minecraft:crafting_table");
 
         for (ItemModel item : modPack.getAllItems()) {
-            for (RecipeModel recipe : item.recipes) {
-                if (recipe.tools.size() > 0) continue;
+            for (RecipeModel recipe : item.getRecipes()) {
+                if (recipe.getTools().size() > 0) continue;
                 if (!recipe.isCraftingTableRequired()) continue;
 
-                recipe.tools.add(craftingTable);
+                recipe.addTool(craftingTable);
             }
         }
     }

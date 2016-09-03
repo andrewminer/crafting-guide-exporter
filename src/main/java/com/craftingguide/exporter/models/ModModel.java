@@ -7,13 +7,13 @@ public class ModModel {
 
     public ModModel(ModContainer rawMod) {
         this(rawMod.getModId(), rawMod.getName(), rawMod.getVersion());
-        this.rawMod = rawMod;
+        this.setRawMod(rawMod);
     }
 
     public ModModel(String id, String displayName, String version) {
-        this.id = id;
-        this.displayName = displayName;
-        this.version = version;
+        this.setDisplayName(displayName);
+        this.setId(id);
+        this.setVersion(version);
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +126,4 @@ public class ModModel {
     private String url = null;
 
     private String version = null;
-
-    // authorList
 }

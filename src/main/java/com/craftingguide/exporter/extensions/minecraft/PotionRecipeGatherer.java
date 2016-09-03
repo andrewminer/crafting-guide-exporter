@@ -17,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.StatCollector;
-import scala.actors.threadpool.Arrays;
 
 public class PotionRecipeGatherer implements IGatherer {
 
@@ -37,12 +36,12 @@ public class PotionRecipeGatherer implements IGatherer {
 
         while (!this.potionsToExplore.isEmpty()) {
             ItemModel potion = this.potionsToExplore.removeFirst();
-            this.exploredPotions.put(potion.displayName, potion);
+            this.exploredPotions.put(potion.getDisplayName(), potion);
 
             for (RecipeModel recipe : this.explorePotion(potion)) {
-                ItemModel newPotion = recipe.output.item;
+                ItemModel newPotion = recipe.getOutput().getItem();
 
-                if (this.exploredPotions.containsKey(newPotion.displayName)) continue;
+                if (this.exploredPotions.containsKey(newPotion.getDisplayName())) continue;
 
                 foundRecipes.add(recipe);
                 this.potionsToExplore.add(newPotion);
@@ -83,7 +82,7 @@ public class PotionRecipeGatherer implements IGatherer {
         if (effects.size() == 0) return;
 
         if (effects.size() > 1) {
-            System.err.print(potion.id + " has multiple effects! Using only the first in the name...");
+            System.err.print(potion.getId() + " has multiple effects! Using only the first in the name...");
         }
 
         PotionEffect effect = effects.get(0);
@@ -93,7 +92,7 @@ public class PotionRecipeGatherer implements IGatherer {
             buffer.append("Ambient ");
         }
 
-        if (ItemPotion.isSplash(potion.rawStack.getItemDamage())) {
+        if (ItemPotion.isSplash(potion.getRawStack().getItemDamage())) {
             buffer.append("Splash ");
         }
 
@@ -115,10 +114,10 @@ public class PotionRecipeGatherer implements IGatherer {
         if (durationInSec > 0) {
             int minutes = (int) (durationInSec / SEC_PER_MIN);
             int seconds = (int) (durationInSec % SEC_PER_MIN);
-            buffer.append(String.format(" (%1$02d:%2$02d)", minutes, seconds));
+            buffer.append(String.format(" (%1$d:%2$02d)", minutes, seconds));
         }
 
-        potion.displayName = buffer.toString();
+        potion.setDisplayName(buffer.toString());
     }
 
     private Set<RecipeModel> explorePotion(ItemModel potion) {
@@ -142,30 +141,32 @@ public class PotionRecipeGatherer implements IGatherer {
     }
 
     private ItemModel getPotionModel(Integer type) {
-        ItemStack newPotionStack = new ItemStack(this.basePotion.rawStack.getItem(), 1, type);
+        ItemStack newPotionStack = new ItemStack(this.basePotion.getRawStack().getItem(), 1, type);
 
         String id = POTION_NAME + ":" + type;
         ItemModel potion = new ItemModel(id, newPotionStack);
         this.assignDisplayName(potion);
 
-        if (this.knownPotions.containsKey(potion.displayName)) {
-            potion = this.knownPotions.get(potion.displayName);
+        if (this.knownPotions.containsKey(potion.getDisplayName())) {
+            potion = this.knownPotions.get(potion.getDisplayName());
         } else {
-            this.knownPotions.put(potion.displayName, potion);
+            this.knownPotions.put(potion.getDisplayName(), potion);
         }
 
         return potion;
     }
 
     private RecipeModel createRecipe(ItemModel input, ItemModel ingredient, ItemModel output) {
-        ItemStackModel[] inputs = { new ItemStackModel(input, 1), new ItemStackModel(ingredient, 1) };
+        ItemStackModel ingredientStack = new ItemStackModel(ingredient, 1);
+        ItemStackModel inputStack = new ItemStackModel(input, 1);
+        ItemStackModel outputStack = new ItemStackModel(output, 3);
 
-        RecipeModel recipe = new RecipeModel();
-        recipe.inputs.addAll(Arrays.asList(inputs));
-        recipe.inputGrid[0][1] = new ItemStackModel(ingredient, 1);
-        recipe.inputGrid[2][0] = recipe.inputGrid[2][1] = recipe.inputGrid[2][2] = new ItemStackModel(input, 1);
-        recipe.output = new ItemStackModel(output, 3);
-        recipe.tools.add(this.brewingStand);
+        RecipeModel recipe = new RecipeModel(outputStack);
+        recipe.setInputAt(0, 1, ingredientStack);
+        recipe.setInputAt(2, 0, inputStack);
+        recipe.setInputAt(2, 1, inputStack);
+        recipe.setInputAt(2, 2, inputStack);
+        recipe.addTool(this.brewingStand);
 
         return recipe;
     }

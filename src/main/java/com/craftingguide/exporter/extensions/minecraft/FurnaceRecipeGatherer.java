@@ -5,8 +5,6 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -32,12 +30,10 @@ public class FurnaceRecipeGatherer implements IGatherer {
 
             ItemStackModel input = ItemStackModel.convert((ItemStack) entry.getKey(), modPack);
 
-            RecipeModel recipe = new RecipeModel();
-            recipe.output = ItemStackModel.convert((ItemStack) entry.getValue(), modPack);
-            recipe.inputs = new ArrayList<ItemStackModel>(Arrays.asList(input, furnaceFuel));
-            recipe.inputGrid[0][1] = input;
-            recipe.inputGrid[2][1] = furnaceFuel;
-            recipe.tools.add(furnace);
+            RecipeModel recipe = new RecipeModel(ItemStackModel.convert((ItemStack) entry.getValue(), modPack));
+            recipe.setInputAt(0, 1, input);
+            recipe.setInputAt(2, 1, furnaceFuel);
+            recipe.addTool(furnace);
 
             modPack.addRecipe(recipe);
         }

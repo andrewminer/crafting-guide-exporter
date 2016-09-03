@@ -25,7 +25,7 @@ public class CraftingGuideFileManager {
     }
 
     public String getItemDir(ModModel mod, ItemModel item) {
-        return asPath(this.getModDir(mod), "items", slugify(item.displayName));
+        return asPath(this.getModDir(mod), "items", slugify(item.getDisplayName()));
     }
 
     public String getItemIconFile(ModModel mod, ItemModel item) {

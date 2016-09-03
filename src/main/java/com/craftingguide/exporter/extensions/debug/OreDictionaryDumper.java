@@ -68,7 +68,7 @@ public class OreDictionaryDumper implements IDumper {
             for (ItemModel item : items) {
                 if (needsInnerDelimiter) printer.line(",");
                 needsInnerDelimiter = true;
-                printer.text("\"" + item.displayName + " <" + item.id + ">\"");
+                printer.text("\"" + item.getDisplayName() + " <" + item.getId() + ">\"");
             }
             printer.line();
 

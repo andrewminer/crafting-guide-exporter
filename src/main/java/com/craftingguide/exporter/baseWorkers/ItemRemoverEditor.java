@@ -18,13 +18,13 @@ public class ItemRemoverEditor implements IEditor {
 
     @Override
     public void edit(ModPackModel modPack) {
-        this._switcher.setDefaultConsumer((item) -> {
-            modPack.removeItem(item.id);
+        this._switcher.setDefaultConsumer((item)-> {
+            modPack.removeItem(item.getId());
         });
 
         for (ItemModel item : modPack.getAllItems()) {
-            this._switcher.match(item.id, item);
-            this._switcher.match(item.displayName, item);
+            this._switcher.match(item.getId(), item);
+            this._switcher.match(item.getDisplayName(), item);
         }
     }
 

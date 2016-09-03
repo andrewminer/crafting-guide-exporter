@@ -1,22 +1,23 @@
 package com.craftingguide.exporter.models;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 
-public class ItemModel {
+public class ItemModel implements Comparable<ItemModel> {
 
-    public ItemModel(String id, ItemStack stack) {
-        this(id, stack.getDisplayName());
-        this.rawStack = stack;
+    public ItemModel(String id, ItemStack rawStack) {
+        this(id, rawStack.getDisplayName());
+        this.setRawStack(rawStack);
     }
 
     public ItemModel(String id, String displayName) {
-        this.id = id;
-        this.displayName = displayName;
+        this.setId(id);
+        this.setDisplayName(displayName);
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,17 +62,65 @@ public class ItemModel {
         return this.rawStack.getItem().isPotionIngredient(this.rawStack);
     }
 
-    // Properties //////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public String id = "";
+    public String getId() {
+        return this.id;
+    }
 
-    public String displayName = "";
+    private void setId(String id) {
+        if (id == null) throw new IllegalArgumentException("id cannot be null");
+        this.id = id;
+    }
 
-    public String groupName = "Other";
+    public String getDisplayName() {
+        if (this.displayName == null) return this.id;
+        return this.displayName;
+    }
 
-    public ArrayList<RecipeModel> recipes = new ArrayList<RecipeModel>();;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 
-    public ItemStack rawStack = null;
+    public String getGroupName() {
+        return this.groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
+
+    public List<RecipeModel> getRecipes() {
+        return Collections.unmodifiableList(this.recipes);
+    }
+
+    public void addRecipe(RecipeModel recipe) {
+        if (recipe.getOutput().getItem() != this) {
+            throw new IllegalArgumentException("recipe does not produce this item");
+        }
+        this.recipes.add(recipe);
+    }
+
+    public void removeRecipe(RecipeModel recipe) {
+        this.recipes.remove(recipe);
+    }
+
+    public ItemStack getRawStack() {
+        return this.rawStack;
+    }
+
+    private void setRawStack(ItemStack rawStack) {
+        this.rawStack = rawStack;
+    }
+
+    // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int compareTo(ItemModel that) {
+        if (!this.getDisplayName().equals(that.getDisplayName())) {
+            return this.getDisplayName().compareTo(that.getDisplayName());
+        }
+        return this.getId().compareTo(that.getId());
+    }
 
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -88,4 +137,16 @@ public class ItemModel {
     public String toString() {
         return this.displayName + " <" + this.id + ">";
     }
+
+    // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
+
+    private String id = "";
+
+    private String displayName = "";
+
+    private String groupName = "Other";
+
+    private List<RecipeModel> recipes = new ArrayList<RecipeModel>();;
+
+    private ItemStack rawStack = null;
 }

@@ -9,9 +9,9 @@ import java.util.Map;
 public class ItemRenamerEditor implements IEditor {
 
     public ItemRenamerEditor(Map<String, String> mappings) {
-        this._mappings = new HashMap<String, String>();
+        this.mappings = new HashMap<String, String>();
         for (Map.Entry<String, String> entry : mappings.entrySet()) {
-            this._mappings.put(entry.getKey(), entry.getValue());
+            this.mappings.put(entry.getKey(), entry.getValue());
         }
     }
 
@@ -20,14 +20,14 @@ public class ItemRenamerEditor implements IEditor {
     @Override
     public void edit(ModPackModel modPack) {
         for (ItemModel item : modPack.getAllItems()) {
-            String newDisplayName = this._mappings.get(item.id);
+            String newDisplayName = this.mappings.get(item.getId());
             if (newDisplayName != null) {
-                item.displayName = newDisplayName;
+                item.setDisplayName(newDisplayName);
             }
         }
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Map<String, String> _mappings = null;
+    private Map<String, String> mappings = null;
 }

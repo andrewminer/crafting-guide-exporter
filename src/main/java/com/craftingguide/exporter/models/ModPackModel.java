@@ -62,10 +62,10 @@ public class ModPackModel {
     }
 
     public void addItem(ItemModel item) {
-        ItemModel existingItem = this.getItem(item.id);
+        ItemModel existingItem = this.getItem(item.getId());
         if (existingItem != null) return;
 
-        this.items.put(item.id, item);
+        this.items.put(item.getId(), item);
         this.itemList = null;
     }
 
@@ -75,7 +75,7 @@ public class ModPackModel {
     }
 
     public void removeItem(ItemModel item) {
-        this.removeItem(item.id);
+        this.removeItem(item.getId());
     }
 
     public ModModel getMod(String modId) {
@@ -110,8 +110,8 @@ public class ModPackModel {
     }
 
     public void addRecipe(RecipeModel recipe) {
-        ItemModel item = this.getItem(recipe.output.item.id);
-        item.recipes.add(recipe);
+        ItemModel item = this.getItem(recipe.getOutput().getItem().getId());
+        item.addRecipe(recipe);
     }
 
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////

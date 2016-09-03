@@ -232,12 +232,12 @@ public class ItemIconDumperScreen extends GuiScreen {
     }
 
     private void drawItem(ItemModel item, int i, int j) {
-        FontRenderer fontRenderer = item.rawStack.getItem().getFontRenderer(item.rawStack);
+        FontRenderer fontRenderer = item.getRawStack().getItem().getFontRenderer(item.getRawStack());
         if (fontRenderer == null) {
             fontRenderer = Minecraft.getMinecraft().fontRenderer;
         }
         TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
-        ItemStack itemStack = item.rawStack;
+        ItemStack itemStack = item.getRawStack();
         List<String> stackTraces = new ArrayList<String>();
 
         // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
@@ -304,7 +304,7 @@ public class ItemIconDumperScreen extends GuiScreen {
                 BufferedImage subImage = image.getSubimage(x + BORDER_SIZE, y + BORDER_SIZE, ICON_SIZE, ICON_SIZE);
                 this.writeImage(subImage, item);
             } catch (IOException e) {
-                System.err.println("Failed to print image for " + item.displayName);
+                System.err.println("Failed to print image for " + item.getDisplayName());
             }
         }
 

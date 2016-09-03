@@ -11,7 +11,7 @@ public class GroupAssignmentEditor implements IEditor {
 
     public void addPattern(String group, String pattern) {
         this.switcher.addPattern(pattern, (item)-> {
-            item.groupName = group;
+            item.setGroupName(group);
         });
     }
 
@@ -20,8 +20,8 @@ public class GroupAssignmentEditor implements IEditor {
     @Override
     public void edit(ModPackModel modPack) {
         for (ItemModel item : modPack.getAllItems()) {
-            this.switcher.match(item.displayName, item);
-            this.switcher.match(item.id, item);
+            this.switcher.match(item.getDisplayName(), item);
+            this.switcher.match(item.getId(), item);
         }
     }
 
