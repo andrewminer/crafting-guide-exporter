@@ -9,6 +9,8 @@ import com.craftingguide.exporter.models.RecipeModel;
 import com.craftingguide.util.Printer;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
@@ -35,6 +37,36 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     private static Logger logger = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private Map<String, List<ItemModel>> groupItems(List<ItemModel> items) {
+        Map<String, List<ItemModel>> result = new HashMap<>();
+        for (ItemModel item : items) {
+            List<ItemModel> groupItems = result.get(item.groupName);
+            if (groupItems == null) {
+                groupItems = new ArrayList<ItemModel>();
+                result.put(item.groupName, groupItems);
+            }
+            groupItems.add(item);
+        }
+        return result;
+    }
+
+    private void printGroup(String groupName, List<ItemModel> items, Printer printer) throws IOException {
+        if (groupName.length() == 0) {
+            groupName = "Other";
+        }
+
+        printer.line("group: " + groupName);
+        printer.line();
+        printer.indent();
+
+        for (ItemModel item : items) {
+            this.printItem(item, printer);
+        }
+
+        printer.outdent();
+        printer.line();
+    }
 
     private void printItem(ItemModel item, Printer printer) throws IOException {
         printer.line("item: " + item.displayName);
@@ -65,8 +97,12 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.line("schema: 1");
             printer.line();
 
-            for (ItemModel item : items) {
-                this.printItem(item, printer);
+            Map<String, List<ItemModel>> itemsByGroup = this.groupItems(items);
+            List<String> groups = new ArrayList<String>(itemsByGroup.keySet());
+            groups.sort((a, b)-> a.compareTo(b));
+
+            for (String groupName : groups) {
+                this.printGroup(groupName, itemsByGroup.get(groupName), printer);
             }
         } catch (IOException e) {
             logger.error("Could not write to " + modVersionFile + ": ");

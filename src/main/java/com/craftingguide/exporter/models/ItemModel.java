@@ -67,6 +67,8 @@ public class ItemModel {
 
     public String displayName = "";
 
+    public String groupName = "Other";
+
     public ArrayList<RecipeModel> recipes = new ArrayList<RecipeModel>();;
 
     public ItemStack rawStack = null;
