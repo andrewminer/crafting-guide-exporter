@@ -1,10 +1,9 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
 import com.craftingguide.CraftingGuideFileManager;
-import com.craftingguide.exporter.IDumper;
-import com.craftingguide.exporter.models.ModPackModel;
+import com.craftingguide.exporter.Dumper;
 
-public abstract class AbstractCraftingGuideDumper implements IDumper {
+public abstract class AbstractCraftingGuideDumper extends Dumper {
 
     public AbstractCraftingGuideDumper(CraftingGuideFileManager fileManager) {
         this.setFileManager(fileManager);
@@ -20,11 +19,6 @@ public abstract class AbstractCraftingGuideDumper implements IDumper {
         if (newFileManager == null) throw new IllegalArgumentException("fileManager cannot be null");
         this._fileManager = newFileManager;
     }
-
-    // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    @Override
-    public abstract void dump(ModPackModel modPack);
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 

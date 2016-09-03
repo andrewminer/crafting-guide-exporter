@@ -1,11 +1,11 @@
 package com.craftingguide.exporter.baseWorkers;
 
-import com.craftingguide.exporter.IEditor;
+import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.PatternSwitcher;
 
-public class GroupAssignmentEditor implements IEditor {
+public class GroupAssignmentEditor extends Editor {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 

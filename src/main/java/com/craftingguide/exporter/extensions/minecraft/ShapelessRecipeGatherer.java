@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IGatherer;
+import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 
-public class ShapelessRecipeGatherer implements IGatherer {
+public class ShapelessRecipeGatherer extends Gatherer {
 
     // IGatherer Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 

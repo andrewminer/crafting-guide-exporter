@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.debug;
 
-import com.craftingguide.exporter.IDumper;
+import com.craftingguide.exporter.Dumper;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.Printer;
 import java.io.File;
@@ -9,7 +9,7 @@ import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public abstract class AbstractFileDumper implements IDumper {
+public abstract class AbstractFileDumper extends Dumper {
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 

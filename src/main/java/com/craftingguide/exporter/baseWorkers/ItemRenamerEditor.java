@@ -1,12 +1,12 @@
 package com.craftingguide.exporter.baseWorkers;
 
-import com.craftingguide.exporter.IEditor;
+import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemRenamerEditor implements IEditor {
+public class ItemRenamerEditor extends Editor {
 
     public ItemRenamerEditor(Map<String, String> mappings) {
         this.mappings = new HashMap<String, String>();

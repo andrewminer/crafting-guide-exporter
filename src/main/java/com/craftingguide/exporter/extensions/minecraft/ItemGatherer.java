@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IGatherer;
+import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import java.util.Set;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-public class ItemGatherer implements IGatherer {
+public class ItemGatherer extends Gatherer {
 
     @Override
     public void gather(ModPackModel modPack) {

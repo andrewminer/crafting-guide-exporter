@@ -1,7 +1,7 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
 import com.craftingguide.CraftingGuideFileManager;
-import com.craftingguide.exporter.IDumper;
+import com.craftingguide.exporter.Dumper;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
-public class FurnaceFuelIconDumper implements IDumper {
+public class FurnaceFuelIconDumper extends Dumper {
 
     public FurnaceFuelIconDumper(CraftingGuideFileManager fileManager) {
         this.setFileManager(fileManager);

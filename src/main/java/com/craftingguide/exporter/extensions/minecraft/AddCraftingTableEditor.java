@@ -1,11 +1,11 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IEditor;
+import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
 
-public class AddCraftingTableEditor implements IEditor {
+public class AddCraftingTableEditor extends Editor {
 
     // IEditor Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 

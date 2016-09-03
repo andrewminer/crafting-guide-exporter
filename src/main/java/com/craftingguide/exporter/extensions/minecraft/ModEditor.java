@@ -1,10 +1,10 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IEditor;
+import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 
-public class ModEditor implements IEditor {
+public class ModEditor extends Editor {
 
     @Override
     public void edit(ModPackModel modPack) {

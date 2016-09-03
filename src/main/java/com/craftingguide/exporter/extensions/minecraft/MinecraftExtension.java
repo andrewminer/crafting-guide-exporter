@@ -1,14 +1,14 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IExtension;
-import com.craftingguide.exporter.IRegistry;
-import com.craftingguide.exporter.IRegistry.Priority;
+import com.craftingguide.exporter.ExporterExtension;
+import com.craftingguide.exporter.Registry;
+import com.craftingguide.exporter.Registry.Priority;
 
-public class MinecraftExtension implements IExtension {
+public class MinecraftExtension implements ExporterExtension {
 
     // IExtension Methods /////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void register(IRegistry registry) {
+    public void register(Registry registry) {
         registry.registerGatherer(new ItemGatherer(), Priority.HIGHEST);
 
         registry.registerGatherer(new ShapedRecipeGatherer());

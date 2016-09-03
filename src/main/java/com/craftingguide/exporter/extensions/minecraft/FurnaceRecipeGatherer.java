@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IGatherer;
+import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
@@ -9,7 +9,7 @@ import java.util.Map;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 
-public class FurnaceRecipeGatherer implements IGatherer {
+public class FurnaceRecipeGatherer extends Gatherer {
 
     // IGatherer Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 

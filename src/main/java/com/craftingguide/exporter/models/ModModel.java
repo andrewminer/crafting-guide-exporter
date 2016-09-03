@@ -70,6 +70,14 @@ public class ModModel {
         this.displayName = displayName;
     }
 
+    public ItemModel getIconicBlock() {
+        return this.iconicBlock;
+    }
+
+    public void setIconicBlock(ItemModel iconicBlock) {
+        this.iconicBlock = iconicBlock;
+    }
+
     public String getId() {
         return this.id;
     }
@@ -118,6 +126,8 @@ public class ModModel {
     private String description = null;
 
     private String displayName = null;
+
+    private ItemModel iconicBlock = null;
 
     private String id = null;
 

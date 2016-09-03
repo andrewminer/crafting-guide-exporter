@@ -46,8 +46,9 @@ public class CraftingGuideDumpCommand extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         try {
             sender.addChatMessage(new ChatComponentTranslation("cge.commands.cgexport.start"));
-            this.getMod().exportCraftingGuideData();
-            sender.addChatMessage(new ChatComponentTranslation("cge.commands.cgexport.finish"));
+            this.getMod().exportCraftingGuideData(()-> {
+                sender.addChatMessage(new ChatComponentTranslation("cge.commands.cgexport.finish"));
+            });
         } catch (CraftingGuideException e) {
             sender.addChatMessage(new ChatComponentTranslation("cge.commands.cgexport.error"));
             logger.error("Failed to complete the Crafting Guide export!", e);

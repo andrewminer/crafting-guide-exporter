@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.minecraft;
 
-import com.craftingguide.exporter.IGatherer;
+import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
@@ -18,7 +18,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.util.StatCollector;
 
-public class PotionRecipeGatherer implements IGatherer {
+public class PotionRecipeGatherer extends Gatherer {
 
     // IGatherer Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 

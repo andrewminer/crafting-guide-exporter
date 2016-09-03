@@ -1,12 +1,11 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
-import com.craftingguide.CraftingGuideFileManager;
+import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.reflect.Field;
@@ -14,7 +13,6 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import javax.imageio.ImageIO;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -27,6 +25,8 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
@@ -35,30 +35,55 @@ import org.lwjgl.opengl.GL12;
 
 public class ItemIconDumperScreen extends GuiScreen {
 
-    public ItemIconDumperScreen(CraftingGuideFileManager fileManager) {
-        this.setFileManager(fileManager);
-
+    public ItemIconDumperScreen(ImageConsumer imageConsumer) {
+        this.setImageConsumer(imageConsumer);
         this.allowUserInput = false;
-        Minecraft.getMinecraft().gameSettings.pauseOnLostFocus = false;
+
+        MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    // Helper Interfaces ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    @FunctionalInterface
+    public interface ImageConsumer {
+
+        public void accept(ModModel mod, ItemModel item, BufferedImage image);
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void dumpItems(ModModel mod, List<ItemModel> items) {
+    public void dumpItems(ModModel mod, List<ItemModel> items, AsyncStep dumpItemsStep) {
+        if (this.isExporting()) throw new IllegalStateException("already exporting!");
+        this.setIsExporting(true);
+
         if (items.isEmpty()) return;
 
+        this.setStep(dumpItemsStep);
+        this.setImageConsumer(imageConsumer);
         this.setItems(items);
         this.setMod(mod);
 
-        this.setIsExporting(true);
         Minecraft.getMinecraft().displayGuiScreen(this);
+    }
+
+    @SubscribeEvent
+    public void onGuiScreenOpened(GuiOpenEvent event) {
+        if (!this.isExporting()) return;
+
+        // don't allow any other GUI screens to interrupt
+        if ((event.gui == null) || (!event.gui.getClass().equals(ItemIconDumperScreen.class))) {
+            event.setCanceled(true);
+        }
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void setFileManager(CraftingGuideFileManager newFileManager) {
-        if (newFileManager == null) throw new IllegalArgumentException("newFileManager cannot be null");
-        this.fileManager = newFileManager;
+    private int getBorderSize() {
+        return this.iconSize / 16;
+    }
+
+    private int getBoxSize() {
+        return this.iconSize + 2 * this.getBorderSize();
     }
 
     public boolean isExporting() {
@@ -67,6 +92,23 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private void setIsExporting(boolean isExportComplete) {
         this.isExporting = isExportComplete;
+    }
+
+    public int getIconSize() {
+        return this.iconSize;
+    }
+
+    public void setIconSize(int iconSize) {
+        this.iconSize = (iconSize < MIN_ICON_SIZE) ? MIN_ICON_SIZE : iconSize;
+    }
+
+    public ImageConsumer getImageConsumer() {
+        return this.imageConsumer;
+    }
+
+    public void setImageConsumer(ImageConsumer imageConsumer) {
+        if (imageConsumer == null) throw new IllegalArgumentException("imageConsumer cannot be null");
+        this.imageConsumer = imageConsumer;
     }
 
     private void setItems(List<ItemModel> newItems) {
@@ -79,6 +121,11 @@ public class ItemIconDumperScreen extends GuiScreen {
     private void setMod(ModModel newMod) {
         if (newMod == null) throw new IllegalArgumentException("newMod cannot be null");
         this.mod = newMod;
+    }
+
+    private void setStep(AsyncStep step) {
+        if (step == null) throw new IllegalArgumentException("step cannot be null");
+        this.step = step;
     }
 
     // GuiScreen Overrides /////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +142,7 @@ public class ItemIconDumperScreen extends GuiScreen {
             if (this.items.isEmpty()) {
                 this.setIsExporting(false);
                 Minecraft.getMinecraft().displayGuiScreen(null);
+                this.step.done();
             }
         }
     }
@@ -134,11 +182,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static int ICON_SIZE = 48; // must be first
-
-    private static int BORDER_SIZE = 3;
-
-    private static int BOX_SIZE = ICON_SIZE + 2 * BORDER_SIZE;
+    private static int MIN_ICON_SIZE = 16; // must be first
 
     private static RenderItem DRAW_ITEMS = new RenderItem();
 
@@ -206,13 +250,13 @@ public class ItemIconDumperScreen extends GuiScreen {
 
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glOrtho(0, d.width * 16 / ICON_SIZE, d.height * 16 / ICON_SIZE, 0, 1000, 3000);
+        GL11.glOrtho(0, d.width * 16 / this.getIconSize(), d.height * 16 / this.getIconSize(), 0, 1000, 3000);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glClearColor(0, 0, 0, 0);
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 
-        int rows = d.height / BOX_SIZE;
-        int cols = d.width / BOX_SIZE;
+        int rows = d.height / this.getBoxSize();
+        int cols = d.width / this.getBoxSize();
         int fit = rows * cols;
         int drawIndex = 0;
 
@@ -290,36 +334,32 @@ public class ItemIconDumperScreen extends GuiScreen {
 
         BufferedImage image = captureScreenshot();
 
-        int rows = image.getHeight() / BOX_SIZE;
-        int cols = image.getWidth() / BOX_SIZE;
+        int borderSize = this.getBorderSize();
+        int boxSize = this.getBoxSize();
+        int iconSize = this.getIconSize();
+
+        int rows = image.getHeight() / boxSize;
+        int cols = image.getWidth() / boxSize;
         int fit = rows * cols;
 
         for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
             ItemModel item = this.items.removeFirst();
 
-            try {
-                int x = i % cols * BOX_SIZE;
-                int y = i / cols * BOX_SIZE;
+            int x = i % cols * boxSize;
+            int y = i / cols * boxSize;
 
-                BufferedImage subImage = image.getSubimage(x + BORDER_SIZE, y + BORDER_SIZE, ICON_SIZE, ICON_SIZE);
-                this.writeImage(subImage, item);
-            } catch (IOException e) {
-                System.err.println("Failed to print image for " + item.getDisplayName());
-            }
+            BufferedImage subImage = image.getSubimage(x + borderSize, y + borderSize, iconSize, iconSize);
+            this.getImageConsumer().accept(this.mod, item, subImage);
         }
 
         // END NEI
     }
 
-    private void writeImage(BufferedImage image, ItemModel item) throws IOException {
-        if (!this.fileManager.ensureDir(this.fileManager.getItemDir(this.mod, item))) return;
-        File iconFile = new File(this.fileManager.getItemIconFile(this.mod, item));
-        ImageIO.write(image, "png", iconFile);
-    }
-
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private CraftingGuideFileManager fileManager = null;
+    private ImageConsumer imageConsumer = null;
+
+    private int iconSize = 48;
 
     private boolean isExporting = false;
 
@@ -330,4 +370,6 @@ public class ItemIconDumperScreen extends GuiScreen {
     private IntBuffer pixelBuffer = null;
 
     private int[] pixelValues = null;
+
+    private AsyncStep step = null;
 }

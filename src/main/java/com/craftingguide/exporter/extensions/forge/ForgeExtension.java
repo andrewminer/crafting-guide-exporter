@@ -1,13 +1,13 @@
 package com.craftingguide.exporter.extensions.forge;
 
-import com.craftingguide.exporter.IExtension;
-import com.craftingguide.exporter.IRegistry;
-import com.craftingguide.exporter.IRegistry.Priority;
+import com.craftingguide.exporter.ExporterExtension;
+import com.craftingguide.exporter.Registry;
+import com.craftingguide.exporter.Registry.Priority;
 
-public class ForgeExtension implements IExtension {
+public class ForgeExtension implements ExporterExtension {
 
     @Override
-    public void register(IRegistry registry) {
+    public void register(Registry registry) {
         registry.registerGatherer(new OreDictionaryGatherer(), Priority.HIGH);
         registry.registerGatherer(new ModGatherer());
     }

@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.debug;
 
-import com.craftingguide.exporter.IDumper;
+import com.craftingguide.exporter.Dumper;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.Printer;
@@ -13,7 +13,7 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class OreDictionaryDumper implements IDumper {
+public class OreDictionaryDumper extends Dumper {
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 

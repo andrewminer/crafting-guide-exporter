@@ -1,11 +1,11 @@
 package com.craftingguide.exporter.baseWorkers;
 
-import com.craftingguide.exporter.IEditor;
+import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.PatternSwitcher;
 
-public class ItemRemoverEditor implements IEditor {
+public class ItemRemoverEditor extends Editor {
 
     public ItemRemoverEditor(Iterable<String> exclusionPatterns) {
         this._switcher = new PatternSwitcher<>();
