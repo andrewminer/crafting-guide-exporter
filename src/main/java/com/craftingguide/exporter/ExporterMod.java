@@ -1,6 +1,8 @@
 package com.craftingguide.exporter;
 
+import com.craftingguide.CraftingGuideConfig;
 import com.craftingguide.CraftingGuideException;
+import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.commands.CraftingGuideDumpCommand;
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
 import com.craftingguide.exporter.extensions.debug.DebugExtension;
@@ -33,14 +35,14 @@ public class ExporterMod implements Registry {
     public void exportCraftingGuideData(AsyncStep commandStep) throws CraftingGuideException {
 
         try {
-            logger.info("Starting CraftingGuide export...");
+            LOGGER.info("Starting CraftingGuide export...");
             long start = System.currentTimeMillis();
 
             this.executeWorkers(this.gatherers, ()-> {
                 this.executeWorkers(this.editors, ()-> {
                     this.executeWorkers(this.dumpers, ()-> {
                         long duration = System.currentTimeMillis() - start;
-                        logger.info("Finished CraftingGuide export after " + duration + "ms.");
+                        LOGGER.info("Finished CraftingGuide export after " + duration + "ms.");
 
                         commandStep.done();
                     });
@@ -55,6 +57,8 @@ public class ExporterMod implements Registry {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        this.initializeConfigs();
+
         try {
             ClientCommandHandler.instance.registerCommand(new CraftingGuideDumpCommand(this));
 
@@ -66,6 +70,8 @@ public class ExporterMod implements Registry {
             System.err.println("Failed to initialize Crafting Guide Export!");
             e.printStackTrace();
         }
+
+        this.getConfig().save();
     }
 
     // IRegistry Methods ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,13 +102,21 @@ public class ExporterMod implements Registry {
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public CraftingGuideConfig getConfig() {
+        return this.config;
+    }
+
+    public CraftingGuideFileManager getFileManager() {
+        return this.getFileManager();
+    }
+
     public ModPackModel getModPack() {
         return this.modPack;
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static Logger logger = LogManager.getLogger();
+    private static Logger LOGGER = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -120,12 +134,12 @@ public class ExporterMod implements Registry {
 
             worker.work(this.modPack, ()-> {
                 long duration = System.currentTimeMillis() - start;
-                logger.info("Executed " + workerName + " in " + duration + "ms.");
+                LOGGER.info("Executed " + workerName + " in " + duration + "ms.");
 
                 this.executeWorkers(workers, executeList);
             });
         } catch (Exception e) {
-            logger.error("Failed to execute " + workerName, e);
+            LOGGER.error("Failed to execute " + workerName, e);
             this.executeWorkers(workers, executeList);
         }
     }
@@ -143,6 +157,13 @@ public class ExporterMod implements Registry {
         this.executeWorkers(allWorkers, executeList);
     }
 
+    private void initializeConfigs() {
+        this.fileManager = new CraftingGuideFileManager();
+        this.config = new CraftingGuideConfig(MODID, this.fileManager);
+
+        this.fileManager.setDumpDir(this.config.getOutputDir());
+    }
+
     private void register(ExporterExtension extension) {
         extension.register(this);
     }
@@ -154,6 +175,8 @@ public class ExporterMod implements Registry {
             workerMap.put(priority, workers);
         }
         workers.add(worker);
+
+        worker.setConfig(this.getConfig());
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
@@ -161,5 +184,10 @@ public class ExporterMod implements Registry {
     private Map<Priority, List<Worker>> dumpers   = new TreeMap<>();
     private Map<Priority, List<Worker>> editors   = new TreeMap<>();
     private Map<Priority, List<Worker>> gatherers = new TreeMap<>();
-    private ModPackModel                modPack   = new ModPackModel();
+
+    private CraftingGuideConfig config = null;
+
+    private CraftingGuideFileManager fileManager = null;
+
+    private ModPackModel modPack = new ModPackModel();
 }

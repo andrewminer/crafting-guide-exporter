@@ -1,6 +1,5 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
-import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModModel;
@@ -17,10 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ModVersionDumper extends AbstractCraftingGuideDumper {
-
-    public ModVersionDumper(CraftingGuideFileManager fileManager) {
-        super(fileManager);
-    }
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,7 +60,6 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         }
 
         printer.outdent();
-        printer.line();
     }
 
     private void printItem(ItemModel item, Printer printer) throws IOException {

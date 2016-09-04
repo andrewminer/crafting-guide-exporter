@@ -16,16 +16,15 @@ import org.apache.logging.log4j.Logger;
 
 public class ItemIconDumper extends AbstractCraftingGuideDumper {
 
-    public ItemIconDumper(CraftingGuideFileManager fileManager) {
-        super(fileManager);
-
+    public ItemIconDumper() {
         this.screen = new ItemIconDumperScreen((mod, item, image)-> {
             try {
-                if (!fileManager.ensureDir(fileManager.getItemDir(mod, item))) return;
-                File iconFile = new File(fileManager.getItemIconFile(mod, item));
+                CraftingGuideFileManager fm = this.getFileManager();
+                if (!fm.ensureDir(fm.getItemDir(mod, item))) return;
+                File iconFile = new File(fm.getItemIconFile(mod, item));
                 ImageIO.write(image, "png", iconFile);
             } catch (IOException e) {
-                logger.error("Failed to save icon for " + item.getDisplayName(), e);
+                LOGGER.error("Failed to save icon for " + item.getDisplayName(), e);
             }
         });
     }
@@ -48,7 +47,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static Logger logger = LogManager.getLogger();
+    private static Logger LOGGER = LogManager.getLogger();
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 

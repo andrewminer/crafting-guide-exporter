@@ -1,7 +1,5 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
-import com.craftingguide.CraftingGuideFileManager;
-import com.craftingguide.exporter.Dumper;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
@@ -9,22 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 
-public class FurnaceFuelIconDumper extends Dumper {
-
-    public FurnaceFuelIconDumper(CraftingGuideFileManager fileManager) {
-        this.setFileManager(fileManager);
-    }
-
-    // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public CraftingGuideFileManager getFileManager() {
-        return this.fileManager;
-    }
-
-    private void setFileManager(CraftingGuideFileManager fileManager) {
-        if (fileManager == null) throw new IllegalArgumentException("fileManager cannot be null");
-        this.fileManager = fileManager;
-    }
+public class FurnaceFuelIconDumper extends AbstractCraftingGuideDumper {
 
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -46,8 +29,4 @@ public class FurnaceFuelIconDumper extends Dumper {
             System.err.println("Failed to copy Furnace Fuel icon.");
         }
     }
-
-    // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
-
-    private CraftingGuideFileManager fileManager = null;
 }

@@ -32,10 +32,10 @@ public class ShapelessRecipeGatherer extends Gatherer {
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private RecipeModel _convertRecipe(ModPackModel modPack, RecipeAdapter recipe) {
-        ItemStack outputItemStack = recipe.getOutput();
-        if (outputItemStack == null) return null;
+        ItemStackModel outputStack = ItemStackModel.convert(recipe.getOutput(), modPack);
+        if (outputStack == null) return null;
 
-        RecipeModel model = new RecipeModel(ItemStackModel.convert(outputItemStack, modPack));
+        RecipeModel model = new RecipeModel(outputStack);
 
         int[] rows = { 1, 1, 0, 0, 1, 0, 2, 2, 2 };
         int[] cols = { 1, 0, 1, 0, 2, 2, 0, 1, 2 };

@@ -10,18 +10,47 @@ public class CraftingGuideFileManager {
         // do nothing
     }
 
-    public CraftingGuideFileManager(String baseDir) {
-        this.setBaseDir(baseDir);
+    // Public Class Methods ////////////////////////////////////////////////////////////////////////////////////////////
+
+    public static String asPath(String... elements) {
+        StringBuffer buffer = new StringBuffer();
+        boolean needsDelimiter = false;
+        for (String element : elements) {
+            if (needsDelimiter) buffer.append(File.separator);
+            needsDelimiter = true;
+            buffer.append(element);
+        }
+        return buffer.toString();
+    }
+
+    public static String slugify(String text) {
+        if (text == null) return null;
+
+        String result = text.toLowerCase();
+        result = result.replaceAll("[^-a-zA-Z0-9._]", "_");
+        result = result.replaceAll("__+", "_");
+        result = result.replaceAll("^_", "");
+        result = result.replaceAll("_$", "");
+
+        return result;
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public String getBaseDir() {
-        return this._baseDir;
+    public String getConfigDir() {
+        return "config";
+    }
+
+    public String getConfigFile() {
+        return asPath(this.getConfigDir(), "crafting-guide.cfg");
     }
 
     public String getDumpDir() {
-        return asPath(this.getBaseDir(), "crafting-guide");
+        return this.dumpDir;
+    }
+
+    public void setDumpDir(String dumpDir) {
+        this.dumpDir = (dumpDir == null) ? "dumps" : dumpDir;
     }
 
     public String getItemDir(ModModel mod, ItemModel item) {
@@ -60,40 +89,7 @@ public class CraftingGuideFileManager {
         return false;
     }
 
-    public void setBaseDir(String newBaseDir) {
-        if (newBaseDir == null) {
-            newBaseDir = "";
-        }
-
-        this._baseDir = newBaseDir;
-    }
-
-    // Private Class Methods ///////////////////////////////////////////////////////////////////////////////////////////
-
-    private static String asPath(String... elements) {
-        StringBuffer buffer = new StringBuffer();
-        boolean needsDelimiter = false;
-        for (String element : elements) {
-            if (needsDelimiter) buffer.append(File.separator);
-            needsDelimiter = true;
-            buffer.append(element);
-        }
-        return buffer.toString();
-    }
-
-    private static String slugify(String text) {
-        if (text == null) return null;
-
-        String result = text.toLowerCase();
-        result = result.replaceAll("[^-a-zA-Z0-9._]", "_");
-        result = result.replaceAll("__+", "_");
-        result = result.replaceAll("^_", "");
-        result = result.replaceAll("_$", "");
-
-        return result;
-    }
-
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private String _baseDir = "";
+    private String dumpDir = "";
 }

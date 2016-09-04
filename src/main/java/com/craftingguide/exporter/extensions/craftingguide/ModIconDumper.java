@@ -15,16 +15,15 @@ import org.apache.logging.log4j.Logger;
 
 public class ModIconDumper extends AbstractCraftingGuideDumper {
 
-    public ModIconDumper(CraftingGuideFileManager fileManager) {
-        super(fileManager);
-
+    public ModIconDumper() {
         this.screen = new ItemIconDumperScreen((mod, item, image)-> {
             try {
-                if (!fileManager.ensureDir(fileManager.getModDir(mod))) return;
-                File iconFile = new File(fileManager.getModIconFile(mod));
+                CraftingGuideFileManager fm = this.getFileManager();
+                if (!fm.ensureDir(fm.getModDir(mod))) return;
+                File iconFile = new File(fm.getModIconFile(mod));
                 ImageIO.write(image, "png", iconFile);
             } catch (IOException e) {
-                logger.error("Failed to save icon for " + mod.getDisplayName(), e);
+                LOGGER.error("Failed to save icon for " + mod.getDisplayName(), e);
             }
         });
         this.screen.setIconSize(MOD_ICON_SIZE);
@@ -51,7 +50,7 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static Logger logger = LogManager.getLogger();
+    private static Logger LOGGER = LogManager.getLogger();
 
     private static String DEFAULT_ICONIC_BLOCK = "minecraft:stone";
 
