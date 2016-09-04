@@ -82,6 +82,15 @@ public class ItemModel implements Comparable<ItemModel> {
         this.displayName = displayName;
     }
 
+    public boolean isGatherable() {
+        if (this.getRecipes().isEmpty()) return true;
+        return this.gatherable;
+    }
+
+    public void setGatherable(boolean gatherable) {
+        this.gatherable = gatherable;
+    }
+
     public String getGroupName() {
         return this.groupName;
     }
@@ -143,6 +152,8 @@ public class ItemModel implements Comparable<ItemModel> {
     private String id = "";
 
     private String displayName = "";
+
+    private boolean gatherable = false;
 
     private String groupName = "Other";
 

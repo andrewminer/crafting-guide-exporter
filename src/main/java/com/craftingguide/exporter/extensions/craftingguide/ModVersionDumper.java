@@ -72,6 +72,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         printer.line("item: " + item.getDisplayName());
         printer.indent();
 
+        if (item.isGatherable()) {
+            printer.line("gatherable: yes");
+        }
+
         if (item.getRecipes().size() > 0) {
             for (RecipeModel recipe : item.getRecipes()) {
                 this.printRecipe(recipe, printer);

@@ -53,7 +53,7 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
 
     private static Logger logger = LogManager.getLogger();
 
-    private static String DEFAULT_ICONIC_BLOCK = "minecraft:grass";
+    private static String DEFAULT_ICONIC_BLOCK = "minecraft:stone";
 
     private static int MOD_ICON_SIZE = 160;
 

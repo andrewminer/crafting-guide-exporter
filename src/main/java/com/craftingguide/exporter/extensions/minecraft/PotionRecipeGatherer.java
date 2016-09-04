@@ -6,6 +6,7 @@ import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -31,6 +32,7 @@ public class PotionRecipeGatherer extends Gatherer {
         this.removeExistingPotions();
         this.gatherPotionIngredients();
 
+        this.knownPotions.put(this.basePotion.getId(), this.basePotion);
         this.potionsToExplore.push(this.basePotion);
         Set<RecipeModel> foundRecipes = new HashSet<>();
 
@@ -58,6 +60,9 @@ public class PotionRecipeGatherer extends Gatherer {
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    // Allowing Mundane, Potent, and Thick Potions as source potions leads to all sorts of silly crafting plans
+    private static Set<Integer> FORBIDDEN_INPUT_POTIONS = new HashSet<>(Arrays.asList(32, 48, 8192));
 
     private static String POTION_NAME = "minecraft:potion"; // must be first
 
@@ -122,6 +127,9 @@ public class PotionRecipeGatherer extends Gatherer {
 
     private Set<RecipeModel> explorePotion(ItemModel potion) {
         Set<RecipeModel> results = new HashSet<RecipeModel>();
+
+        if (FORBIDDEN_INPUT_POTIONS.contains(potion.getType())) return results;
+
         for (ItemModel ingredient : this.ingredients) {
             Integer newType = PotionHelper.applyIngredient(potion.getType(), ingredient.getPotionEffect());
             if (newType == 0) continue;
