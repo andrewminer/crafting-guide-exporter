@@ -9,6 +9,9 @@ public class BuildCraftExtension implements ExporterExtension {
 
     @Override
     public void register(Registry registry) {
+        registry.registerGatherer(new RedstoneBoardGatherer());
+        registry.registerGatherer(new RobotGatherer());
+
         registry.registerEditor(new BuildCraftModEditor());
         registry.registerEditor(new BuildCraftGroupEditor());
     }
