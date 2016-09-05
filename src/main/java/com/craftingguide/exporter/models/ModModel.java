@@ -14,9 +14,13 @@ public class ModModel {
     }
 
     public ModModel(String id, String displayName, String version) {
+        this(id, displayName);
+        this.setVersion(version);
+    }
+
+    public ModModel(String id, String displayName) {
         this.setDisplayName(displayName);
         this.setId(id);
-        this.setVersion(version);
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -25,7 +29,7 @@ public class ModModel {
 
         @Override
         public int compare(ModModel a, ModModel b) {
-            return a.displayName.compareTo(b.displayName);
+            return a.getDisplayName().compareTo(b.getDisplayName());
         }
     };
 
@@ -56,7 +60,7 @@ public class ModModel {
             if (credits != null && credits.length() > 0) return credits;
         }
 
-        return "";
+        return null;
     }
 
     public void setAuthor(String author) {
@@ -71,7 +75,7 @@ public class ModModel {
             if (description != null && description.length() > 0) return description;
         }
 
-        return "";
+        return null;
     }
 
     public void setDescription(String description) {
@@ -145,7 +149,7 @@ public class ModModel {
             if (url != null && url.length() > 0) return url;
         }
 
-        return "";
+        return null;
     }
 
     public void setUrl(String url) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -91,8 +93,8 @@ public class ItemModel implements Comparable<ItemModel> {
         this.groupName = groupName;
     }
 
-    public List<RecipeModel> getRecipes() {
-        return Collections.unmodifiableList(this.recipes);
+    public SortedSet<RecipeModel> getRecipes() {
+        return Collections.unmodifiableSortedSet(this.recipes);
     }
 
     public void addRecipe(RecipeModel recipe) {
@@ -149,7 +151,7 @@ public class ItemModel implements Comparable<ItemModel> {
 
     private String groupName = "Other";
 
-    private List<RecipeModel> recipes = new ArrayList<RecipeModel>();;
+    private SortedSet<RecipeModel> recipes = new TreeSet<RecipeModel>();;
 
     private ItemStack rawStack = null;
 }

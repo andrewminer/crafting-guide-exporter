@@ -11,8 +11,10 @@ public class ModDumper extends AbstractFileDumper {
 
     protected void dump(ModPackModel modPack, Printer printer) throws IOException {
         for (ModModel mod : modPack.getAllMods()) {
-            String format = "%1$-31s    %2$-31s    %3$-10s";
-            printer.println(String.format(format, mod.getId(), mod.getDisplayName(), mod.getVersion()));
+            String format = "%1$-39s    %2$-39s    %3$-20s    %4$-10s";
+            String enabledText = mod.isEnabled() ? "enabled" : "";
+            String text = String.format(format, mod.getId(), mod.getDisplayName(), mod.getVersion(), enabledText);
+            printer.println(text);
         }
     }
 

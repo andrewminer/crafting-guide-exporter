@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-public class RecipeModel {
+public class RecipeModel implements Comparable<RecipeModel> {
 
     public RecipeModel(ItemStackModel output) {
         this.setOutput(output);
@@ -125,6 +125,12 @@ public class RecipeModel {
         }
         if (maxCol < minCol) return 0;
         return maxCol - minCol + 1;
+    }
+
+    // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int compareTo(RecipeModel that) {
+        return this.toString().compareTo(that.toString());
     }
 
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////

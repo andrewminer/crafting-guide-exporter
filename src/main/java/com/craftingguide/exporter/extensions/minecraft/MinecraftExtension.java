@@ -11,10 +11,11 @@ public class MinecraftExtension implements ExporterExtension {
     public void register(Registry registry) {
         registry.registerGatherer(new ItemGatherer(), Priority.HIGH);
 
-        registry.registerGatherer(new ShapedRecipeGatherer());
-        registry.registerGatherer(new ShapelessRecipeGatherer());
-        registry.registerGatherer(new FurnaceRecipeGatherer());
-        registry.registerGatherer(new PotionRecipeGatherer());
+        registry.registerGatherer(new ShapedRecipeGatherer(), Priority.LOW);
+        registry.registerGatherer(new ShapelessRecipeGatherer(), Priority.LOW);
+
+        registry.registerGatherer(new FurnaceRecipeGatherer(), Priority.LOWEST);
+        registry.registerGatherer(new PotionRecipeGatherer(), Priority.LOWEST);
 
         registry.registerEditor(new AddCraftingTableEditor());
         registry.registerEditor(new DisambiguateDisplayNameEditor());

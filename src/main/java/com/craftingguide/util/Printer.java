@@ -20,7 +20,7 @@ public class Printer {
     }
 
     public void println(String text) throws IOException {
-        text = (text == null) ? "" : text.trim();
+        text = (text == null) ? "" : text;
         if (text.length() > 0) {
             this.resolveIndent();
         }

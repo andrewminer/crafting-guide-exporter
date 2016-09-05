@@ -31,9 +31,15 @@ public class ModDumper extends AbstractCraftingGuideDumper {
                 printer.println("schema: 1");
                 printer.println();
                 printer.println("name: " + mod.getDisplayName());
-                printer.println("author: " + mod.getAuthor());
-                printer.println("description: " + mod.getDescription());
-                printer.println("homePageUrl: " + mod.getUrl());
+                if (mod.getAuthor() != null) {
+                    printer.println("author: " + mod.getAuthor());
+                }
+                if (mod.getDescription() != null) {
+                    printer.println("description: " + mod.getDescription());
+                }
+                if (mod.getUrl() != null) {
+                    printer.println("homePageUrl: " + mod.getUrl());
+                }
                 printer.println();
                 printer.println("version: " + mod.getVersion());
             } catch (IOException e) {
