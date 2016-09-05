@@ -16,6 +16,8 @@ public class ModDumper extends AbstractCraftingGuideDumper {
     @Override
     public void dump(ModPackModel modPack) {
         for (ModModel mod : modPack.getAllMods()) {
+            if (mod.isEmpty()) continue;
+
             FileWriter fileWriter = null;
             Printer printer = null;
 

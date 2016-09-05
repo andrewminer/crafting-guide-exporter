@@ -8,7 +8,7 @@ public class ForgeExtension implements ExporterExtension {
 
     @Override
     public void register(Registry registry) {
-        registry.registerGatherer(new OreDictionaryGatherer(), Priority.HIGH);
-        registry.registerGatherer(new ModGatherer());
+        registry.registerGatherer(new ModGatherer(), Priority.HIGHEST);
+        registry.registerGatherer(new OreDictionaryGatherer(), Priority.HIGHEST);
     }
 }

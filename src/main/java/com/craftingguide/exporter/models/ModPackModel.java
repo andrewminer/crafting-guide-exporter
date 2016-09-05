@@ -7,26 +7,10 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ModPackModel {
-
-    // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public Map<String, List<ItemModel>> getItemsByMod() {
-        Map<String, List<ItemModel>> result = new HashMap<>();
-
-        for (ModModel mod : this.getAllMods()) {
-            List<ItemModel> modItems = new ArrayList<ItemModel>();
-            result.put(mod.getId(), modItems);
-
-            for (ItemModel item : this.getAllItems()) {
-                if (!item.isFromMod(mod.getId())) continue;
-                modItems.add(item);
-            }
-        }
-
-        return result;
-    }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -65,17 +49,39 @@ public class ModPackModel {
         ItemModel existingItem = this.getItem(item.getId());
         if (existingItem != null) return;
 
-        this.items.put(item.getId(), item);
-        this.itemList = null;
+        boolean foundMod = false;
+        for (ModModel mod : this.getAllMods()) {
+            if (!mod.containsItemId(item.getId())) continue;
+
+            mod.addItem(item);
+            foundMod = true;
+            break;
+        }
+
+        if (foundMod) {
+            this.items.put(item.getId(), item);
+            this.itemList = null;
+        } else {
+            LOGGER.warn("Could not find mod for item: " + item);
+        }
     }
 
     public void removeItem(String id) {
-        this.items.remove(id);
-        this.itemList = null;
+        ItemModel item = this.getItem(id);
+        if (item == null) return;
+
+        this.removeItem(item);
     }
 
     public void removeItem(ItemModel item) {
-        this.removeItem(item.getId());
+        if (item == null) return;
+
+        this.items.remove(item.getId());
+        this.itemList = null;
+
+        for (ModModel mod : this.getAllMods()) {
+            mod.removeItem(item);
+        }
     }
 
     public ModModel getMod(String modId) {
@@ -119,6 +125,10 @@ public class ModPackModel {
     public String toString() {
         return "ModPack[" + this.items.values().size() + " items]";
     }
+
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static Logger LOGGER = LogManager.getLogger();
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 

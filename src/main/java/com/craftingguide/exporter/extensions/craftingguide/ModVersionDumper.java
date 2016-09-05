@@ -9,6 +9,7 @@ import com.craftingguide.util.Printer;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,10 +21,8 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     // IDumper Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void dump(ModPackModel modPack) {
-        Map<String, List<ItemModel>> itemsByMod = modPack.getItemsByMod();
-        for (String modId : itemsByMod.keySet()) {
-            ModModel mod = modPack.getMod(modId);
-            this.printMod(mod, itemsByMod.get(modId));
+        for (ModModel mod : modPack.getAllMods()) {
+            this.printMod(mod);
         }
     }
 
@@ -33,7 +32,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Map<String, List<ItemModel>> groupItems(List<ItemModel> items) {
+    private Map<String, List<ItemModel>> groupItems(Collection<ItemModel> items) {
         Map<String, List<ItemModel>> result = new HashMap<>();
         for (ItemModel item : items) {
             List<ItemModel> groupItems = result.get(item.getGroupName());
@@ -80,8 +79,8 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         printer.line();
     }
 
-    private void printMod(ModModel mod, List<ItemModel> items) {
-        if (items.size() == 0) return;
+    private void printMod(ModModel mod) {
+        if (mod.getAllItems().isEmpty()) return;
         if (!this.getFileManager().ensureDir(this.getFileManager().getModVersionDir(mod))) return;
 
         String modVersionFile = this.getFileManager().getModVersionFile(mod);
@@ -95,7 +94,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.line("schema: 1");
             printer.line();
 
-            Map<String, List<ItemModel>> itemsByGroup = this.groupItems(items);
+            Map<String, List<ItemModel>> itemsByGroup = this.groupItems(mod.getAllItems());
             List<String> groups = new ArrayList<String>(itemsByGroup.keySet());
             groups.sort((a, b)-> a.compareTo(b));
 

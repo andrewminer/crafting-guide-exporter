@@ -9,7 +9,7 @@ public class MinecraftExtension implements ExporterExtension {
     // IExtension Methods /////////////////////////////////////////////////////////////////////////////////////////////
 
     public void register(Registry registry) {
-        registry.registerGatherer(new ItemGatherer(), Priority.HIGHEST);
+        registry.registerGatherer(new ItemGatherer(), Priority.HIGH);
 
         registry.registerGatherer(new ShapedRecipeGatherer());
         registry.registerGatherer(new ShapelessRecipeGatherer());

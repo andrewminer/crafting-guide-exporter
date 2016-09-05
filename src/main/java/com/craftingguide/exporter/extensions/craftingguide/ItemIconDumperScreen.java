@@ -11,6 +11,7 @@ import java.io.StringWriter;
 import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -52,7 +53,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void dumpItems(ModModel mod, List<ItemModel> items, AsyncStep dumpItemsStep) {
+    public void dumpItems(ModModel mod, Collection<ItemModel> items, AsyncStep dumpItemsStep) {
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
 
@@ -111,7 +112,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.imageConsumer = imageConsumer;
     }
 
-    private void setItems(List<ItemModel> newItems) {
+    private void setItems(Collection<ItemModel> newItems) {
         if (newItems == null) {
             newItems = new LinkedList<ItemModel>();
         }

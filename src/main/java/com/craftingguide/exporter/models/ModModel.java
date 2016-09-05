@@ -1,7 +1,10 @@
 package com.craftingguide.exporter.models;
 
 import cpw.mods.fml.common.ModContainer;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 public class ModModel {
 
@@ -25,6 +28,20 @@ public class ModModel {
             return a.displayName.compareTo(b.displayName);
         }
     };
+
+    // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public boolean containsItemId(String itemId) {
+        int index = itemId.indexOf(':');
+        if (index == -1) return false;
+
+        String modPrefix = itemId.substring(0, index);
+        return modPrefix.equals(this.getId());
+    }
+
+    public boolean isEmpty() {
+        return this.items.isEmpty();
+    }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,6 +104,23 @@ public class ModModel {
         this.id = id;
     }
 
+    public SortedSet<ItemModel> getAllItems() {
+        return Collections.unmodifiableSortedSet(this.items);
+    }
+
+    public void addItem(ItemModel item) {
+        if (item == null) throw new IllegalArgumentException("item cannot be null");
+
+        if (!this.containsItemId(item.getId())) {
+            throw new IllegalArgumentException("item " + item.getId() + " does not belong to this mod");
+        }
+        this.items.add(item);
+    }
+
+    public void removeItem(ItemModel item) {
+        this.items.remove(item);
+    }
+
     public ModContainer getRawMod() {
         return this.rawMod;
     }
@@ -130,6 +164,8 @@ public class ModModel {
     private ItemModel iconicBlock = null;
 
     private String id = null;
+
+    private SortedSet<ItemModel> items = new TreeSet<ItemModel>();
 
     private ModContainer rawMod = null;
 

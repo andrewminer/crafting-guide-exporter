@@ -2,6 +2,7 @@ package com.craftingguide.exporter.baseWorkers;
 
 import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ItemModel;
+import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.PatternSwitcher;
 
@@ -34,9 +35,10 @@ public class GroupAssignmentEditor extends Editor {
 
     @Override
     public void edit(ModPackModel modPack) {
-        for (ItemModel item : modPack.getAllItems()) {
-            if (!item.isFromMod(this.getModId())) return;
+        ModModel mod = modPack.getMod(this.getModId());
+        if (mod == null) return;
 
+        for (ItemModel item : mod.getAllItems()) {
             this.switcher.match(item.getDisplayName(), item);
             this.switcher.match(item.getId(), item);
         }

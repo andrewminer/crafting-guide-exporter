@@ -65,6 +65,11 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
         }
 
         ModModel mod = mods.removeFirst();
+        if (mod.isEmpty()) {
+            this.processNextMod(mods, dumpModIconsStep);
+            return;
+        }
+
         ItemModel iconicBlock = mod.getIconicBlock();
         if (iconicBlock == null) {
             iconicBlock = this.getModPack().getItem(DEFAULT_ICONIC_BLOCK);

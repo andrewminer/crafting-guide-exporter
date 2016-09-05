@@ -42,14 +42,6 @@ public class ItemModel implements Comparable<ItemModel> {
         return this.rawStack.getItemDamage();
     }
 
-    public boolean isFromMod(String modId) {
-        int index = this.getId().indexOf(':');
-        if (index == -1) return false;
-
-        String myModPrefix = this.getId().substring(0, index);
-        return myModPrefix.equals(modId);
-    }
-
     public boolean isPotion() {
         return this.getRawStack().getItem() instanceof ItemPotion;
     }
