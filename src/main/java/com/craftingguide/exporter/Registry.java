@@ -6,15 +6,7 @@ public interface Registry {
         HIGHEST, HIGH, MEDIUM, LOW, LOWEST
     };
 
-    public void registerDumper(Dumper dumper);
+    public void registerWorker(String classpath);
 
-    public void registerDumper(Dumper dumper, Priority priority);
-
-    public void registerEditor(Editor editor);
-
-    public void registerEditor(Editor editor, Priority priority);
-
-    public void registerGatherer(Gatherer gatherer);
-
-    public void registerGatherer(Gatherer gatherer, Priority priority);
+    public void registerWorker(String classpath, Priority priority);
 }

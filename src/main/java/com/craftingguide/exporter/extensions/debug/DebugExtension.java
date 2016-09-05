@@ -5,12 +5,12 @@ import com.craftingguide.exporter.Registry;
 
 public class DebugExtension implements ExporterExtension {
 
-    // IExtension Methods //////////////////////////////////////////////////////////////////////////////////////////////
+    // ExporterExtension Overrides /////////////////////////////////////////////////////////////////////////////////////
 
     @Override
     public void register(Registry registry) {
-        registry.registerDumper(new ModDumper());
-        registry.registerDumper(new ItemDumper());
-        registry.registerDumper(new OreDictionaryDumper());
+        registry.registerWorker("debug.ItemDumper");
+        registry.registerWorker("debug.ModDumper");
+        registry.registerWorker("debug.OreDictionaryDumper");
     }
 }

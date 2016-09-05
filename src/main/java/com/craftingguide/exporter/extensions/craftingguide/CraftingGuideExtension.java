@@ -6,13 +6,13 @@ import com.craftingguide.exporter.Registry.Priority;
 
 public class CraftingGuideExtension implements ExporterExtension {
 
-    // IExtension Methods //////////////////////////////////////////////////////////////////////////////////////////////
+    // ExporterExtension Overrides /////////////////////////////////////////////////////////////////////////////////////
 
     public void register(Registry registry) {
-        registry.registerDumper(new ItemIconDumper());
-        registry.registerDumper(new ModDumper());
-        registry.registerDumper(new ModIconDumper());
-        registry.registerDumper(new ModVersionDumper());
-        registry.registerDumper(new FurnaceFuelIconDumper(), Priority.LOW);
+        registry.registerWorker("craftingguide.ItemIconDumper");
+        registry.registerWorker("craftingguide.ModDumper");
+        registry.registerWorker("craftingguide.ModIconDumper");
+        registry.registerWorker("craftingguide.ModVersionDumper");
+        registry.registerWorker("craftingguide.FurnaceFuelIconDumper", Priority.LOW);
     }
 }

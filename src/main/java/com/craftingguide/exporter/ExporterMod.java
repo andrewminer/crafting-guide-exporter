@@ -76,30 +76,35 @@ public class ExporterMod implements Registry {
         this.getConfig().save();
     }
 
-    // IRegistry Methods ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Registry Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void registerDumper(Dumper dumper) {
-        this.registerDumper(dumper, Priority.MEDIUM);
+    public void registerWorker(String classpath) {
+        this.registerWorker(classpath, Priority.MEDIUM);
     }
 
-    public void registerDumper(Dumper dumper, Priority priority) {
-        this.registerWorker(priority, dumper, this.dumpers);
-    }
+    public void registerWorker(String className, Priority priority) {
+        try {
+            className = WORKER_PACKAGE + "." + className;
+            Class<Worker> workerClass = (Class<Worker>) Class.forName(className);
+            Worker worker = workerClass.newInstance();
 
-    public void registerEditor(Editor editor) {
-        this.registerEditor(editor, Priority.MEDIUM);
-    }
+            Map<Priority, List<Worker>> workerMap = null;
+            if (worker instanceof Dumper) {
+                workerMap = this.dumpers;
+            } else if (worker instanceof Editor) {
+                workerMap = this.editors;
+            } else if (worker instanceof Gatherer) {
+                workerMap = this.gatherers;
+            }
 
-    public void registerEditor(Editor editor, Priority priority) {
-        this.registerWorker(priority, editor, this.editors);
-    }
-
-    public void registerGatherer(Gatherer gatherer) {
-        this.registerGatherer(gatherer, Priority.MEDIUM);
-    }
-
-    public void registerGatherer(Gatherer gatherer, Priority priority) {
-        this.registerWorker(priority, gatherer, this.gatherers);
+            if (workerMap != null) {
+                this.registerWorker(priority, worker, workerMap);
+            } else {
+                LOGGER.warn("could not load work of unknown type: " + className);
+            }
+        } catch (Exception e) {
+            LOGGER.warn("could not load worker for " + className);
+        }
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -119,6 +124,8 @@ public class ExporterMod implements Registry {
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
     private static Logger LOGGER = LogManager.getLogger();
+
+    private static String WORKER_PACKAGE = "com.craftingguide.exporter.extensions";
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
