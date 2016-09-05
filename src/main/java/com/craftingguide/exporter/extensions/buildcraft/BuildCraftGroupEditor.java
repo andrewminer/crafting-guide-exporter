@@ -8,7 +8,8 @@ public class BuildCraftGroupEditor extends GroupAssignmentEditor {
         super("BuildCraft");
 
         // Rough categorization by single words
-        this.addPattern("Electronics", ".*Chipset|.*Gate.*|.*Wire");
+        this.addPattern("Electronics (gates)", ".*Gate.*");
+        this.addPattern("Electronics (parts)", ".*Chipset|.*Wire");
         this.addPattern("Filters & Lenses", "Filter.*|Lens.*");
         this.addPattern("Fluids", "Fuel.*|Oil.*|Water.*");
         this.addPattern("Machine Parts", ".*Gear|.*Mark");
@@ -34,6 +35,6 @@ public class BuildCraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Pipes (energy)", "Power Adapter");
         this.addPattern("Pipes (structure)", "Frame|Mining Pipe|Pipe Plug");
         this.addPattern("Robotics", "Redstone Crystal");
-        this.addPattern("Tools", "Debugger|Paintbrush|Wrench");
+        this.addPattern("Tools", "Debugger|Paintbrush|Gate Copier|Wrench");
     }
 }
