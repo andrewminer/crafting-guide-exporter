@@ -24,7 +24,9 @@ public class GatherableEditor extends Editor {
 
     // Protected Methods ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    protected void addPattern(String pattern) {}
+    protected void addPattern(String patternText) {
+        this.switcher.addPattern(patternText);
+    }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 

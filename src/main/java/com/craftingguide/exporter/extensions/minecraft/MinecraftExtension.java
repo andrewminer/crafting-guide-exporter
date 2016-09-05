@@ -16,11 +16,13 @@ public class MinecraftExtension implements ExporterExtension {
         registry.registerGatherer(new FurnaceRecipeGatherer());
         registry.registerGatherer(new PotionRecipeGatherer());
 
-        registry.registerEditor(new MinecraftGroupEditor());
-        registry.registerEditor(new RemoveUncraftableEditor());
-        registry.registerEditor(new DisambiguateDisplayNameEditor());
         registry.registerEditor(new AddCraftingTableEditor());
-        registry.registerEditor(new ModEditor());
+        registry.registerEditor(new DisambiguateDisplayNameEditor());
+        registry.registerEditor(new MinecraftGatherableEditor());
+        registry.registerEditor(new MinecraftGroupEditor());
+        registry.registerEditor(new MinecraftModEditor());
+        registry.registerEditor(new RemoveUncraftableEditor());
+
         registry.registerEditor(new AddContainerItemEditor(), Priority.LOW);
     }
 }

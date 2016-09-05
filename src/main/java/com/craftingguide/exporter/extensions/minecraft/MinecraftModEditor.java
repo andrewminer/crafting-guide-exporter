@@ -4,7 +4,7 @@ import com.craftingguide.exporter.Editor;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 
-public class ModEditor extends Editor {
+public class MinecraftModEditor extends Editor {
 
     @Override
     public void edit(ModPackModel modPack) {
