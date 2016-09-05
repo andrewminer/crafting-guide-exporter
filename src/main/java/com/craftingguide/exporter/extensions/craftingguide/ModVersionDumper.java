@@ -50,8 +50,8 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             groupName = "Other";
         }
 
-        printer.line("group: " + groupName);
-        printer.line();
+        printer.println("group: " + groupName);
+        printer.println();
         printer.indent();
 
         for (ItemModel item : items) {
@@ -62,11 +62,11 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     }
 
     private void printItem(ItemModel item, Printer printer) throws IOException {
-        printer.line("item: " + item.getDisplayName());
+        printer.println("item: " + item.getDisplayName());
         printer.indent();
 
         if (item.isGatherable()) {
-            printer.line("gatherable: yes");
+            printer.println("gatherable: yes");
         }
 
         if (item.getRecipes().size() > 0) {
@@ -76,11 +76,11 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         }
 
         printer.outdent();
-        printer.line();
+        printer.println();
     }
 
     private void printMod(ModModel mod) {
-        if (mod.getAllItems().isEmpty()) return;
+        if (!mod.isEnabled()) return;
         if (!this.getFileManager().ensureDir(this.getFileManager().getModVersionDir(mod))) return;
 
         String modVersionFile = this.getFileManager().getModVersionFile(mod);
@@ -91,8 +91,8 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             fileWriter = new FileWriter(modVersionFile, false);
             printer = new Printer(fileWriter);
 
-            printer.line("schema: 1");
-            printer.line();
+            printer.println("schema: 1");
+            printer.println();
 
             Map<String, List<ItemModel>> itemsByGroup = this.groupItems(mod.getAllItems());
             List<String> groups = new ArrayList<String>(itemsByGroup.keySet());
@@ -114,44 +114,44 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     private void printRecipe(RecipeModel recipe, Printer printer) throws IOException {
         boolean needsDelimiter = false;
 
-        printer.line("recipe:");
+        printer.println("recipe:");
         printer.indent();
 
         if (recipe.getExtras().size() > 0) {
             needsDelimiter = false;
-            printer.text("extras: ");
+            printer.print("extras: ");
             for (ItemStackModel extraStack : recipe.getExtras()) {
-                if (needsDelimiter) printer.text(", ");
+                if (needsDelimiter) printer.print(", ");
                 needsDelimiter = true;
                 this.printStack(extraStack, printer);
             }
-            printer.line();
+            printer.println();
         }
 
-        printer.text("input: ");
+        printer.print("input: ");
         needsDelimiter = false;
         for (ItemStackModel inputStack : recipe.getInputs()) {
-            if (needsDelimiter) printer.text(", ");
+            if (needsDelimiter) printer.print(", ");
             needsDelimiter = true;
             this.printStack(inputStack, printer);
         }
-        printer.line();
+        printer.println();
 
-        printer.line("pattern: " + recipe.getPattern());
+        printer.println("pattern: " + recipe.getPattern());
 
         if (recipe.getOutput().getQuantity() > 1) {
-            printer.line("quantity: " + recipe.getOutput().getQuantity());
+            printer.println("quantity: " + recipe.getOutput().getQuantity());
         }
 
         if (recipe.getTools().size() > 0) {
-            printer.text("tools: ");
+            printer.print("tools: ");
             needsDelimiter = false;
             for (ItemModel tool : recipe.getTools()) {
-                if (needsDelimiter) printer.text(", ");
+                if (needsDelimiter) printer.print(", ");
                 needsDelimiter = true;
-                printer.text(tool.getDisplayName());
+                printer.print(tool.getDisplayName());
             }
-            printer.line();
+            printer.println();
         }
 
         printer.outdent();
@@ -159,8 +159,8 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
 
     private void printStack(ItemStackModel stack, Printer printer) throws IOException {
         if (stack.getQuantity() > 1) {
-            printer.text(stack.getQuantity() + " ");
+            printer.print(stack.getQuantity() + " ");
         }
-        printer.text(stack.getItem().getDisplayName());
+        printer.print(stack.getItem().getDisplayName());
     }
 }

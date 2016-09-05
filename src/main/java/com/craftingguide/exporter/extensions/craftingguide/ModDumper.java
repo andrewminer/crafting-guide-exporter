@@ -16,7 +16,7 @@ public class ModDumper extends AbstractCraftingGuideDumper {
     @Override
     public void dump(ModPackModel modPack) {
         for (ModModel mod : modPack.getAllMods()) {
-            if (mod.isEmpty()) continue;
+            if (!mod.isEnabled()) continue;
 
             FileWriter fileWriter = null;
             Printer printer = null;
@@ -28,14 +28,14 @@ public class ModDumper extends AbstractCraftingGuideDumper {
                 fileWriter = new FileWriter(modFile);
                 printer = new Printer(fileWriter);
 
-                printer.line("schema: 1");
-                printer.line();
-                printer.line("name: " + mod.getDisplayName());
-                printer.line("author: " + mod.getAuthor());
-                printer.line("description: " + mod.getDescription());
-                printer.line("homePageUrl: " + mod.getUrl());
-                printer.line();
-                printer.line("version: " + mod.getVersion());
+                printer.println("schema: 1");
+                printer.println();
+                printer.println("name: " + mod.getDisplayName());
+                printer.println("author: " + mod.getAuthor());
+                printer.println("description: " + mod.getDescription());
+                printer.println("homePageUrl: " + mod.getUrl());
+                printer.println();
+                printer.println("version: " + mod.getVersion());
             } catch (IOException e) {
                 LOGGER.error("Failed to write " + modFile, e);
             } finally {

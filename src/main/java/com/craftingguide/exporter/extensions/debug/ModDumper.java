@@ -12,7 +12,7 @@ public class ModDumper extends AbstractFileDumper {
     protected void dump(ModPackModel modPack, Printer printer) throws IOException {
         for (ModModel mod : modPack.getAllMods()) {
             String format = "%1$-31s    %2$-31s    %3$-10s";
-            printer.line(String.format(format, mod.getId(), mod.getDisplayName(), mod.getVersion()));
+            printer.println(String.format(format, mod.getId(), mod.getDisplayName(), mod.getVersion()));
         }
     }
 

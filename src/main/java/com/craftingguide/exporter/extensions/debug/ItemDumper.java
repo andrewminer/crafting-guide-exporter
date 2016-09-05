@@ -11,7 +11,7 @@ public class ItemDumper extends AbstractFileDumper {
 
     protected void dump(ModPackModel modPack, Printer printer) throws IOException {
         for (ItemModel item : modPack.getAllItems()) {
-            printer.line(String.format("%1$40s    %2$-40s", item.getDisplayName(), item.getId()));
+            printer.println(String.format("%1$40s    %2$-40s", item.getDisplayName(), item.getId()));
         }
     }
 

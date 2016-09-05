@@ -48,7 +48,7 @@ public class OreDictionaryDumper extends Dumper {
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void printOreDictionary(ModPackModel modPack, Printer printer) throws IOException {
-        printer.line("{");
+        printer.println("{");
         printer.indent();
 
         Map<String, List<ItemModel>> dictionary = modPack.getOreDictionary();
@@ -57,27 +57,27 @@ public class OreDictionaryDumper extends Dumper {
 
         boolean needsDelimiter = false;
         for (String oreName : keys) {
-            if (needsDelimiter) printer.line(",");
+            if (needsDelimiter) printer.println(",");
             needsDelimiter = true;
 
-            printer.line("\"" + oreName + "\": [");
+            printer.println("\"" + oreName + "\": [");
             printer.indent();
 
             List<ItemModel> items = dictionary.get(oreName);
             boolean needsInnerDelimiter = false;
             for (ItemModel item : items) {
-                if (needsInnerDelimiter) printer.line(",");
+                if (needsInnerDelimiter) printer.println(",");
                 needsInnerDelimiter = true;
-                printer.text("\"" + item.getDisplayName() + " <" + item.getId() + ">\"");
+                printer.print("\"" + item.getDisplayName() + " <" + item.getId() + ">\"");
             }
-            printer.line();
+            printer.println();
 
             printer.outdent();
-            printer.text("]");
+            printer.print("]");
         }
-        printer.line();
+        printer.println();
 
         printer.outdent();
-        printer.line("}");
+        printer.println("}");
     }
 }

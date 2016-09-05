@@ -87,6 +87,14 @@ public class ModModel {
         this.displayName = displayName;
     }
 
+    public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
     public ItemModel getIconicBlock() {
         return this.iconicBlock;
     }
@@ -160,6 +168,8 @@ public class ModModel {
     private String description = null;
 
     private String displayName = null;
+
+    private boolean enabled = false;
 
     private ItemModel iconicBlock = null;
 

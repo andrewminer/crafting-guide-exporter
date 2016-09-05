@@ -6,51 +6,54 @@ import java.io.Writer;
 public class Printer {
 
     public Printer(Writer writer) {
-        this._writer = writer;
+        this.writer = writer;
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void indent() {
-        this._indentation++;
+        this.indentation++;
     }
 
-    public void line() throws IOException {
-        this.line("");
+    public void println() throws IOException {
+        this.println("");
     }
 
-    public void line(String text) throws IOException {
+    public void println(String text) throws IOException {
+        text = (text == null) ? "" : text.trim();
+        if (text.length() > 0) {
+            this.resolveIndent();
+        }
+        this.writer.write(text);
+        this.writer.write('\n');
+        this.onNewLine = true;
+    }
+
+    public void print(String text) throws IOException {
         this.resolveIndent();
-        this._writer.write(text);
-        this._writer.write('\n');
-        this._onNewLine = true;
-    }
-
-    public void text(String text) throws IOException {
-        this.resolveIndent();
-        this._writer.write(text);
+        this.writer.write(text);
     }
 
     public void outdent() {
-        this._indentation = Math.max(0, this._indentation - 1);
+        this.indentation = Math.max(0, this.indentation - 1);
     }
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void resolveIndent() throws IOException {
-        if (!this._onNewLine) return;
-        this._onNewLine = false;
+        if (!this.onNewLine) return;
+        this.onNewLine = false;
 
-        for (int i = 0; i < this._indentation; i++) {
-            this._writer.write("    ");
+        for (int i = 0; i < this.indentation; i++) {
+            this.writer.write("    ");
         }
     }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private int _indentation = 0;
+    private int indentation = 0;
 
-    private boolean _onNewLine = true;
+    private boolean onNewLine = true;
 
-    private Writer _writer = null;
+    private Writer writer = null;
 }

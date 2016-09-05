@@ -65,7 +65,7 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
         }
 
         ModModel mod = mods.removeFirst();
-        if (mod.isEmpty()) {
+        if (!mod.isEnabled()) {
             this.processNextMod(mods, dumpModIconsStep);
             return;
         }
