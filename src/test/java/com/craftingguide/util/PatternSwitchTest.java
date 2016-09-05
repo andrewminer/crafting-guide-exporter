@@ -17,7 +17,7 @@ public class PatternSwitchTest {
     @Before
     public void beforeEach() {
         this._items = new ArrayList<String>();
-        this._consumer = (item) -> this._items.add(item);
+        this._consumer = (item)-> this._items.add(item);
         this._switcher = new PatternSwitcher<String>(this._consumer);
     }
 
@@ -48,9 +48,9 @@ public class PatternSwitchTest {
     public void testEachPatternCanHaveConsumer() {
         String[] results = new String[3];
         PatternSwitcher<String> s = new PatternSwitcher<String>();
-        s.addPattern("^a.*", (text) -> results[0] = text);
-        s.addPattern(".*o$", (text) -> results[1] = text);
-        s.addPattern("^c.*e$", (text) -> results[2] = text);
+        s.addPattern("^a.*", (text)-> results[0] = text);
+        s.addPattern(".*o$", (text)-> results[1] = text);
+        s.addPattern("^c.*e$", (text)-> results[2] = text);
 
         s.match("alpha", "a");
         s.match("bravo", "b");

@@ -5,6 +5,8 @@ import com.craftingguide.exporter.baseWorkers.GroupAssignmentEditor;
 public class MinecraftGroupEditor extends GroupAssignmentEditor {
 
     public MinecraftGroupEditor() {
+        super("minecraft");
+
         this.addPattern("Armor", ".*Armor|.*Boots|.*Cap|.*Chestplate|.*Helm(et)?|.*Leggings|.*Pants|.*Tunic");
         this.addPattern("Blocks (earthen)", ".*Clay|Dirt|Farmland|Gravel|Mycelium|Nether Brick.*|Podzol|.*Sand.*");
         this.addPattern("Blocks (glass)", ".*Glass.*");

@@ -33,9 +33,9 @@ public class ItemModel implements Comparable<ItemModel> {
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<PotionEffect> getEffectsAsPotion() {
-        if (!(this.rawStack.getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
-        ItemPotion rawPotion = (ItemPotion) this.rawStack.getItem();
-        return rawPotion.getEffects(this.rawStack);
+        if (!(this.getRawStack().getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
+        ItemPotion rawPotion = (ItemPotion) this.getRawStack().getItem();
+        return rawPotion.getEffects(this.getRawStack());
     }
 
     public int getType() {
@@ -43,23 +43,23 @@ public class ItemModel implements Comparable<ItemModel> {
     }
 
     public boolean isFromMod(String modId) {
-        int index = this.id.indexOf(':');
+        int index = this.getId().indexOf(':');
         if (index == -1) return false;
 
-        String myModPrefix = this.id.substring(0, index);
+        String myModPrefix = this.getId().substring(0, index);
         return myModPrefix.equals(modId);
     }
 
     public boolean isPotion() {
-        return this.rawStack.getItem() instanceof ItemPotion;
+        return this.getRawStack().getItem() instanceof ItemPotion;
     }
 
     public String getPotionEffect() {
-        return this.rawStack.getItem().getPotionEffect(this.rawStack);
+        return this.getRawStack().getItem().getPotionEffect(this.getRawStack());
     }
 
     public boolean isPotionIngredient() {
-        return this.rawStack.getItem().isPotionIngredient(this.rawStack);
+        return this.getRawStack().getItem().isPotionIngredient(this.getRawStack());
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
