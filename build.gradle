@@ -16,9 +16,13 @@ buildscript {
 }
 
 apply plugin: 'forge'
+apply plugin: 'java'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 version = "1.0"
-group = "com.crafting-guide.exporter"
+group = "com.craftingguide.exporter"
 archivesBaseName = "crafting-guide-exporter"
 
 minecraft {
@@ -26,19 +30,16 @@ minecraft {
     runDir = "minecraft"
 }
 
+repositories {
+    ivy {
+        name "BuildCraft"
+        artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision](-[classifier]).[ext]"
+    }
+}
+
 dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+  compile name: "buildcraft", version: "7.1.17", classifier:"dev"
+  testCompile 'junit:junit:4.12'
 }
 
 processResources {
