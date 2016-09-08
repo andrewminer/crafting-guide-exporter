@@ -147,7 +147,7 @@ public class ExporterMod implements Registry {
 
                 this.executeWorkers(workers, executeList);
             });
-        } catch (Exception e) {
+        } catch (Throwable e) {
             LOGGER.error("Failed to execute " + workerName, e);
             this.executeWorkers(workers, executeList);
         }
