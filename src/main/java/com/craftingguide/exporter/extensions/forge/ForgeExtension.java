@@ -11,5 +11,6 @@ public class ForgeExtension implements ExporterExtension {
         registry.registerWorker("forge.ModGatherer", Priority.HIGHEST);
 
         registry.registerWorker("forge.OreDictionaryGatherer");
+        registry.registerWorker("forge.FluidGatherer");
     }
 }

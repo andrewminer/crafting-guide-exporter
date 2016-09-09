@@ -9,12 +9,18 @@ import java.util.TreeSet;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemModel implements Comparable<ItemModel> {
 
-    public ItemModel(String id, ItemStack rawStack) {
-        this(id, rawStack.getDisplayName());
-        this.setRawStack(rawStack);
+    public ItemModel(String id, ItemStack rawItemStack) {
+        this(id, rawItemStack.getDisplayName());
+        this.setRawItemStack(rawItemStack);
+    }
+
+    public ItemModel(String id, FluidStack rawFluidStack) {
+        this(id, rawFluidStack.getFluid().getLocalizedName(rawFluidStack));
+        this.setRawFluidStack(rawFluidStack);
     }
 
     public ItemModel(String id, String displayName) {
@@ -35,25 +41,25 @@ public class ItemModel implements Comparable<ItemModel> {
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<PotionEffect> getEffectsAsPotion() {
-        if (!(this.getRawStack().getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
-        ItemPotion rawPotion = (ItemPotion) this.getRawStack().getItem();
-        return rawPotion.getEffects(this.getRawStack());
+        if (!(this.getRawItemStack().getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
+        ItemPotion rawPotion = (ItemPotion) this.getRawItemStack().getItem();
+        return rawPotion.getEffects(this.getRawItemStack());
     }
 
     public int getType() {
-        return this.rawStack.getItemDamage();
+        return this.rawItemStack.getItemDamage();
     }
 
     public boolean isPotion() {
-        return this.getRawStack().getItem() instanceof ItemPotion;
+        return this.getRawItemStack().getItem() instanceof ItemPotion;
     }
 
     public String getPotionEffect() {
-        return this.getRawStack().getItem().getPotionEffect(this.getRawStack());
+        return this.getRawItemStack().getItem().getPotionEffect(this.getRawItemStack());
     }
 
     public boolean isPotionIngredient() {
-        return this.getRawStack().getItem().isPotionIngredient(this.getRawStack());
+        return this.getRawItemStack().getItem().isPotionIngredient(this.getRawItemStack());
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -74,6 +80,10 @@ public class ItemModel implements Comparable<ItemModel> {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public boolean isFluid() {
+        return this.rawFluidStack != null;
     }
 
     public boolean isGatherable() {
@@ -108,12 +118,20 @@ public class ItemModel implements Comparable<ItemModel> {
         this.recipes.remove(recipe);
     }
 
-    public ItemStack getRawStack() {
-        return this.rawStack;
+    public FluidStack getRawFluidStack() {
+        return this.rawFluidStack;
     }
 
-    private void setRawStack(ItemStack rawStack) {
-        this.rawStack = rawStack;
+    public void setRawFluidStack(FluidStack rawFluidStack) {
+        this.rawFluidStack = rawFluidStack;
+    }
+
+    public ItemStack getRawItemStack() {
+        return this.rawItemStack;
+    }
+
+    private void setRawItemStack(ItemStack rawItemStack) {
+        this.rawItemStack = rawItemStack;
     }
 
     // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,5 +171,7 @@ public class ItemModel implements Comparable<ItemModel> {
 
     private SortedSet<RecipeModel> recipes = new TreeSet<RecipeModel>();;
 
-    private ItemStack rawStack = null;
+    private FluidStack rawFluidStack = null;
+
+    private ItemStack rawItemStack = null;
 }

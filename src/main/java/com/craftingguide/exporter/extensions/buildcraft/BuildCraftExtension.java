@@ -55,6 +55,7 @@ public class BuildCraftExtension implements ExporterExtension {
         registry.registerWorker("buildcraft.RedstoneBoardGatherer");
         registry.registerWorker("buildcraft.RobotGatherer");
         registry.registerWorker("buildcraft.AssemblyTableRecipeGatherer");
+        registry.registerWorker("buildcraft.RefineryRecipeGatherer");
 
         registry.registerWorker("buildcraft.BuildCraftModEditor");
         registry.registerWorker("buildcraft.BuildCraftGroupEditor");

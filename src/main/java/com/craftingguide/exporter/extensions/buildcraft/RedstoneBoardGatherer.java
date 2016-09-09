@@ -17,7 +17,7 @@ public class RedstoneBoardGatherer extends Gatherer {
         if (baseBoard == null) return;
 
         List<ItemStack> subItems = new ArrayList<>();
-        Item rawItem = baseBoard.getRawStack().getItem();
+        Item rawItem = baseBoard.getRawItemStack().getItem();
         rawItem.getSubItems(null, null, subItems);
 
         for (ItemStack rawSubItemStack : (List<ItemStack>) subItems) {

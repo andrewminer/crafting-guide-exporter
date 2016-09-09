@@ -1,8 +1,10 @@
 package com.craftingguide.exporter.models;
 
 import java.util.Comparator;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemStackModel implements Comparable<ItemStackModel> {
 
@@ -23,6 +25,26 @@ public class ItemStackModel implements Comparable<ItemStackModel> {
         if (outputItemModel == null) return null;
 
         return new ItemStackModel(outputItemModel, itemStack.stackSize);
+    }
+
+    public static ItemStackModel convert(FluidStack fluidStack, ModPackModel context) {
+        if (fluidStack == null) return null;
+        if (fluidStack.getFluid() == null) return null;
+
+        ItemStackModel result = null;
+        Block fluidBlock = fluidStack.getFluid().getBlock();
+
+        if (fluidBlock != null) {
+            Item fluidItem = Item.getItemFromBlock(fluidBlock);
+            ItemStack rawStack = new ItemStack(fluidItem, fluidStack.amount, 0);
+            result = ItemStackModel.convert(rawStack, context);
+        } else {
+            ItemModel item = new ItemModel(fluidStack.getFluid().getName(), fluidStack);
+            result = new ItemStackModel(item, fluidStack.amount);
+        }
+
+        result.getItem().setRawFluidStack(fluidStack);
+        return result;
     }
 
     // Class Properties ////////////////////////////////////////////////////////////////////////////////////////////////

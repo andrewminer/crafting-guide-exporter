@@ -17,7 +17,7 @@ public class RobotGatherer extends Gatherer {
         if (baseRobot == null) return;
 
         List<ItemStack> subItems = new ArrayList<>();
-        Item rawItem = baseRobot.getRawStack().getItem();
+        Item rawItem = baseRobot.getRawItemStack().getItem();
         rawItem.getSubItems(null, null, subItems);
 
         for (ItemStack rawSubItemStack : (List<ItemStack>) subItems) {

@@ -97,7 +97,7 @@ public class PotionRecipeGatherer extends Gatherer {
             buffer.append("Ambient ");
         }
 
-        if (ItemPotion.isSplash(potion.getRawStack().getItemDamage())) {
+        if (ItemPotion.isSplash(potion.getRawItemStack().getItemDamage())) {
             buffer.append("Splash ");
         }
 
@@ -149,7 +149,7 @@ public class PotionRecipeGatherer extends Gatherer {
     }
 
     private ItemModel getPotionModel(Integer type) {
-        ItemStack newPotionStack = new ItemStack(this.basePotion.getRawStack().getItem(), 1, type);
+        ItemStack newPotionStack = new ItemStack(this.basePotion.getRawItemStack().getItem(), 1, type);
 
         String id = POTION_NAME + ":" + type;
         ItemModel potion = new ItemModel(id, newPotionStack);

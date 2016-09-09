@@ -47,6 +47,13 @@ public class ModPackModel {
 
     public void addItem(ItemModel item) {
         ItemModel existingItem = this.getItem(item.getId());
+
+        if (item.isFluid()) {
+            if (existingItem != null && !existingItem.isFluid()) {
+                existingItem.setRawFluidStack(item.getRawFluidStack());
+            }
+        }
+
         if (existingItem != null) return;
 
         boolean foundMod = false;

@@ -17,7 +17,7 @@ public class GateGatherer extends Gatherer {
         if (baseGate == null) return;
 
         List<ItemStack> subItems = new ArrayList<>();
-        Item rawItem = baseGate.getRawStack().getItem();
+        Item rawItem = baseGate.getRawItemStack().getItem();
         rawItem.getSubItems(null, null, subItems);
 
         for (ItemStack rawSubItemStack : (List<ItemStack>) subItems) {

@@ -277,12 +277,12 @@ public class ItemIconDumperScreen extends GuiScreen {
     }
 
     private void drawItem(ItemModel item, int i, int j) {
-        FontRenderer fontRenderer = item.getRawStack().getItem().getFontRenderer(item.getRawStack());
+        FontRenderer fontRenderer = item.getRawItemStack().getItem().getFontRenderer(item.getRawItemStack());
         if (fontRenderer == null) {
             fontRenderer = Minecraft.getMinecraft().fontRenderer;
         }
         TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
-        ItemStack itemStack = item.getRawStack();
+        ItemStack itemStack = item.getRawItemStack();
         List<String> stackTraces = new ArrayList<String>();
 
         // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
