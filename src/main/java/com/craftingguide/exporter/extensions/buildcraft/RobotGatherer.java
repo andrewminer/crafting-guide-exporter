@@ -21,23 +21,7 @@ public class RobotGatherer extends Gatherer {
         rawItem.getSubItems(null, null, subItems);
 
         for (ItemStack rawSubItemStack : (List<ItemStack>) subItems) {
-            String robotType = null;
-            List<String> extraData = new ArrayList<>();
-            rawSubItemStack.getItem().addInformation(rawSubItemStack, null, extraData, true);
-            if (extraData.size() > 0) {
-                robotType = ((String) extraData.get(0)).substring(2);
-            }
-
-            String id = BASE_ROBOT_ID;
-            if (robotType != null) {
-                id += ":" + robotType;
-            }
-
-            ItemModel item = new ItemModel(id, rawSubItemStack);
-            if (robotType != null) {
-                item.setDisplayName(item.getDisplayName() + " (" + robotType + ")");
-            }
-
+            ItemModel item = BuildCraftExtension.findOrCreateItem(rawSubItemStack, modPack);
             modPack.addItem(item);
         }
     }

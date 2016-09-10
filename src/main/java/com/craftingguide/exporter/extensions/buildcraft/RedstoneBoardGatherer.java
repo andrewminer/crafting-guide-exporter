@@ -21,18 +21,8 @@ public class RedstoneBoardGatherer extends Gatherer {
         rawItem.getSubItems(null, null, subItems);
 
         for (ItemStack rawSubItemStack : (List<ItemStack>) subItems) {
-            String id = rawSubItemStack.stackTagCompound.getString("id");
-            id = id.replace("buildcraft", ROBOTICS_MOD_ID);
-
-            ItemModel item = new ItemModel(id, rawSubItemStack);
+            ItemModel item = BuildCraftExtension.findOrCreateItem(rawSubItemStack, modPack);
             modPack.addItem(item);
-
-            List<String> extraData = new ArrayList<>();
-            rawSubItemStack.getItem().addInformation(rawSubItemStack, null, extraData, true);
-            if (extraData.size() > 0) {
-                String boardType = ((String) extraData.get(0)).substring(2);
-                item.setDisplayName(item.getDisplayName() + " (" + boardType + ")");
-            }
         }
     }
 
