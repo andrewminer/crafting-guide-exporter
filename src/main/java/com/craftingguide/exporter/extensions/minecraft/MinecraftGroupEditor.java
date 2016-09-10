@@ -11,7 +11,7 @@ public class MinecraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Blocks (earthen)", ".*Clay.*|Dirt|Farmland|Gravel|Mycelium|Nether Brick.*|Podzol|.*Sand.*");
         this.addPattern("Blocks (glass)", ".*Glass.*");
         this.addPattern("Blocks (minerals)", "");
-        this.addPattern("Blocks (tools)", "Anvil|Beacon|Bed|Cauldron|.*Chest|Command.*|Crafting Table|Furnace|Jukebox");
+        this.addPattern("Blocks (tools)", "Anvil|Beacon|Bed|Cauldron|.*Chest|Crafting Table|Furnace|Jukebox");
         this.addPattern("Blocks (stone)", "Bedrock|Chiseled.*|.*Cobble.*|Netherrack|.*Quartz.*|.*Stone.*|Obsidian");
         this.addPattern("Blocks (wooden)", ".*Fence.*|.*Wood (Planks|Slab|Stairs)");
         this.addPattern("Brewing (potions)", ".*Potion.*");
@@ -43,6 +43,7 @@ public class MinecraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Weapons", "Arrow|Bow|.*Sword");
 
         // Second Tier (overrides)
+        this.addPattern("Blocks (tools)", "Command Block|Ender Chest");
         this.addPattern("Brewing (supplies)", "Awkward Potion|Fermented.*|Glistering.*|Mundane Potion|Potent Potion");
         this.addPattern("Brewing (supplies)", "Thick Potion");
         this.addPattern("Blocks (earthen)", "Brick.*");
