@@ -8,7 +8,10 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import net.minecraft.item.ItemStack;
 
 public class AssemblyTableRecipeGatherer extends Gatherer {
@@ -27,25 +30,28 @@ public class AssemblyTableRecipeGatherer extends Gatherer {
             if (outputItem == null) continue;
 
             ItemStackModel outputStack = new ItemStackModel(outputItem, rawOutputStack.stackSize);
-            RecipeModel model = new RecipeModel(outputStack);
+            RecipeModel recipe = new RecipeModel(outputStack);
 
             int index = 0;
             for (Object inputObj : rawRecipe.getInputs()) {
                 if (inputObj instanceof List) {
                     for (Object itemStackObj : (List) inputObj) {
                         ItemStackModel stackModel = ItemStackModel.convert(((ItemStack) itemStackObj), modPack);
-                        model.setInputAt(ROWS[index], COLS[index], stackModel);
+                        recipe.setInputAt(ROWS[index], COLS[index], stackModel);
                         index++;
                     }
                 } else if (inputObj instanceof ItemStack) {
                     ItemStackModel stackModel = ItemStackModel.convert(((ItemStack) inputObj), modPack);
-                    model.setInputAt(ROWS[index], COLS[index], stackModel);
+                    recipe.setInputAt(ROWS[index], COLS[index], stackModel);
                     index++;
                 }
             }
 
-            model.addTool(assemblyTable);
-            modPack.addRecipe(model);
+            recipe.addTool(assemblyTable);
+
+            if (this.shouldKeepRecipe(recipe, modPack)) {
+                modPack.addRecipe(recipe);
+            }
         }
     }
 
@@ -56,4 +62,25 @@ public class AssemblyTableRecipeGatherer extends Gatherer {
     private static int[] COLS = { 1, 0, 1, 0, 2, 2, 0, 1, 2 };
 
     private static int[] ROWS = { 1, 1, 0, 0, 1, 0, 2, 2, 2 };
+
+    private static String STONE_FACADE_ID = "BuildCraft|Transport:pipeFacade:0";
+
+    private static String STONE_ID = "minecraft:stone";
+
+    private static String STRUCTURE_PIPE_ID = "BuildCraft|Transport:item.buildcraftPipe.pipestructurecobblestone:0";
+
+    // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private boolean shouldKeepRecipe(RecipeModel recipe, ModPackModel modPack) {
+        ItemModel stoneFacade = modPack.getItem(STONE_FACADE_ID);
+        if (recipe.getOutput().getItem() != stoneFacade) return true;
+
+        ItemModel stone = modPack.getItem(STONE_ID);
+        ItemModel structurePipe = modPack.getItem(STRUCTURE_PIPE_ID);
+        Set<ItemModel> validInputs = new HashSet<>(Arrays.asList(stone, structurePipe));
+        for (ItemStackModel inputStack : recipe.getInputs()) {
+            if (!validInputs.contains(inputStack.getItem())) return false;
+        }
+        return true;
+    }
 }

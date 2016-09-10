@@ -11,7 +11,7 @@ public class PatternSwitcher<T> {
     }
 
     public PatternSwitcher(Consumer<T> defaultConsumer) {
-        this._patterns = new ArrayList<PatternElement>();
+        this.patterns = new ArrayList<PatternElement>();
         this.setDefaultConsumer(defaultConsumer);
     }
 
@@ -27,7 +27,7 @@ public class PatternSwitcher<T> {
 
     public void addPattern(String patternText, int options, Consumer<T> consumer) {
         Pattern pattern = Pattern.compile(patternText, options);
-        this._patterns.add(new PatternElement(pattern, consumer));
+        this.patterns.add(new PatternElement(pattern, consumer));
     }
 
     public void addAllPatterns(Iterable<String> patternTexts) {
@@ -37,9 +37,9 @@ public class PatternSwitcher<T> {
     }
 
     public void match(String text, T item) {
-        for (PatternElement element : this._patterns) {
+        for (PatternElement element : this.patterns) {
             if (element.pattern.matcher(text).matches()) {
-                Consumer<T> consumer = element.consumer != null ? element.consumer : this._defaultConsumer;
+                Consumer<T> consumer = element.consumer != null ? element.consumer : this.defaultConsumer;
                 consumer.accept(item);
             }
         }
@@ -48,7 +48,7 @@ public class PatternSwitcher<T> {
     // Property Access Methods /////////////////////////////////////////////////////////////////////////////////////////
 
     public void setDefaultConsumer(Consumer<T> defaultConsumer) {
-        this._defaultConsumer = defaultConsumer != null ? defaultConsumer : (t) -> {};
+        this.defaultConsumer = defaultConsumer != null ? defaultConsumer : (t) -> {};
     }
 
     // Private Helper Classes //////////////////////////////////////////////////////////////////////////////////////////
@@ -67,8 +67,8 @@ public class PatternSwitcher<T> {
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private ArrayList<PatternElement> _patterns = null;
+    private ArrayList<PatternElement> patterns = null;
 
-    private Consumer<T> _defaultConsumer = null;
+    private Consumer<T> defaultConsumer = null;
 
 }

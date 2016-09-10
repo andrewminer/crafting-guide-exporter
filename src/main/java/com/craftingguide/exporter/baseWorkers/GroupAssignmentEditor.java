@@ -40,7 +40,6 @@ public class GroupAssignmentEditor extends Editor {
 
         for (ItemModel item : mod.getAllItems()) {
             this.switcher.match(item.getDisplayName(), item);
-            this.switcher.match(item.getId(), item);
         }
     }
 

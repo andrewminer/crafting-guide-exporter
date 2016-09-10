@@ -17,9 +17,9 @@ public class BuildCraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Machines (electronics)", ".*Table");
         this.addPattern("Machines (power)", ".*Engine");
         this.addPattern("Machines (transport)", ".*Buffer");
-        this.addPattern("Pipes (transport)", ".*Transport Pipe");
-        this.addPattern("Pipes (fluid)", ".*Fluid Pipe");
-        this.addPattern("Pipes (energy)", ".*Kinesis Pipe");
+        this.addPattern("Pipes (transport)", ".*Transport.*");
+        this.addPattern("Pipes (fluid)", ".*Fluid.*");
+        this.addPattern("Pipes (energy)", ".*Kinesis.*");
         this.addPattern("Pipes (structure)", "Facade.*|.*Structure.*");
         this.addPattern("Robotics", ".*Board.*|.*Station|.*Robot.*");
 
@@ -27,7 +27,7 @@ public class BuildCraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Documents", "Blueprint|List|Map Location|Template");
         this.addPattern("Fluids", "Tank");
         this.addPattern("Machine Parts", "Package");
-        this.addPattern("Machines (building)", "Architect Table|Builder|Filler|Quarry");
+        this.addPattern("Machines (building)", "Architect Table|Builder|Filler|Quarry|Requester");
         this.addPattern("Machines (electronics)", "Laser");
         this.addPattern("Machines (fluid)", "Flood Gate|Pump|Refinery");
         this.addPattern("Machines (transport)", "Chute");
