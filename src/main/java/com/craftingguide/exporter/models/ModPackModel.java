@@ -29,11 +29,14 @@ public class ModPackModel {
     }
 
     public ItemModel getItem(ItemStack itemStack) {
-        String id = Item.itemRegistry.getNameForObject(itemStack.getItem());
-        if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < 16) {
-            id += ":" + itemStack.getItemDamage();
-        }
-        return this.getItem(id);
+        String baseId = Item.itemRegistry.getNameForObject(itemStack.getItem());
+        String fullId = baseId + ":" + itemStack.getItemDamage();
+
+        ItemModel item = this.getItem(fullId);
+        if (item != null) return item;
+
+        item = this.getItem(baseId);
+        return item;
     }
 
     public Iterable<ItemModel> getAllItems() {

@@ -16,7 +16,6 @@ import net.minecraft.item.ItemStack;
 
 public class AssemblyTableRecipeGatherer extends Gatherer {
 
-    @SuppressWarnings("rawtypes")
     public void gather(ModPackModel modPack) {
         ItemModel assemblyTable = modPack.getItem(ASSEMBLY_TABLE_ID);
 
@@ -34,17 +33,15 @@ public class AssemblyTableRecipeGatherer extends Gatherer {
 
             int index = 0;
             for (Object inputObj : rawRecipe.getInputs()) {
+                ItemStack rawInputStack = null;
                 if (inputObj instanceof List) {
-                    for (Object itemStackObj : (List) inputObj) {
-                        ItemStackModel stackModel = ItemStackModel.convert(((ItemStack) itemStackObj), modPack);
-                        recipe.setInputAt(ROWS[index], COLS[index], stackModel);
-                        index++;
-                    }
+                    rawInputStack = ((List<ItemStack>) inputObj).get(0);
                 } else if (inputObj instanceof ItemStack) {
-                    ItemStackModel stackModel = ItemStackModel.convert(((ItemStack) inputObj), modPack);
-                    recipe.setInputAt(ROWS[index], COLS[index], stackModel);
-                    index++;
+                    rawInputStack = (ItemStack) inputObj;
                 }
+                ItemStackModel stackModel = ItemStackModel.convert(rawInputStack, modPack);
+                recipe.setInputAt(ROWS[index], COLS[index], stackModel);
+                index++;
             }
 
             recipe.addTool(assemblyTable);

@@ -20,12 +20,6 @@ public class IntegrationTableRecipeGatherer extends Gatherer {
         for (IIntegrationRecipe rawRecipe : BuildcraftRecipeRegistry.integrationTable.getRecipes()) {
             for (ItemStack rawInput : rawRecipe.getExampleInput()) {
                 for (ItemStack rawExpansion : rawRecipe.getExampleExpansions().get(0)) {
-
-                    ItemModel x = BuildCraftExtension.findOrCreateItem(rawInput, modPack);
-                    if (x.getDisplayName().contains("Robot")) {
-                        System.out.println("found robot");
-                    }
-
                     if (!rawRecipe.isValidExpansion(rawInput, rawExpansion)) continue;
 
                     ItemStack rawOutput = rawRecipe.craft(rawInput, Arrays.asList(rawExpansion), true);
