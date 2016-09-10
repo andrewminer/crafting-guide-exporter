@@ -15,16 +15,11 @@ public class ItemStackModel implements Comparable<ItemStackModel> {
 
     // Class Methods ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public static ItemStackModel convert(ItemStack itemStack, ModPackModel context) {
-        String outputId = Item.itemRegistry.getNameForObject(itemStack.getItem());
-        if (itemStack.getItemDamage() > 0 && itemStack.getItemDamage() < 16) {
-            outputId += ":" + itemStack.getItemDamage();
-        }
+    public static ItemStackModel convert(ItemStack itemStack, ModPackModel modPack) {
+        ItemModel item = modPack.getItem(itemStack);
+        if (item == null) return null;
 
-        ItemModel outputItemModel = context.getItem(outputId);
-        if (outputItemModel == null) return null;
-
-        return new ItemStackModel(outputItemModel, itemStack.stackSize);
+        return new ItemStackModel(item, itemStack.stackSize);
     }
 
     public static ItemStackModel convert(FluidStack fluidStack, ModPackModel context) {

@@ -35,6 +35,10 @@ public class ShapedRecipeGatherer extends Gatherer {
         ItemStackModel output = ItemStackModel.convert(recipe.getOutput(), modPack);
         if (output == null) return null;
 
+        if (output.getItem().getDisplayName().equals("Electrum Hoe")) {
+            System.out.println("found it");
+        }
+
         RecipeModel model = new RecipeModel(output);
 
         int index = 0;

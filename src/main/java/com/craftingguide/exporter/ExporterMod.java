@@ -5,6 +5,7 @@ import com.craftingguide.CraftingGuideException;
 import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.commands.CraftingGuideDumpCommand;
 import com.craftingguide.exporter.extensions.buildcraft.BuildCraftExtension;
+import com.craftingguide.exporter.extensions.cofh.CofhExtension;
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
 import com.craftingguide.exporter.extensions.debug.DebugExtension;
 import com.craftingguide.exporter.extensions.forge.ForgeExtension;
@@ -68,6 +69,7 @@ public class ExporterMod implements Registry {
             this.register(new ForgeExtension());
             this.register(new MinecraftExtension());
             this.register(new BuildCraftExtension());
+            this.register(new CofhExtension());
         } catch (Exception e) {
             System.err.println("Failed to initialize Crafting Guide Export!");
             e.printStackTrace();
