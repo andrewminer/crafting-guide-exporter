@@ -26,5 +26,4 @@ public class FluidDumper extends AbstractFileDumper {
     protected String getDumpFile() {
         return "fluids.txt";
     }
-
 }

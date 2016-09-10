@@ -3,6 +3,7 @@ package com.craftingguide.exporter.extensions.buildcraft;
 import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.ExporterExtension;
 import com.craftingguide.exporter.Registry;
+import com.craftingguide.exporter.Registry.Priority;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import java.util.ArrayList;
@@ -54,8 +55,10 @@ public class BuildCraftExtension implements ExporterExtension {
         registry.registerWorker("buildcraft.GateGatherer");
         registry.registerWorker("buildcraft.RedstoneBoardGatherer");
         registry.registerWorker("buildcraft.RobotGatherer");
-        registry.registerWorker("buildcraft.AssemblyTableRecipeGatherer");
-        registry.registerWorker("buildcraft.RefineryRecipeGatherer");
+
+        registry.registerWorker("buildcraft.AssemblyTableRecipeGatherer", Priority.LOW);
+        registry.registerWorker("buildcraft.RefineryRecipeGatherer", Priority.LOW);
+        registry.registerWorker("buildcraft.ProgrammingTableRecipeGatherer", Priority.LOW);
 
         registry.registerWorker("buildcraft.BuildCraftModEditor");
         registry.registerWorker("buildcraft.BuildCraftGroupEditor");
