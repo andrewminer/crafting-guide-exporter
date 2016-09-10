@@ -8,7 +8,6 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class BuildCraftExtension implements ExporterExtension {
@@ -16,8 +15,8 @@ public class BuildCraftExtension implements ExporterExtension {
     // Public Class Methods ////////////////////////////////////////////////////////////////////////////////////////////
 
     public static ItemModel findOrCreateItem(ItemStack rawItemStack, ModPackModel modPack) {
-        String itemId = Item.itemRegistry.getNameForObject(rawItemStack.getItem());
-        if (!BASE_GATE_ID.equals(itemId)) return modPack.getItem(itemId);
+        ItemModel item = modPack.getItem(rawItemStack);
+        if (!item.getId().equals(BASE_GATE_ID)) return item;
 
         List<String> extraData = new ArrayList<>();
         rawItemStack.getItem().addInformation(rawItemStack, null, extraData, true);
@@ -27,12 +26,12 @@ public class BuildCraftExtension implements ExporterExtension {
             extraChip = extraData.get(3);
         }
 
-        itemId = BASE_GATE_ID + ":" + CraftingGuideFileManager.slugify(rawItemStack.getDisplayName());
+        String itemId = BASE_GATE_ID + ":" + CraftingGuideFileManager.slugify(rawItemStack.getDisplayName());
         if (extraChip != null) {
             itemId += ":" + CraftingGuideFileManager.slugify(extraChip);
         }
 
-        ItemModel item = modPack.getItem(itemId);
+        item = modPack.getItem(itemId);
         if (item == null) {
             item = new ItemModel(itemId, rawItemStack);
 
@@ -57,6 +56,7 @@ public class BuildCraftExtension implements ExporterExtension {
         registry.registerWorker("buildcraft.RobotGatherer");
 
         registry.registerWorker("buildcraft.AssemblyTableRecipeGatherer", Priority.LOW);
+        registry.registerWorker("buildcraft.IntegrationTableRecipeGatherer", Priority.LOW);
         registry.registerWorker("buildcraft.RefineryRecipeGatherer", Priority.LOW);
         registry.registerWorker("buildcraft.ProgrammingTableRecipeGatherer", Priority.LOW);
 
