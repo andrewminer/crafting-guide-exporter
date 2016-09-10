@@ -23,6 +23,7 @@ public class MinecraftExtension implements ExporterExtension {
         registry.registerWorker("minecraft.MinecraftGroupEditor");
         registry.registerWorker("minecraft.MinecraftModEditor");
         registry.registerWorker("minecraft.RemoveUncraftableEditor");
+        registry.registerWorker("minecraft.SuppressEffectRenderingEditor");
 
         registry.registerWorker("minecraft.AddContainerItemEditor", Priority.LOW);
     }

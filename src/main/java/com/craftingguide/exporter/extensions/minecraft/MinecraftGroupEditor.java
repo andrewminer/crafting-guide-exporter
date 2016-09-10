@@ -8,7 +8,7 @@ public class MinecraftGroupEditor extends GroupAssignmentEditor {
         super("minecraft");
 
         this.addPattern("Armor", ".*Armor|.*Boots|.*Cap|.*Chestplate|.*Helm(et)?|.*Leggings|.*Pants|.*Tunic");
-        this.addPattern("Blocks (earthen)", ".*Clay|Dirt|Farmland|Gravel|Mycelium|Nether Brick.*|Podzol|.*Sand.*");
+        this.addPattern("Blocks (earthen)", ".*Clay.*|Dirt|Farmland|Gravel|Mycelium|Nether Brick.*|Podzol|.*Sand.*");
         this.addPattern("Blocks (glass)", ".*Glass.*");
         this.addPattern("Blocks (minerals)", "");
         this.addPattern("Blocks (tools)", "Anvil|Beacon|Bed|Cauldron|.*Chest|Command.*|Crafting Table|Furnace|Jukebox");
@@ -22,12 +22,12 @@ public class MinecraftGroupEditor extends GroupAssignmentEditor {
         this.addPattern("Dyes", "Cocoa Beans|.*Dye");
         this.addPattern("Fireworks", "Fire Charge|Firework.*");
         this.addPattern("Flowers", "Allium|.*Bluet|.*Orchid|.*Daisy|Dandelion.*|Lilac|Peony|Poppy|Sunflower|.*Tulip");
-        this.addPattern("Food", ".*Apple|Bread|Cake|Carrot|Cooked.*|Cookie|.*[fF]ish|Hay.*|Melon.*|Milk|Mushroom.*");
+        this.addPattern("Food", ".*Apple.*|Bread|Cake|Carrot|Cooked.*|Cookie|.*[fF]ish|Hay.*|Melon.*|Milk|Mushroom.*");
         this.addPattern("Food", ".*Potato|Pumpkin.*|Raw.*|.*Seeds|Steak|Sugar.*|Wheat");
         this.addPattern("Household Items", ".*Book.*|.*Bottle.*|Bowl|.*Disc.*|.*Door|Flower Pot|.*Frame|Ladder");
         this.addPattern("Household Items", "Painting|Paper");
         this.addPattern("Liquids", ".*Bucket|Lava|Water");
-        this.addPattern("Machines", "Button|Dispenser|Dropper|Hopper|Lever|.*Piston|.*Pressure Plate.*|Redstone .*");
+        this.addPattern("Machines", "Button.*|Dispenser|Dropper|Hopper|Lever|.*Piston|.*Pressure Plate.*|Redstone .*");
         this.addPattern("Machines", ".*Sensor|Trapdoor|Tripwire.*");
         this.addPattern("Minerals", ".*Block|Block of.*|.*[cC]oal|Diamond|Emerald|Flint|Glowstone.*|.*Ice|.*Ingot");
         this.addPattern("Minerals", ".*Nugget|Redstone|Snow.*");

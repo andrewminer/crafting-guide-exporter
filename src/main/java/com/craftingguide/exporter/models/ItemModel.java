@@ -82,6 +82,14 @@ public class ItemModel implements Comparable<ItemModel> {
         this.displayName = displayName;
     }
 
+    public boolean isEffectRenderable() {
+        return this.effectRenderable;
+    }
+
+    public void setEffectRenderable(boolean effectRenderable) {
+        this.effectRenderable = effectRenderable;
+    }
+
     public boolean isFluid() {
         return this.rawFluidStack != null;
     }
@@ -164,6 +172,8 @@ public class ItemModel implements Comparable<ItemModel> {
     private String id = "";
 
     private String displayName = "";
+
+    private boolean effectRenderable = true;
 
     private boolean gatherable = false;
 

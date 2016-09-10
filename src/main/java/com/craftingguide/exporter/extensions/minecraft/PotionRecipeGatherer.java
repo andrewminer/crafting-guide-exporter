@@ -153,6 +153,7 @@ public class PotionRecipeGatherer extends Gatherer {
 
         String id = POTION_NAME + ":" + type;
         ItemModel potion = new ItemModel(id, newPotionStack);
+        potion.setEffectRenderable(false);
         this.assignDisplayName(potion);
 
         if (this.knownPotions.containsKey(potion.getDisplayName())) {
