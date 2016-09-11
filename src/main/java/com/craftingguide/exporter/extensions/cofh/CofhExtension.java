@@ -11,6 +11,7 @@ public class CofhExtension implements ExporterExtension {
     public void register(Registry registry) {
         registry.registerWorker("cofh.CrucibleRecipeGatherer");
         registry.registerWorker("cofh.PulverizerRecipeGatherer");
+        registry.registerWorker("cofh.TransposerRecipeGatherer");
 
         registry.registerWorker("cofh.CofhModEditor");
         registry.registerWorker("cofh.ThermalExpansionGroupEditor");

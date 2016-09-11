@@ -16,6 +16,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Magma Cream");
         this.addPattern("Nether Brick (block)");
         this.addPattern("Nether Quartz");
+        this.addPattern("Packed Ice");
         this.addPattern("Redstone");
         this.addPattern("Sand");
         this.addPattern("String");

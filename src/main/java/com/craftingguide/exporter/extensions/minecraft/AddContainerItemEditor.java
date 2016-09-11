@@ -22,6 +22,10 @@ public class AddContainerItemEditor extends Editor {
         }
     }
 
+    // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
+
+    private static String CRAFTING_TABLE_ID = "minecraft:crafting_table";
+
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void addToRecipes(ItemModel containedItem, ItemStackModel container, ModPackModel modPack) {
@@ -30,8 +34,19 @@ public class AddContainerItemEditor extends Editor {
                 int quantity = recipe.getQuantityRequired(containedItem.getId());
                 if (quantity == 0) continue;
 
+                if (!this.isCraftedRecipe(recipe, modPack)) continue;
+
                 recipe.addExtra(new ItemStackModel(container.getItem(), container.getQuantity() * quantity));
             }
         }
+    }
+
+    private boolean isCraftedRecipe(RecipeModel recipe, ModPackModel modPack) {
+        if (recipe.getTools().size() == 0) return true;
+        if (recipe.getTools().size() > 1) return false;
+
+        ItemModel craftingTable = modPack.getItem(CRAFTING_TABLE_ID);
+        if (recipe.getTools().contains(craftingTable)) return true;
+        return false;
     }
 }
