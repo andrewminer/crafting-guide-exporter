@@ -9,6 +9,8 @@ public class CofhExtension implements ExporterExtension {
 
     @Override
     public void register(Registry registry) {
+        registry.registerWorker("cofh.PulverizerRecipeGatherer");
+
         registry.registerWorker("cofh.CofhModEditor");
         registry.registerWorker("cofh.ThermalExpansionGroupEditor");
         registry.registerWorker("cofh.ThermalFoundationGroupEditor");

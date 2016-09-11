@@ -30,15 +30,11 @@ minecraft {
     runDir = "minecraft"
 }
 
-repositories {
-    ivy {
-        name "BuildCraft"
-        artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision](-[classifier]).[ext]"
-    }
-}
-
 dependencies {
-  compile name: "buildcraft", version: "7.1.17", classifier:"dev"
+  compile files("mods/buildcraft.jar")
+  compile files("mods/cofh-core-dev.jar")
+  compile files("mods/thermal-expansion-dev.jar")
+  compile files("mods/thermal-foundation-dev.jar")
   testCompile 'junit:junit:4.12'
 }
 
