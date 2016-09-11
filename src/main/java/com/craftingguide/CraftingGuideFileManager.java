@@ -27,7 +27,7 @@ public class CraftingGuideFileManager {
         if (text == null) return null;
 
         String result = text.toLowerCase();
-        result = result.replaceAll("[^-a-zA-Z0-9._]", "_");
+        result = result.replaceAll("[^a-zA-Z0-9._]", "_");
         result = result.replaceAll("__+", "_");
         result = result.replaceAll("^_", "");
         result = result.replaceAll("_$", "");
