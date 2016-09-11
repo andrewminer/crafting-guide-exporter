@@ -24,10 +24,13 @@ public class ItemStackModel implements Comparable<ItemStackModel> {
 
     public static ItemStackModel convert(FluidStack fluidStack, ModPackModel context) {
         if (fluidStack == null) return null;
-        if (fluidStack.getFluid() == null) return null;
 
         ItemStackModel result = null;
-        Block fluidBlock = fluidStack.getFluid().getBlock();
+        Block fluidBlock = null;
+
+        if (fluidStack.getFluid() != null) {
+            fluidBlock = fluidStack.getFluid().getBlock();
+        }
 
         if (fluidBlock != null) {
             Item fluidItem = Item.getItemFromBlock(fluidBlock);
