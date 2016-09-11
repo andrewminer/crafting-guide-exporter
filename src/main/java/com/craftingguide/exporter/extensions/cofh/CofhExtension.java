@@ -13,6 +13,7 @@ public class CofhExtension implements ExporterExtension {
         registry.registerWorker("cofh.ExtruderRecipeGatherer");
         registry.registerWorker("cofh.PrecipitatorRecipeGatherer");
         registry.registerWorker("cofh.PulverizerRecipeGatherer");
+        registry.registerWorker("cofh.SmelterRecipeGatherer");
         registry.registerWorker("cofh.TransposerRecipeGatherer");
 
         registry.registerWorker("cofh.CofhModEditor");
