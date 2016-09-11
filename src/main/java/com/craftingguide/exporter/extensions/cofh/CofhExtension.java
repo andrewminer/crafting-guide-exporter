@@ -14,6 +14,8 @@ public class CofhExtension implements ExporterExtension {
         registry.registerWorker("cofh.InsolatorRecipeGatherer");
         registry.registerWorker("cofh.PrecipitatorRecipeGatherer");
         registry.registerWorker("cofh.PulverizerRecipeGatherer");
+        registry.registerWorker("cofh.RedstoneFurnaceRecipeGatherer");
+        registry.registerWorker("cofh.SawmillRecipeGatherer");
         registry.registerWorker("cofh.SmelterRecipeGatherer");
         registry.registerWorker("cofh.TransposerRecipeGatherer");
 
