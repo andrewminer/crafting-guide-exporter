@@ -36,21 +36,31 @@ public class PrecipitatorRecipeGatherer extends Gatherer {
          * The following code seems like it ought to read the recipes for the precipitator, but for whatever reason, the
          * returned list is empty. Instead, the few recipes for this machine have been hard-coded into the file for the
          * time-being. Issue #16 tracks this problem.
-         * 
-         * PrecipitatorManager.loadRecipes(); for (RecipePrecipitator rawRecipe : PrecipitatorManager.getRecipeList()) {
-         * RecipeModel recipe = null;
-         * 
-         * for (ItemStack rawOutput : rawRecipe.getOutputs()) { if (recipe == null) { recipe = new
-         * RecipeModel(ItemStackModel.convert(rawOutput, modPack)); } else {
-         * recipe.addExtra(ItemStackModel.convert(rawOutput, modPack)); } }
-         * 
-         * if (recipe == null) continue;
-         * 
-         * int index = 0; for (FluidStack rawInput : rawRecipe.getInputs()) { recipe.setInputAt(ROWS[index],
-         * COLS[index], ItemStackModel.convert(rawInput, modPack)); index++; }
-         * 
-         * recipe.addTool(precipitator); modPack.addRecipe(recipe); }
          */
+
+        // PrecipitatorManager.loadRecipes();
+        // for (RecipePrecipitator rawRecipe : PrecipitatorManager.getRecipeList()) {
+        // RecipeModel recipe = null;
+        //
+        // for (ItemStack rawOutput : rawRecipe.getOutputs()) {
+        // if (recipe == null) {
+        // recipe = new RecipeModel(ItemStackModel.convert(rawOutput, modPack));
+        // } else {
+        // recipe.addExtra(ItemStackModel.convert(rawOutput, modPack));
+        // }
+        // }
+        //
+        // if (recipe == null) continue;
+        //
+        // int index = 0;
+        // for (FluidStack rawInput : rawRecipe.getInputs()) {
+        // recipe.setInputAt(ROWS[index], COLS[index], ItemStackModel.convert(rawInput, modPack));
+        // index++;
+        // }
+        //
+        // recipe.addTool(precipitator);
+        // modPack.addRecipe(recipe);
+        // }
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////

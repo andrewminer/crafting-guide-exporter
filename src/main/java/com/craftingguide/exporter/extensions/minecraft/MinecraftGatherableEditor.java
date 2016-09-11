@@ -6,6 +6,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
 
     public MinecraftGatherableEditor() {
         this.addPattern("Coal");
+        this.addPattern("Cobblestone");
         this.addPattern("Diamond");
         this.addPattern("Emerald");
         this.addPattern("Flint");
@@ -16,6 +17,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Magma Cream");
         this.addPattern("Nether Brick (block)");
         this.addPattern("Nether Quartz");
+        this.addPattern("Obsidian");
         this.addPattern("Packed Ice");
         this.addPattern("Redstone");
         this.addPattern("Sand");
