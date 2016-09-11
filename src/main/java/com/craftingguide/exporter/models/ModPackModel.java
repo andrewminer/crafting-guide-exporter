@@ -130,6 +130,11 @@ public class ModPackModel {
         item.addRecipe(recipe);
     }
 
+    public void removeRecipe(RecipeModel recipe) {
+        ItemModel item = this.getItem(recipe.getOutput().getItem().getId());
+        item.removeRecipe(recipe);
+    }
+
     // Object Overrides ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public String toString() {

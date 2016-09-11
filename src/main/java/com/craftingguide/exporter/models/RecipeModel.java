@@ -12,6 +12,19 @@ public class RecipeModel implements Comparable<RecipeModel> {
         this.setOutput(output);
     }
 
+    // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
+
+    public int getTotalInputsRequired() {
+        int result = 0;
+        for (ItemStackModel[] row : this.inputGrid) {
+            for (ItemStackModel cell : row) {
+                if (cell == null) continue;
+                result += cell.getQuantity();
+            }
+        }
+        return result;
+    }
+
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean isCraftingTableRequired() {
@@ -130,6 +143,14 @@ public class RecipeModel implements Comparable<RecipeModel> {
     // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
 
     public int compareTo(RecipeModel that) {
+        if (this.tools.size() != that.tools.size()) {
+            return (this.tools.size() < that.tools.size()) ? -1 : +1;
+        }
+
+        if (this.getTotalInputsRequired() != that.getTotalInputsRequired()) {
+            return (this.getTotalInputsRequired() < that.getTotalInputsRequired()) ? -1 : +1;
+        }
+
         return this.toString().compareTo(that.toString());
     }
 

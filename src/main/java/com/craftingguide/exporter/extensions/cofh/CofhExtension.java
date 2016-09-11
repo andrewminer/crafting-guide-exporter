@@ -2,6 +2,7 @@ package com.craftingguide.exporter.extensions.cofh;
 
 import com.craftingguide.exporter.ExporterExtension;
 import com.craftingguide.exporter.Registry;
+import com.craftingguide.exporter.Registry.Priority;
 
 public class CofhExtension implements ExporterExtension {
 
@@ -18,6 +19,8 @@ public class CofhExtension implements ExporterExtension {
         registry.registerWorker("cofh.SawmillRecipeGatherer");
         registry.registerWorker("cofh.SmelterRecipeGatherer");
         registry.registerWorker("cofh.TransposerRecipeGatherer");
+
+        registry.registerWorker("cofh.TieredMachineEditor", Priority.HIGH);
 
         registry.registerWorker("cofh.CofhModEditor");
         registry.registerWorker("cofh.ThermalExpansionGroupEditor");

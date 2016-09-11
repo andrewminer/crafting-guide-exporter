@@ -70,7 +70,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         }
 
         if (item.getRecipes().size() > 0) {
-            for (RecipeModel recipe : item.getRecipes()) {
+            List<RecipeModel> recipes = new ArrayList<>(item.getRecipes());
+            recipes.sort(null);
+
+            for (RecipeModel recipe : recipes) {
                 this.printRecipe(recipe, printer);
             }
         }
