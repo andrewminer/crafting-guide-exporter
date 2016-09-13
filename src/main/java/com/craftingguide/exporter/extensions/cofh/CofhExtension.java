@@ -23,6 +23,9 @@ public class CofhExtension implements ExporterExtension {
         registry.registerWorker("cofh.TieredMachineEditor", Priority.HIGH);
 
         registry.registerWorker("cofh.CofhModEditor");
+        registry.registerWorker("cofh.IgnoreOddIngredientEditor");
+        registry.registerWorker("cofh.IgnoreUselessPulverizerRecipeEditor");
+        registry.registerWorker("cofh.SuppressEffectRenderingEditor");
         registry.registerWorker("cofh.ThermalExpansionGroupEditor");
         registry.registerWorker("cofh.ThermalFoundationGroupEditor");
     }

@@ -131,6 +131,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.println();
         }
 
+        if (recipe.isIgnoredDuringCrafting()) {
+            printer.println("ignoreDuringCrafting: yes");
+        }
+
         printer.print("input: ");
         needsDelimiter = false;
         for (ItemStackModel inputStack : recipe.getInputs()) {

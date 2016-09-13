@@ -14,6 +14,13 @@ public class RecipeModel implements Comparable<RecipeModel> {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public boolean requiresInput(ItemModel itemModel) {
+        for (ItemStackModel itemStack : this.getInputs()) {
+            if (itemStack.getItem().equals(itemModel)) return true;
+        }
+        return false;
+    }
+
     public int getTotalInputsRequired() {
         int result = 0;
         for (ItemStackModel[] row : this.inputGrid) {
@@ -54,6 +61,14 @@ public class RecipeModel implements Comparable<RecipeModel> {
         }
         if (maxRow < minRow) return 0;
         return maxRow - minRow + 1;
+    }
+
+    public boolean isIgnoredDuringCrafting() {
+        return this.ignoredDuringCrafting;
+    }
+
+    public void setIgnoredDuringCrafting(boolean ignoredDuringCrafting) {
+        this.ignoredDuringCrafting = ignoredDuringCrafting;
     }
 
     public ItemStackModel getInputAt(int row, int col) {
@@ -190,6 +205,8 @@ public class RecipeModel implements Comparable<RecipeModel> {
     // Public Properties ///////////////////////////////////////////////////////////////////////////////////////////////
 
     private SortedSet<ItemStackModel> extras = new TreeSet<ItemStackModel>();;
+
+    private boolean ignoredDuringCrafting = false;
 
     private SortedSet<ItemStackModel> inputs = new TreeSet<ItemStackModel>();;
 

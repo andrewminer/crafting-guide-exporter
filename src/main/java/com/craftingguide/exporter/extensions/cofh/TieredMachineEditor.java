@@ -57,7 +57,7 @@ public class TieredMachineEditor extends Editor {
 
     private static String REINFORCED_FRAME_ID = "ThermalExpansion:Frame:2";
 
-    private static String RESONANT_FRAME_ID = "ThermalExpansion:Frame:0";
+    private static String RESONANT_FRAME_ID = "ThermalExpansion:Frame:3";
 
     private static String SIGNALUM_GEAR_ID = "ThermalFoundation:material:138";
 

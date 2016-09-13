@@ -7,6 +7,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
     public MinecraftGatherableEditor() {
         this.addPattern("Cactus");
         this.addPattern("Carrot");
+        this.addPattern("Clay \\(item\\)");
         this.addPattern("Coal");
         this.addPattern("Cocoa Beans");
         this.addPattern("Cobblestone");
@@ -29,6 +30,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Pumpkin");
         this.addPattern("Redstone");
         this.addPattern("Sand");
+        this.addPattern("Snowball");
         this.addPattern("String");
         this.addPattern("Sugar Cane");
         this.addPattern("Vines");

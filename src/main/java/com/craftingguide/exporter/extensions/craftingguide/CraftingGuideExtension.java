@@ -9,6 +9,8 @@ public class CraftingGuideExtension implements ExporterExtension {
     // ExporterExtension Overrides /////////////////////////////////////////////////////////////////////////////////////
 
     public void register(Registry registry) {
+        registry.registerWorker("craftingguide.GatherableIngotEditor");
+
         registry.registerWorker("craftingguide.ItemIconDumper");
         registry.registerWorker("craftingguide.ModDumper");
         registry.registerWorker("craftingguide.ModIconDumper");
