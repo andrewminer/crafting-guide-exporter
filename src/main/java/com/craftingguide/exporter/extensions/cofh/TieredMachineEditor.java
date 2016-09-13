@@ -21,9 +21,19 @@ public class TieredMachineEditor extends Editor {
             String baseId = item.getId();
             this.correctBasicItem(item);
 
+            RecipeModel baseRecipe = item.getRecipes().first();
+
             item = this.addVariant(baseId, item, "Hardened", ELECTRUM_GEAR_ID, INVAR_INGOT_ID);
+            this.addMachineFrameRecipe(item, baseRecipe, modPack.getItem(HARDENED_FRAME_ID));
+            modPack.addItem(item);
+
             item = this.addVariant(baseId, item, "Reinforced", SIGNALUM_GEAR_ID, HARDENED_GLASS_ID);
+            this.addMachineFrameRecipe(item, baseRecipe, modPack.getItem(REINFORCED_FRAME_ID));
+            modPack.addItem(item);
+
             item = this.addVariant(baseId, item, "Resonant", ENDERIUM_GEAR_ID, SILVER_INGOT_ID);
+            this.addMachineFrameRecipe(item, baseRecipe, modPack.getItem(RESONANT_FRAME_ID));
+            modPack.addItem(item);
         }
 
         this.modPack = null;
@@ -35,6 +45,8 @@ public class TieredMachineEditor extends Editor {
 
     private static String ENDERIUM_GEAR_ID = "ThermalFoundation:material:140";
 
+    private static String HARDENED_FRAME_ID = "ThermalExpansion:Frame:1";
+
     private static String HARDENED_GLASS_ID = "ThermalExpansion:Glass:0";
 
     private static String INVAR_INGOT_ID = "ThermalFoundation:material:72";
@@ -43,11 +55,34 @@ public class TieredMachineEditor extends Editor {
 
     private static String MACHINE_FRAME_ID = "ThermalExpansion:Frame:0";
 
+    private static String REINFORCED_FRAME_ID = "ThermalExpansion:Frame:2";
+
+    private static String RESONANT_FRAME_ID = "ThermalExpansion:Frame:0";
+
     private static String SIGNALUM_GEAR_ID = "ThermalFoundation:material:138";
 
     private static String SILVER_INGOT_ID = "ThermalFoundation:material:66";
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private void addMachineFrameRecipe(ItemModel item, RecipeModel baseRecipe, ItemModel frame) {
+        RecipeModel recipe = new RecipeModel(new ItemStackModel(item, 1));
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (row == 1 && col == 1) {
+                    recipe.setInputAt(row, col, new ItemStackModel(frame, 1));
+                } else {
+                    ItemStackModel input = baseRecipe.getInputAt(row, col);
+                    if (input != null) {
+                        recipe.setInputAt(row, col, input);
+                    }
+                }
+            }
+        }
+
+        item.addRecipe(recipe);
+    }
 
     private ItemModel addVariant(String id, ItemModel priorItem, String name, String gearId, String ingotId) {
         ItemModel item = new ItemModel(id + ":" + name, priorItem.getRawItemStack());
