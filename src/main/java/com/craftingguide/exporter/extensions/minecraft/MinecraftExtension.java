@@ -17,7 +17,8 @@ public class MinecraftExtension implements ExporterExtension {
         registry.registerWorker("minecraft.FurnaceRecipeGatherer", Priority.LOWEST);
         registry.registerWorker("minecraft.PotionRecipeGatherer", Priority.LOWEST);
 
-        registry.registerWorker("minecraft.AddCraftingTableEditor");
+        registry.registerWorker("minecraft.AddCraftingTableEditor", Priority.HIGHEST);
+
         registry.registerWorker("minecraft.DisambiguateDisplayNameEditor");
         registry.registerWorker("minecraft.MinecraftGatherableEditor");
         registry.registerWorker("minecraft.MinecraftGroupEditor");

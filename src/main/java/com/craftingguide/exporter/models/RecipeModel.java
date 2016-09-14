@@ -175,7 +175,7 @@ public class RecipeModel implements Comparable<RecipeModel> {
     public boolean equals(Object obj) {
         if (!(obj instanceof RecipeModel)) return false;
         RecipeModel that = (RecipeModel) obj;
-        return this.toString().equals(that.toString());
+        return this.compareTo(that) == 0;
     }
 
     @Override
