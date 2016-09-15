@@ -31,10 +31,6 @@ public class TransposerRecipeGatherer extends Gatherer {
             ItemStackModel output = ItemStackModel.convert(rawRecipe.getOutput(), modPack);
             ItemStackModel fluid = ItemStackModel.convert(rawRecipe.getFluid(), modPack);
 
-            if (output.getItem().getDisplayName().equals("Bucket")) {
-                System.out.println();
-            }
-
             RecipeModel recipe = new RecipeModel(output);
             recipe.addExtra(fluid);
             recipe.setInputAt(1, 1, input);
