@@ -14,6 +14,26 @@ public class RecipeModel implements Comparable<RecipeModel> {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
+    public void copyInputsFrom(RecipeModel recipe) {
+        int width = recipe.getWidth();
+        int height = recipe.getHeight();
+
+        this.inputs.clear();
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                ItemStackModel input = recipe.getInputAt(row, col);
+                if (input == null) continue;
+
+                this.setInputAt(row, col, new ItemStackModel(input));
+            }
+        }
+    }
+
+    public void copyToolsFrom(RecipeModel recipe) {
+        this.tools.clear();
+        this.tools.addAll(recipe.getTools());
+    }
+
     public boolean requiresInput(ItemModel itemModel) {
         for (ItemStackModel itemStack : this.getInputs()) {
             if (itemStack.getItem().equals(itemModel)) return true;
@@ -190,7 +210,7 @@ public class RecipeModel implements Comparable<RecipeModel> {
         boolean needsDelimiter = false;
         for (ItemStackModel input : this.getInputs()) {
             if (needsDelimiter) buffer.append(", ");
-            needsDelimiter = false;
+            needsDelimiter = true;
             buffer.append(input.toString());
         }
 

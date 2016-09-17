@@ -1,5 +1,6 @@
 package com.craftingguide.exporter.extensions.craftingguide;
 
+import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.util.Printer;
@@ -41,7 +42,7 @@ public class ModDumper extends AbstractCraftingGuideDumper {
                     printer.println("homePageUrl: " + mod.getUrl());
                 }
                 printer.println();
-                printer.println("version: " + mod.getVersion());
+                printer.println("version: " + CraftingGuideFileManager.slugify(mod.getVersion()));
             } catch (IOException e) {
                 LOGGER.error("Failed to write " + modFile, e);
             } finally {

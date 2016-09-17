@@ -31,10 +31,12 @@ minecraft {
 }
 
 dependencies {
-  compile files("mods/buildcraft.jar")
-  compile files("mods/cofh-core-dev.jar")
-  compile files("mods/thermal-expansion-dev.jar")
-  compile files("mods/thermal-foundation-dev.jar")
+  compile files("minecraft/mods/buildcraft-dev.jar")
+  compile files("minecraft/mods/cofh-core-dev.jar")
+  compile files("minecraft/mods/redstone-arsenal-dev.jar")
+  compile files("minecraft/mods/thermal-dynamics-dev.jar")
+  compile files("minecraft/mods/thermal-expansion-dev.jar")
+  compile files("minecraft/mods/thermal-foundation-dev.jar")
   testCompile 'junit:junit:4.12'
 }
 

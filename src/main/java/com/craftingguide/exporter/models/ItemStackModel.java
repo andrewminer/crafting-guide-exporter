@@ -8,6 +8,10 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class ItemStackModel implements Comparable<ItemStackModel> {
 
+    public ItemStackModel(ItemStackModel that) {
+        this(that.getItem(), that.getQuantity());
+    }
+
     public ItemStackModel(ItemModel item, int quantity) {
         this.setItem(item);
         this.setQuantity(quantity);

@@ -4,12 +4,14 @@ import com.craftingguide.CraftingGuideConfig;
 import com.craftingguide.CraftingGuideException;
 import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.commands.CraftingGuideDumpCommand;
+import com.craftingguide.exporter.extensions.agricraft.AgriCraftExtension;
 import com.craftingguide.exporter.extensions.buildcraft.BuildCraftExtension;
 import com.craftingguide.exporter.extensions.cofh.CofhExtension;
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
 import com.craftingguide.exporter.extensions.debug.DebugExtension;
 import com.craftingguide.exporter.extensions.forge.ForgeExtension;
 import com.craftingguide.exporter.extensions.minecraft.MinecraftExtension;
+import com.craftingguide.exporter.extensions.solarexpansion.SolarExpansionExtension;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -64,12 +66,14 @@ public class ExporterMod implements Registry {
         try {
             ClientCommandHandler.instance.registerCommand(new CraftingGuideDumpCommand(this));
 
+            this.register(new AgriCraftExtension());
+            this.register(new BuildCraftExtension());
+            this.register(new CofhExtension());
             this.register(new CraftingGuideExtension());
             this.register(new DebugExtension());
             this.register(new ForgeExtension());
             this.register(new MinecraftExtension());
-            this.register(new BuildCraftExtension());
-            this.register(new CofhExtension());
+            this.register(new SolarExpansionExtension());
         } catch (Exception e) {
             System.err.println("Failed to initialize Crafting Guide Export!");
             e.printStackTrace();
