@@ -6,10 +6,6 @@ import java.io.File;
 
 public class CraftingGuideFileManager {
 
-    public CraftingGuideFileManager() {
-        // do nothing
-    }
-
     // Public Class Methods ////////////////////////////////////////////////////////////////////////////////////////////
 
     public static String asPath(String... elements) {
@@ -21,18 +17,6 @@ public class CraftingGuideFileManager {
             buffer.append(element);
         }
         return buffer.toString();
-    }
-
-    public static String slugify(String text) {
-        if (text == null) return null;
-
-        String result = text.toLowerCase();
-        result = result.replaceAll("[^a-zA-Z0-9._]", "_");
-        result = result.replaceAll("__+", "_");
-        result = result.replaceAll("^_", "");
-        result = result.replaceAll("_$", "");
-
-        return result;
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -54,7 +38,7 @@ public class CraftingGuideFileManager {
     }
 
     public String getItemDir(ModModel mod, ItemModel item) {
-        return asPath(this.getModDir(mod), "items", slugify(item.getDisplayName()));
+        return asPath(this.getModDir(mod), "items", this.slugifier.slugify(item.getDisplayName()));
     }
 
     public String getItemIconFile(ModModel mod, ItemModel item) {
@@ -62,7 +46,7 @@ public class CraftingGuideFileManager {
     }
 
     public String getModDir(ModModel mod) {
-        return asPath(this.getDumpDir(), slugify(mod.getDisplayName()));
+        return asPath(this.getDumpDir(), this.slugifier.slugify(mod.getDisplayName()));
     }
 
     public String getModIconFile(ModModel mod) {
@@ -70,7 +54,7 @@ public class CraftingGuideFileManager {
     }
 
     public String getModVersionDir(ModModel mod) {
-        return asPath(this.getModDir(mod), "versions", slugify(mod.getVersion()));
+        return asPath(this.getModDir(mod), "versions", this.slugifier.slugify(mod.getVersion()));
     }
 
     public String getModVersionFile(ModModel mod) {
@@ -92,4 +76,6 @@ public class CraftingGuideFileManager {
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
     private String dumpDir = "";
+
+    private Slugifier slugifier = new Slugifier();
 }

@@ -122,11 +122,14 @@ public class ModModel {
 
     public void addItem(ItemModel item) {
         if (item == null) throw new IllegalArgumentException("item cannot be null");
+        if (this.items.contains(item)) return;
 
         if (!this.containsItemId(item.getId())) {
             throw new IllegalArgumentException("item " + item.getId() + " does not belong to this mod");
         }
+
         this.items.add(item);
+        item.setMod(this);
     }
 
     public void removeItem(ItemModel item) {

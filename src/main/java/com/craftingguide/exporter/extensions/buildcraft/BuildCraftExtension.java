@@ -1,6 +1,6 @@
 package com.craftingguide.exporter.extensions.buildcraft;
 
-import com.craftingguide.CraftingGuideFileManager;
+import com.craftingguide.Slugifier;
 import com.craftingguide.exporter.ExporterExtension;
 import com.craftingguide.exporter.Registry;
 import com.craftingguide.exporter.Registry.Priority;
@@ -47,6 +47,8 @@ public class BuildCraftExtension implements ExporterExtension {
 
     private static String BASE_ROBOT_ID = "BuildCraft|Robotics:robot";
 
+    private static Slugifier SLUGIFIER = new Slugifier();
+
     // Private Class Methods ///////////////////////////////////////////////////////////////////////////////////////////
 
     private static ItemModel findOrCreateBoard(ItemStack itemStack, ModPackModel modPack) {
@@ -83,9 +85,9 @@ public class BuildCraftExtension implements ExporterExtension {
             extraChip = extraData.get(3);
         }
 
-        String itemId = BASE_GATE_ID + ":" + CraftingGuideFileManager.slugify(rawItemStack.getDisplayName());
+        String itemId = BASE_GATE_ID + ":" + SLUGIFIER.slugify(rawItemStack.getDisplayName());
         if (extraChip != null) {
-            itemId += ":" + CraftingGuideFileManager.slugify(extraChip);
+            itemId += ":" + SLUGIFIER.slugify(extraChip);
         }
 
         ItemModel item = modPack.getItem(itemId);

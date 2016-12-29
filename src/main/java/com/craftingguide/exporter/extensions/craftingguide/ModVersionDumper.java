@@ -28,7 +28,9 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
-    private static Logger logger = LogManager.getLogger();
+    private static Logger LOGGER = LogManager.getLogger();
+
+    private static String MINECRAFT_MOD_ID = "minecraft";
 
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -105,7 +107,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
                 this.printGroup(groupName, itemsByGroup.get(groupName), printer);
             }
         } catch (IOException e) {
-            logger.error("Could not write to " + modVersionFile + ": ");
+            LOGGER.error("Could not write to " + modVersionFile + ": ");
             e.printStackTrace();
         } finally {
             try {
@@ -168,6 +170,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
         if (stack.getQuantity() > 1) {
             printer.print(stack.getQuantity() + " ");
         }
+
         printer.print(stack.getItem().getDisplayName());
     }
 }

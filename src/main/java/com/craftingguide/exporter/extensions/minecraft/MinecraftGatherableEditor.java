@@ -22,6 +22,8 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Lily Pad");
         this.addPattern("Magma Cream");
         this.addPattern("Melon \\(item\\)");
+        this.addPattern("Mushroom \\(brown\\)");
+        this.addPattern("Mushroom \\(red\\)");
         this.addPattern("Nether Brick \\(block\\)");
         this.addPattern("Nether Quartz");
         this.addPattern("Obsidian");
@@ -30,6 +32,7 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Pumpkin");
         this.addPattern("Redstone");
         this.addPattern("Sand");
+        this.addPattern("Seeds");
         this.addPattern("Snowball");
         this.addPattern("String");
         this.addPattern("Sugar Cane");

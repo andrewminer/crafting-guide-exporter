@@ -111,6 +111,18 @@ public class ItemModel implements Comparable<ItemModel> {
         this.groupName = groupName;
     }
 
+    public ModModel getMod() {
+        return mod;
+    }
+
+    public void setMod(ModModel mod) {
+        if (this.mod == mod) return;
+        if (this.mod != null) throw new IllegalArgumentException("mod cannot be reassigned");
+        if (mod == null) throw new IllegalArgumentException("mod cannot be unassigned");
+        this.mod = mod;
+        this.mod.addItem(this);
+    }
+
     public SortedSet<RecipeModel> getRecipes() {
         return Collections.unmodifiableSortedSet(this.recipes);
     }
@@ -178,6 +190,8 @@ public class ItemModel implements Comparable<ItemModel> {
     private boolean gatherable = false;
 
     private String groupName = "Other";
+
+    private ModModel mod = null;
 
     private SortedSet<RecipeModel> recipes = new TreeSet<RecipeModel>();;
 
