@@ -25,9 +25,11 @@ public class MinecraftGatherableEditor extends GatherableEditor {
         this.addPattern("Mushroom \\(brown\\)");
         this.addPattern("Mushroom \\(red\\)");
         this.addPattern("Nether Brick \\(block\\)");
+        this.addPattern("Nether Wart");
         this.addPattern("Nether Quartz");
         this.addPattern("Obsidian");
         this.addPattern("Packed Ice");
+        this.addPattern("Poisonous Potato");
         this.addPattern("Potato");
         this.addPattern("Pumpkin");
         this.addPattern("Redstone");

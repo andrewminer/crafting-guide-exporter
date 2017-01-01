@@ -71,6 +71,7 @@ public class ExporterMod implements Registry {
             this.register(new CofhExtension());
             this.register(new CraftingGuideExtension());
             this.register(new DebugExtension());
+            // this.register(new EnderStorageExtension()); // TODO(#20) disabled pending solution to crashing bug
             this.register(new ForgeExtension());
             this.register(new MinecraftExtension());
             this.register(new SolarExpansionExtension());
