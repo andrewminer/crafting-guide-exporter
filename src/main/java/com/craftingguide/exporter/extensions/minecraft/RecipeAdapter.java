@@ -14,19 +14,19 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 public class RecipeAdapter {
 
     public RecipeAdapter(IRecipe recipe) {
-        this._recipe = recipe;
+        this.recipe = recipe;
     }
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public int getHeight() {
-        if (this._recipe instanceof ShapedRecipes) {
-            return ((ShapedRecipes) this._recipe).recipeHeight;
-        } else if (this._recipe instanceof ShapedOreRecipe) {
+        if (this.recipe instanceof ShapedRecipes) {
+            return ((ShapedRecipes) this.recipe).recipeHeight;
+        } else if (this.recipe instanceof ShapedOreRecipe) {
             try {
                 Field field = ShapedOreRecipe.class.getDeclaredField("height");
                 field.setAccessible(true);
-                return ((Number) field.get(this._recipe)).intValue();
+                return ((Number) field.get(this.recipe)).intValue();
             } catch (Throwable e) {
                 System.err.println("Could not get recipe height by reflection");
                 e.printStackTrace();
@@ -41,21 +41,21 @@ public class RecipeAdapter {
 
         ArrayList<ItemStack> results = new ArrayList<ItemStack>();
 
-        if (this._recipe instanceof ShapelessRecipes) {
-            for (ItemStack itemStack : (List<ItemStack>) ((ShapelessRecipes) this._recipe).recipeItems) {
+        if (this.recipe instanceof ShapelessRecipes) {
+            for (ItemStack itemStack : (List<ItemStack>) ((ShapelessRecipes) this.recipe).recipeItems) {
                 results.add(itemStack);
             }
-        } else if (this._recipe instanceof ShapedRecipes) {
-            for (ItemStack itemStack : ((ShapedRecipes) this._recipe).recipeItems) {
+        } else if (this.recipe instanceof ShapedRecipes) {
+            for (ItemStack itemStack : ((ShapedRecipes) this.recipe).recipeItems) {
                 results.add(itemStack);
             }
         } else if (this.isOreDict()) {
             List<Object> inputs = null;
 
-            if (this._recipe instanceof ShapelessOreRecipe) {
-                inputs = ((ShapelessOreRecipe) this._recipe).getInput();
-            } else if (this._recipe instanceof ShapedOreRecipe) {
-                inputs = (List<Object>) Arrays.asList(((ShapedOreRecipe) this._recipe).getInput());
+            if (this.recipe instanceof ShapelessOreRecipe) {
+                inputs = ((ShapelessOreRecipe) this.recipe).getInput();
+            } else if (this.recipe instanceof ShapedOreRecipe) {
+                inputs = (List<Object>) Arrays.asList(((ShapedOreRecipe) this.recipe).getInput());
             }
 
             for (Object inputObj : inputs) {
@@ -75,13 +75,13 @@ public class RecipeAdapter {
     }
 
     public int getWidth() {
-        if (this._recipe instanceof ShapedRecipes) {
-            return ((ShapedRecipes) this._recipe).recipeWidth;
-        } else if (this._recipe instanceof ShapedOreRecipe) {
+        if (this.recipe instanceof ShapedRecipes) {
+            return ((ShapedRecipes) this.recipe).recipeWidth;
+        } else if (this.recipe instanceof ShapedOreRecipe) {
             try {
                 Field field = ShapedOreRecipe.class.getDeclaredField("width");
                 field.setAccessible(true);
-                return ((Number) field.get(this._recipe)).intValue();
+                return ((Number) field.get(this.recipe)).intValue();
             } catch (Throwable e) {
                 System.err.println("Could not get recipe width by reflection");
                 e.printStackTrace();
@@ -92,24 +92,24 @@ public class RecipeAdapter {
     }
 
     public ItemStack getOutput() {
-        return this._recipe.getRecipeOutput(); // foo
+        return this.recipe.getRecipeOutput();
     }
 
     public boolean isOreDict() {
-        if (this._recipe instanceof ShapedOreRecipe) return true;
-        if (this._recipe instanceof ShapelessOreRecipe) return true;
+        if (this.recipe instanceof ShapedOreRecipe) return true;
+        if (this.recipe instanceof ShapelessOreRecipe) return true;
         return false;
     }
 
     public boolean isShaped() {
-        if (this._recipe instanceof ShapedRecipes) return true;
-        if (this._recipe instanceof ShapedOreRecipe) return true;
+        if (this.recipe instanceof ShapedRecipes) return true;
+        if (this.recipe instanceof ShapedOreRecipe) return true;
         return false;
     }
 
     public boolean isShapeless() {
-        if (this._recipe instanceof ShapelessRecipes) return true;
-        if (this._recipe instanceof ShapelessOreRecipe) return true;
+        if (this.recipe instanceof ShapelessRecipes) return true;
+        if (this.recipe instanceof ShapelessOreRecipe) return true;
         return false;
     }
 
@@ -119,5 +119,5 @@ public class RecipeAdapter {
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private IRecipe _recipe = null;
+    private IRecipe recipe = null;
 }

@@ -46,16 +46,16 @@ public class ItemModel implements Comparable<ItemModel> {
         return rawPotion.getEffects(this.getRawItemStack());
     }
 
+    public String getPotionEffect() {
+        return this.getRawItemStack().getItem().getPotionEffect(this.getRawItemStack());
+    }
+
     public int getType() {
         return this.rawItemStack.getItemDamage();
     }
 
     public boolean isPotion() {
         return this.getRawItemStack().getItem() instanceof ItemPotion;
-    }
-
-    public String getPotionEffect() {
-        return this.getRawItemStack().getItem().getPotionEffect(this.getRawItemStack());
     }
 
     public boolean isPotionIngredient() {

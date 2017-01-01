@@ -10,6 +10,7 @@ public class AgriCraftExtension implements ExporterExtension {
     @Override
     public void register(Registry registry) {
         registry.registerWorker("agricraft.MutationRecipeGatherer");
+        registry.registerWorker("agricraft.FruitGatherer");
 
         registry.registerWorker("agricraft.AgriCraftGroupEditor");
         registry.registerWorker("agricraft.AgriCraftModEditor");

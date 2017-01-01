@@ -51,6 +51,7 @@ public class MutationRecipeGatherer extends Gatherer {
                 recipe.addExtra(new ItemStackModel(required, 1));
             }
 
+            recipe.setIsMadeInWorld(true);
             modPack.addRecipe(recipe);
         }
     }

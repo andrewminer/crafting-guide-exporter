@@ -55,6 +55,7 @@ public class RecipeModel implements Comparable<RecipeModel> {
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 
     public boolean isCraftingTableRequired() {
+        if (this.isMadeInWorld) return false;
         return this.getWidth() > 2 || this.getHeight() > 2;
     }
 
@@ -107,6 +108,14 @@ public class RecipeModel implements Comparable<RecipeModel> {
     public void addInput(ItemStackModel stack) {
         if (stack == null) throw new IllegalArgumentException("stack cannot be null");
         this.inputs.add(stack);
+    }
+
+    public boolean isMadeInWorld() {
+        return this.isMadeInWorld;
+    }
+
+    public void setIsMadeInWorld(boolean isMadeInWorld) {
+        this.isMadeInWorld = isMadeInWorld;
     }
 
     public ItemStackModel getOutput() {
@@ -224,15 +233,17 @@ public class RecipeModel implements Comparable<RecipeModel> {
 
     // Public Properties ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    private SortedSet<ItemStackModel> extras = new TreeSet<ItemStackModel>();;
+    private SortedSet<ItemStackModel> extras = new TreeSet<ItemStackModel>();
 
     private boolean ignoredDuringCrafting = false;
 
-    private SortedSet<ItemStackModel> inputs = new TreeSet<ItemStackModel>();;
+    private ItemStackModel[][] inputGrid = { { null, null, null }, { null, null, null }, { null, null, null } };
+
+    private SortedSet<ItemStackModel> inputs = new TreeSet<ItemStackModel>();
+
+    private boolean isMadeInWorld = false;
 
     private ItemStackModel output = null;
-
-    private ItemStackModel[][] inputGrid = { { null, null, null }, { null, null, null }, { null, null, null } };
 
     private SortedSet<ItemModel> tools = new TreeSet<ItemModel>();;
 }
