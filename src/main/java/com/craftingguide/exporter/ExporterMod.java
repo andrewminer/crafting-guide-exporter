@@ -5,6 +5,7 @@ import com.craftingguide.CraftingGuideException;
 import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.commands.CraftingGuideDumpCommand;
 import com.craftingguide.exporter.extensions.agricraft.AgriCraftExtension;
+import com.craftingguide.exporter.extensions.bigreactors.BigReactorsExtension;
 import com.craftingguide.exporter.extensions.buildcraft.BuildCraftExtension;
 import com.craftingguide.exporter.extensions.cofh.CofhExtension;
 import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtension;
@@ -68,6 +69,7 @@ public class ExporterMod implements Registry {
 
             this.register(new AgriCraftExtension());
             this.register(new BuildCraftExtension());
+            this.register(new BigReactorsExtension());
             this.register(new CofhExtension());
             this.register(new CraftingGuideExtension());
             this.register(new DebugExtension());
