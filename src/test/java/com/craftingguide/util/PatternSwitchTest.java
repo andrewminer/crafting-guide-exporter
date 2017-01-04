@@ -16,32 +16,32 @@ public class PatternSwitchTest {
 
     @Before
     public void beforeEach() {
-        this._items = new ArrayList<String>();
-        this._consumer = (item)-> this._items.add(item);
-        this._switcher = new PatternSwitcher<String>(this._consumer);
+        this.items = new ArrayList<String>();
+        this.consumer = (item)-> this.items.add(item);
+        this.switcher = new PatternSwitcher<String>(this.consumer);
     }
 
     // Tests ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Test
     public void testDefaultConsumerIsUsedInMatching() {
-        PatternSwitcher<String> s = new PatternSwitcher<String>(this._consumer);
+        PatternSwitcher<String> s = new PatternSwitcher<String>(this.consumer);
         s.addPattern(".*");
 
         s.match("alpha", "a");
-        assertThat(this._items, hasItems("a"));
+        assertThat(this.items, hasItems("a"));
     }
 
     @Test
     public void testMultiplePatternsUseDefaultConsumer() {
-        PatternSwitcher<String> s = new PatternSwitcher<String>(this._consumer);
+        PatternSwitcher<String> s = new PatternSwitcher<String>(this.consumer);
         s.addAllPatterns(Arrays.asList("^a.*", ".*o$", "^c.*e$"));
 
         s.match("alpha", "a");
         s.match("bravo", "b");
         s.match("charlie", "c");
 
-        assertThat(this._items, hasItems("a", "b", "c"));
+        assertThat(this.items, hasItems("a", "b", "c"));
     }
 
     @Test
@@ -63,9 +63,9 @@ public class PatternSwitchTest {
 
     // Fixtures ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private Consumer<String> _consumer = null;
+    private Consumer<String> consumer = null;
 
-    private ArrayList<String> _items = null;
+    private ArrayList<String> items = null;
 
-    private PatternSwitcher<String> _switcher = null;
+    private PatternSwitcher<String> switcher = null;
 }
