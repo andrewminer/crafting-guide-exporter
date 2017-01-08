@@ -41,25 +41,28 @@ public class ItemModel implements Comparable<ItemModel> {
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public List<PotionEffect> getEffectsAsPotion() {
-        if (!(this.getRawItemStack().getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
-        ItemPotion rawPotion = (ItemPotion) this.getRawItemStack().getItem();
-        return rawPotion.getEffects(this.getRawItemStack());
+        if (!(this.rawItemStack.getItem() instanceof ItemPotion)) return new ArrayList<PotionEffect>();
+        ItemPotion rawPotion = (ItemPotion) this.rawItemStack.getItem();
+        return rawPotion.getEffects(this.rawItemStack);
     }
 
     public String getPotionEffect() {
-        return this.getRawItemStack().getItem().getPotionEffect(this.getRawItemStack());
+        return this.rawItemStack.getItem().getPotionEffect(this.rawItemStack);
     }
 
     public int getType() {
+        if (this.rawItemStack == null) return 0;
         return this.rawItemStack.getItemDamage();
     }
 
     public boolean isPotion() {
-        return this.getRawItemStack().getItem() instanceof ItemPotion;
+        if (this.rawItemStack == null) return false;
+        return this.rawItemStack.getItem() instanceof ItemPotion;
     }
 
     public boolean isPotionIngredient() {
-        return this.getRawItemStack().getItem().isPotionIngredient(this.getRawItemStack());
+        if (this.rawItemStack == null) return false;
+        return this.rawItemStack.getItem().isPotionIngredient(this.rawItemStack);
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -95,6 +98,7 @@ public class ItemModel implements Comparable<ItemModel> {
     }
 
     public boolean isGatherable() {
+        if (this.isMultiblock()) return false;
         if (this.getRecipes().isEmpty()) return true;
         return this.gatherable;
     }
@@ -123,6 +127,19 @@ public class ItemModel implements Comparable<ItemModel> {
         this.mod.addItem(this);
     }
 
+    public boolean isMultiblock() {
+        return (this.multiblock != null);
+    }
+
+    public MultiblockRecipe getMultiblock() {
+        return this.multiblock;
+    }
+
+    public void setMultiblock(MultiblockRecipe multiblock) {
+        if (this.recipes.size() > 0) throw new IllegalStateException("Cannot set a multiblock on an item with recipes");
+        this.multiblock = multiblock;
+    }
+
     public SortedSet<RecipeModel> getRecipes() {
         return Collections.unmodifiableSortedSet(this.recipes);
     }
@@ -131,6 +148,8 @@ public class ItemModel implements Comparable<ItemModel> {
         if (recipe.getOutput().getItem() != this) {
             throw new IllegalArgumentException("recipe does not produce this item");
         }
+        if (this.isMultiblock()) throw new IllegalStateException("Cannot add recipes to a multiblock item");
+
         this.recipes.add(recipe);
     }
 
@@ -192,6 +211,8 @@ public class ItemModel implements Comparable<ItemModel> {
     private String groupName = "Other";
 
     private ModModel mod = null;
+
+    private MultiblockRecipe multiblock = null;
 
     private SortedSet<RecipeModel> recipes = new TreeSet<RecipeModel>();;
 

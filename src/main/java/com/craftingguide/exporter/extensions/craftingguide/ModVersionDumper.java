@@ -4,6 +4,7 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
+import com.craftingguide.exporter.models.MultiblockRecipe;
 import com.craftingguide.exporter.models.RecipeModel;
 import com.craftingguide.util.Printer;
 import java.io.FileWriter;
@@ -80,6 +81,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             }
         }
 
+        if (item.isMultiblock()) {
+            this.printMultiblock(item.getMultiblock(), printer);
+        }
+
         printer.outdent();
         printer.println();
     }
@@ -114,6 +119,43 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
                 fileWriter.close();
             } catch (Throwable e) {}
         }
+    }
+
+    private void printMultiblock(MultiblockRecipe multiblock, Printer printer) throws IOException {
+        printer.println("multiblock:");
+        printer.indent();
+
+        printer.print("input: ");
+        HashMap<String, Integer> itemToIndexMap = new HashMap<>();
+        int index = 0;
+        boolean delimiterNeeded = false;
+        for (ItemStackModel stack : multiblock.getInputItems()) {
+            if (delimiterNeeded) printer.print(", ");
+            delimiterNeeded = true;
+            this.printStack(stack, printer);
+            itemToIndexMap.put(stack.toString(), index++);
+        }
+
+        printer.println();
+        for (int z = 0; z < multiblock.getLayerCount(); z++) {
+            printer.print("layer: ");
+
+            for (int y = 0; y < multiblock.getRowCount(); y++) {
+                for (int x = 0; x < multiblock.getColumnCount(); x++) {
+                    ItemStackModel stack = multiblock.getItemStackAt(x, y, z);
+                    if (stack != null) {
+                        Integer i = itemToIndexMap.get(stack.toString());
+                        printer.print("" + i);
+                    } else {
+                        printer.print(".");
+                    }
+                }
+                printer.print(" ");
+            }
+            printer.println();
+        }
+
+        printer.outdent();
     }
 
     private void printRecipe(RecipeModel recipe, Printer printer) throws IOException {

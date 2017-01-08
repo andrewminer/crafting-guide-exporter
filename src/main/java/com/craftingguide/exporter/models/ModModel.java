@@ -1,10 +1,8 @@
 package com.craftingguide.exporter.models;
 
 import cpw.mods.fml.common.ModContainer;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -138,15 +136,6 @@ public class ModModel {
         this.items.remove(item);
     }
 
-    public List<MultiblockModel> getAllMultiblocks() {
-        return this.multiblocks;
-    }
-
-    public void addMultiblock(MultiblockModel multiblock) {
-        if (multiblock == null) throw new IllegalArgumentException("multiblock cannot be null");
-        this.multiblocks.add(multiblock);
-    }
-
     public ModContainer getRawMod() {
         return this.rawMod;
     }
@@ -194,8 +183,6 @@ public class ModModel {
     private String id = null;
 
     private SortedSet<ItemModel> items = new TreeSet<ItemModel>();
-
-    private ArrayList<MultiblockModel> multiblocks = new ArrayList<MultiblockModel>();
 
     private ModContainer rawMod = null;
 

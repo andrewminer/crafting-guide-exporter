@@ -266,9 +266,12 @@ public class ItemIconDumperScreen extends GuiScreen {
         GL11.glColor4f(1, 1, 1, 1);
 
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
+            ItemModel item = this.items.get(drawIndex);
+            if (item.isMultiblock()) continue;
+
             int x = i % cols * 18;
             int y = i / cols * 18;
-            this.drawItem(this.items.get(drawIndex), x + 1, y + 1);
+            this.drawItem(item, x + 1, y + 1);
         }
 
         GL11.glFlush();

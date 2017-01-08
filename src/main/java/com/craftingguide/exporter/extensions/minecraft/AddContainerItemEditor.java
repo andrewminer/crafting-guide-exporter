@@ -14,6 +14,8 @@ public class AddContainerItemEditor extends Editor {
     @Override
     public void edit(ModPackModel modPack) {
         for (ItemModel item : modPack.getAllItems()) {
+            if (item.getRawItemStack() == null) continue;
+
             ItemStack containerStack = item.getRawItemStack().getItem().getContainerItem(item.getRawItemStack());
             if (containerStack == null) continue;
 
