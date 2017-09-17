@@ -30,17 +30,26 @@ minecraft {
     runDir = "minecraft"
 }
 
+repositories {
+  maven { url = "http://chickenbones.net/maven/"}
+  maven {
+    name = "CurseForge"
+    url = "https://minecraft.curseforge.com/api/maven/"
+  }
+  maven { url 'https://jitpack.io' }
+}
+
 dependencies {
   compile group: 'org.json', name: 'json', version: '20090211'
-  compile files("minecraft/mods/agricraft-1.7.10-1.5.0-dev.jar")
-  compile files("minecraft/mods/buildcraft-1.7.10-7.1.18-dev.jar")
-  compile files("minecraft/mods/code-chicken-core-1.7.10-1.0.4.29-dev.jar")
-  compile files("minecraft/mods/cofh-core-1.7.10-3.1.3-dev.jar")
-  compile files("minecraft/mods/ender-storage-1.7.10-1.4.5.27-dev.jar")
-  compile files("minecraft/mods/redstone-arsenal-1.7.10-1.1.2-dev.jar")
-  compile files("minecraft/mods/thermal-dynamics-1.7.10-1.2.0-dev.jar")
-  compile files("minecraft/mods/thermal-expansion-1.7.10-4.1.4-dev.jar")
-  compile files("minecraft/mods/thermal-foundation-1.7.10-1.2.5-dev.jar")
+  compile "agricraft:AgriCraft-1.7.10:1.5.0:dev"
+  compile "com.github.Buildcraft:buildcraft:68514dedb0:dev"
+  compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
+  compile files("libs/CoFHCore-[1.7.10]3.1.4-329-dev.jar")
+  compile "codechicken:EnderStorage:1.7.10-1.4.5.27:dev"
+  compile files("libs/RedstoneArsenal-[1.7.10]1.1.2-92-dev.jar")
+  compile files("libs/ThermalDynamics-[1.7.10]1.2.1-172-dev.jar")
+  compile files("libs/ThermalExpansion-[1.7.10]4.1.5-248-dev.jar")
+  compile files("libs/ThermalFoundation-[1.7.10]1.2.6-118-dev.jar")
   testCompile 'junit:junit:4.12'
 }
 
