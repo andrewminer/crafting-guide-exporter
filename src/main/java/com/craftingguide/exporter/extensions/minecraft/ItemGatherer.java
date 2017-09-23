@@ -25,8 +25,6 @@ public class ItemGatherer extends Gatherer {
             ModContainer rawMod = GameData.findModOwner(GameData.getItemRegistry().getNameForObject(item));
             ModModel mod = rawMod == null ? modPack.getMod("minecraft") : modPack.getMod(rawMod.getModId());
             //TODO: Buildcraft items are gotten 2 times
-            System.out.println(GameData.getItemRegistry().getNameForObject(item));
-            System.out.println(rawMod);
             boolean needToAddItemToModModel = true;
             for (ItemModel itemModel : mod.getAllItems()) {
             	if (itemModel.getRawItemStack().getItem() == item) {

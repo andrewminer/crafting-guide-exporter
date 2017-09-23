@@ -48,7 +48,6 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
     // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void processNextMod(AsyncStep dumpAllItemsStep) {
-    	System.out.println(remainingMods.size() + " left");
         if (this.remainingMods == null) return;
 
         if (this.remainingMods.isEmpty()) {

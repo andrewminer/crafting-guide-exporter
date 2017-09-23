@@ -57,27 +57,19 @@ public class ItemIconDumperScreen extends GuiScreen {
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void dumpItems(ModModel mod, Collection<ItemModel> items, AsyncStep dumpItemsStep) {
-    	System.out.println("Working on" + mod.getDisplayName());
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
 
-        System.out.println(items.isEmpty());
-        System.out.println("items is not empty");
         if (items.isEmpty()) {
         	this.setIsExporting(false);
         	dumpItemsStep.done();
         }
 
-        System.out.println("Setting step");
         this.setStep(dumpItemsStep);
-        System.out.println("Setting image consumer");
         this.setImageConsumer(imageConsumer);
-        System.out.println("Setting items");
         this.setItems(items);
-        System.out.println("Setting mod");
         this.setMod(mod);
 
-        System.out.println("displaying gui");
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
@@ -147,7 +139,6 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float frame) {
-    	System.out.println(this.items.isEmpty());
         try {
             this.drawAllItems();
             this.exportAllItems();
@@ -283,7 +274,6 @@ public class ItemIconDumperScreen extends GuiScreen {
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             ItemModel item = this.items.get(drawIndex);
             if (item.isMultiblock()) continue;
-            System.out.println("currently drawing" + item.getDisplayName());
             int x = i % cols * 18;
             int y = i / cols * 18;
             this.drawItem(item, x + 1, y + 1);
