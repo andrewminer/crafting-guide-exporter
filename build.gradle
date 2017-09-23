@@ -26,7 +26,7 @@ group = "com.craftingguide.exporter"
 archivesBaseName = "crafting-guide-exporter"
 
 minecraft {
-    version = "1.7.10-10.13.4.1558-1.7.10"
+    version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "minecraft"
 }
 
@@ -43,13 +43,15 @@ dependencies {
   compile group: 'org.json', name: 'json', version: '20090211'
   compile "agricraft:AgriCraft-1.7.10:1.5.0:dev"
   compile "com.github.Buildcraft:buildcraft:68514dedb0:dev"
-  compile "codechicken:CodeChickenCore:1.7.10-1.0.4.29:dev"
+  compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
   compile files("libs/CoFHCore-[1.7.10]3.1.4-329-dev.jar")
-  compile "codechicken:EnderStorage:1.7.10-1.4.5.27:dev"
+  compile "codechicken:EnderStorage:1.7.10-1.4.7.38:dev"
   compile files("libs/RedstoneArsenal-[1.7.10]1.1.2-92-dev.jar")
   compile files("libs/ThermalDynamics-[1.7.10]1.2.1-172-dev.jar")
   compile files("libs/ThermalExpansion-[1.7.10]4.1.5-248-dev.jar")
   compile files("libs/ThermalFoundation-[1.7.10]1.2.6-118-dev.jar")
+  compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+  compile files("libs/CodeChickenLib-1.7.10-1.1.3.140-dev.jar")
   testCompile 'junit:junit:4.12'
 }
 

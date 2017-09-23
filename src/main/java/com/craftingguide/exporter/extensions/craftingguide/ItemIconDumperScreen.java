@@ -3,17 +3,7 @@ package com.craftingguide.exporter.extensions.craftingguide;
 import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.reflect.Field;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -28,11 +18,24 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+
+import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemIconDumperScreen extends GuiScreen {
 
@@ -54,16 +57,27 @@ public class ItemIconDumperScreen extends GuiScreen {
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
     public void dumpItems(ModModel mod, Collection<ItemModel> items, AsyncStep dumpItemsStep) {
+    	System.out.println("Working on" + mod.getDisplayName());
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
 
-        if (items.isEmpty()) return;
+        System.out.println(items.isEmpty());
+        System.out.println("items is not empty");
+        if (items.isEmpty()) {
+        	this.setIsExporting(false);
+        	dumpItemsStep.done();
+        }
 
+        System.out.println("Setting step");
         this.setStep(dumpItemsStep);
+        System.out.println("Setting image consumer");
         this.setImageConsumer(imageConsumer);
+        System.out.println("Setting items");
         this.setItems(items);
+        System.out.println("Setting mod");
         this.setMod(mod);
 
+        System.out.println("displaying gui");
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
@@ -114,9 +128,9 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private void setItems(Collection<ItemModel> newItems) {
         if (newItems == null) {
-            newItems = new LinkedList<ItemModel>();
+            newItems = new ArrayList<ItemModel>();
         }
-        this.items = new LinkedList<>(newItems);
+        this.items = new ArrayList<ItemModel>(newItems);
     }
 
     private void setMod(ModModel newMod) {
@@ -133,6 +147,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float frame) {
+    	System.out.println(this.items.isEmpty());
         try {
             this.drawAllItems();
             this.exportAllItems();
@@ -268,7 +283,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             ItemModel item = this.items.get(drawIndex);
             if (item.isMultiblock()) continue;
-
+            System.out.println("currently drawing" + item.getDisplayName());
             int x = i % cols * 18;
             int y = i / cols * 18;
             this.drawItem(item, x + 1, y + 1);
@@ -350,7 +365,8 @@ public class ItemIconDumperScreen extends GuiScreen {
         int fit = rows * cols;
 
         for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
-            ItemModel item = this.items.removeFirst();
+            ItemModel item = this.items.get(0);
+            this.items.remove(0);
 
             int x = i % cols * boxSize;
             int y = i / cols * boxSize;
@@ -370,7 +386,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private boolean isExporting = false;
 
-    private LinkedList<ItemModel> items = new LinkedList<>();
+    private ArrayList<ItemModel> items = new ArrayList<>();
 
     private ModModel mod = null;
 

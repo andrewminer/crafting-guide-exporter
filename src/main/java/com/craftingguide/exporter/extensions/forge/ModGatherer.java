@@ -5,6 +5,8 @@ import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.ModContainer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 
 public class ModGatherer extends Gatherer {
 
@@ -14,7 +16,13 @@ public class ModGatherer extends Gatherer {
         modPack.addMod(minecraft);
 
         for (ModContainer rawMod : Loader.instance().getActiveModList()) {
+        	System.out.println(rawMod.getName());
             ModModel mod = new ModModel(rawMod);
+            mod.setAuthor(mod.getRawMod().getMetadata().getAuthorList());
+            mod.setDescription(mod.getRawMod().getMetadata().description);
+            mod.setIconicBlock(modPack.getItem(new ItemStack(Blocks.stone)));
+            mod.setUrl(mod.getUrl());
+            mod.setEnabled(true);
             modPack.addMod(mod);
         }
     }
