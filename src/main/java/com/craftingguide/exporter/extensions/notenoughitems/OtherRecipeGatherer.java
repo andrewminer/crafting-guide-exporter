@@ -1,4 +1,4 @@
-package com.craftingguide.exporter.extensions.minecraft;
+package com.craftingguide.exporter.extensions.notenoughitems;
 
 import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemModel;
@@ -63,10 +63,10 @@ public class OtherRecipeGatherer extends Gatherer {
 			}
 			for (int recipe = 0; recipe < machine.numRecipes(); recipe++) {
 				ItemStack result = machine.getResultStack(recipe).item;
-				List<PositionedStack> ingrediants = machine.getIngredientStacks(recipe);
-				ArrayList<ItemStack> ingrediantStacks = new ArrayList<ItemStack>();
-				for (PositionedStack ingrediant : ingrediants) {
-					ingrediantStacks.add(ingrediant.item);
+				List<PositionedStack> ingredients = machine.getIngredientStacks(recipe);
+				ArrayList<ItemStack> ingredientStacks = new ArrayList<ItemStack>();
+				for (PositionedStack ingredient : ingredients) {
+					ingredientStacks.add(ingredient.item);
 				}
 				ArrayList<ItemStack> otherStacks = new ArrayList<ItemStack>();
 				List<PositionedStack> others = machine.getOtherStacks(recipe);
@@ -74,7 +74,7 @@ public class OtherRecipeGatherer extends Gatherer {
 					otherStacks.add(other.item);
 				}
 				RecipeModel recipeModel = new RecipeModel(new ItemStackModel(modpack.getItem(result), result.stackSize));
-				for (ItemStack input : ingrediantStacks) {
+				for (ItemStack input : ingredientStacks) {
 					recipeModel.addInput(new ItemStackModel(modpack.getItem(input), input.stackSize));
 				}
 				for (ItemStack extra : otherStacks) {

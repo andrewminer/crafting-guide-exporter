@@ -27,6 +27,7 @@ import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -120,9 +121,9 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private void setItems(Collection<ItemModel> newItems) {
         if (newItems == null) {
-            newItems = new ArrayList<ItemModel>();
+            newItems = new LinkedList<ItemModel>();
         }
-        this.items = new ArrayList<ItemModel>(newItems);
+        this.items = new LinkedList<>(newItems);
     }
 
     private void setMod(ModModel newMod) {
@@ -309,6 +310,7 @@ public class ItemIconDumperScreen extends GuiScreen {
                 DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
             } else {
                 DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+                DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, i);
             }
 
             // Disabled because, for Crafting Guide, we don't actually want the overlays.
@@ -321,7 +323,7 @@ public class ItemIconDumperScreen extends GuiScreen {
             e.printStackTrace(new PrintWriter(sw));
             String stackTrace = itemStack + sw.toString();
             if (!stackTraces.contains(stackTrace)) {
-                System.err.println("Error while rendering: " + itemStack);
+            	System.err.println("Error while rendering: " + itemStack);
                 e.printStackTrace();
                 stackTraces.add(stackTrace);
             }
@@ -355,8 +357,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         int fit = rows * cols;
 
         for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
-            ItemModel item = this.items.get(0);
-            this.items.remove(0);
+            ItemModel item = this.items.removeFirst();
 
             int x = i % cols * boxSize;
             int y = i / cols * boxSize;
@@ -376,7 +377,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     private boolean isExporting = false;
 
-    private ArrayList<ItemModel> items = new ArrayList<>();
+    private LinkedList<ItemModel> items = new LinkedList<>();
 
     private ModModel mod = null;
 

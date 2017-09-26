@@ -16,6 +16,8 @@ public class ModGatherer extends Gatherer {
         modPack.addMod(minecraft);
 
         for (ModContainer rawMod : Loader.instance().getActiveModList()) {
+        	//TODO: Use curseforge to get an icon for the mods
+        	//TODO: use creative tabs to get the group
             ModModel mod = new ModModel(rawMod);
             mod.setAuthor(mod.getRawMod().getMetadata().getAuthorList());
             mod.setDescription(mod.getRawMod().getMetadata().description);

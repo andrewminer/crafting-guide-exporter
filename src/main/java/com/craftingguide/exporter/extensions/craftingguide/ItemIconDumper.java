@@ -35,6 +35,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
     public void dump(ModPackModel modPack, AsyncStep dumpAllItemsStep) {
         this.remainingMods = new LinkedList<ModModel>();
         for (ModModel mod : modPack.getAllMods()) {
+        	if (!mod.isEnabled()) continue;
 
             this.remainingMods.add(mod);
         }
