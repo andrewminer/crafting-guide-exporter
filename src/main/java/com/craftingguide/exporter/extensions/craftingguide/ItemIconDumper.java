@@ -4,13 +4,10 @@ import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
-
 import javax.imageio.ImageIO;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -35,7 +32,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
     public void dump(ModPackModel modPack, AsyncStep dumpAllItemsStep) {
         this.remainingMods = new LinkedList<ModModel>();
         for (ModModel mod : modPack.getAllMods()) {
-        	if (!mod.isEnabled()) continue;
+            if (!mod.isEnabled()) continue;
 
             this.remainingMods.add(mod);
         }
@@ -56,6 +53,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
             dumpAllItemsStep.done();
             return;
         }
+        
         ModModel mod = this.remainingMods.removeFirst();
         this.screen.dumpItems(mod, mod.getAllItems(), ()-> {
             this.processNextMod(dumpAllItemsStep);

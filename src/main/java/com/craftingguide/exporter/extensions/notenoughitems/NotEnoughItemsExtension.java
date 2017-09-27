@@ -6,9 +6,9 @@ import com.craftingguide.exporter.Registry.Priority;
 
 public class NotEnoughItemsExtension implements ExporterExtension {
 
-	@Override
-	public void register(Registry registry) {
-		registry.registerWorker("minecraft.OtherRecipeGatherer", Priority.LOWEST);
-	}
+    @Override
+    public void register(Registry registry) {
+        registry.registerWorker("minecraft.OtherRecipeGatherer", Priority.LOWEST);
+    }
 
 }

@@ -21,7 +21,7 @@ public class ItemGatherer extends Gatherer {
 
     @Override
     public void gather(ModPackModel modPack) {
-    	Set<String> ids = (Set<String>) Item.itemRegistry.getKeys();
+        Set<String> ids = (Set<String>) Item.itemRegistry.getKeys();
         for (String id : ids) {
             Item item = (Item) Item.itemRegistry.getObject(id);
 
@@ -30,44 +30,44 @@ public class ItemGatherer extends Gatherer {
             //TODO: Buildcraft items are gotten 2 times
             boolean needToAddItemToModModel = true;
             for (ItemModel itemModel : mod.getAllItems()) {
-            	if (itemModel.getRawItemStack().getItem() == item) {
-            		needToAddItemToModModel = false;
-            	}
+                if (itemModel.getRawItemStack().getItem() == item) {
+                    needToAddItemToModModel = false;
+                }
             }
             if (item.getHasSubtypes()) {
                 ArrayList<ItemStack> subItemStacks = new ArrayList<ItemStack>();
                 item.getSubItems(item, null, subItemStacks);
                 
                 if (subItemStacks.isEmpty()) {
-                	// The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2fNyMLI
+                    // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2fNyMLI
                     // BEGIN NEI
-                	
-                	HashSet<String> damageIconSet = new HashSet<String>();
+
+                    HashSet<String> damageIconSet = new HashSet<String>();
                     for (int damage = 0; damage < 16; damage++) {
-                    	ItemStack itemstack = new ItemStack(item, 1, damage);
+                        ItemStack itemstack = new ItemStack(item, 1, damage);
                         IIcon icon = item.getIconIndex(itemstack);
                         String name = GuiContainerManager.concatenatedDisplayName(itemstack, false);
                         String s = name + "@" + (icon == null ? 0 : icon.hashCode());
                         if (!damageIconSet.contains(s)) {
-                        	damageIconSet.add(s);
+                            damageIconSet.add(s);
                             subItemStacks.add(itemstack);
                         }
                     }
-                    
+
                     // END NEI
                 }
 
                 for (ItemStack stack : subItemStacks) {
                     String subTypeId = id + ":" + stack.getItemDamage();
                     if (needToAddItemToModModel) {
-                    	mod.addItem(new ItemModel(subTypeId, stack));
+                        mod.addItem(new ItemModel(subTypeId, stack));
                     }
                     modPack.addItem(new ItemModel(subTypeId, stack));
                 }
             } else {
                 ItemStack stack = new ItemStack(item, 1, 0);
                 if (needToAddItemToModModel) {
-                	mod.addItem(new ItemModel(id, stack));
+                    mod.addItem(new ItemModel(id, stack));
                 }
                 modPack.addItem(new ItemModel(id, stack));
             }

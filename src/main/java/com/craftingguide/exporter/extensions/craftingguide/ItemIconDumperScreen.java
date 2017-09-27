@@ -3,7 +3,7 @@ package com.craftingguide.exporter.extensions.craftingguide;
 import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
-
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
@@ -16,9 +16,6 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.common.MinecraftForge;
-
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
@@ -29,14 +26,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
+import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class ItemIconDumperScreen extends GuiScreen {
 
@@ -62,8 +58,8 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.setIsExporting(true);
 
         if (items.isEmpty()) {
-        	this.setIsExporting(false);
-        	dumpItemsStep.done();
+            this.setIsExporting(false);
+            dumpItemsStep.done();
         }
 
         this.setStep(dumpItemsStep);
@@ -275,6 +271,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             ItemModel item = this.items.get(drawIndex);
             if (item.isMultiblock()) continue;
+            
             int x = i % cols * 18;
             int y = i / cols * 18;
             this.drawItem(item, x + 1, y + 1);
@@ -323,7 +320,7 @@ public class ItemIconDumperScreen extends GuiScreen {
             e.printStackTrace(new PrintWriter(sw));
             String stackTrace = itemStack + sw.toString();
             if (!stackTraces.contains(stackTrace)) {
-            	System.err.println("Error while rendering: " + itemStack);
+                System.err.println("Error while rendering: " + itemStack);
                 e.printStackTrace();
                 stackTraces.add(stackTrace);
             }
