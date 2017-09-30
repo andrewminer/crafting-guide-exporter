@@ -42,8 +42,10 @@ public class ShapelessRecipeGatherer extends Gatherer {
         int index = 0;
 
         for (ItemStack itemStack : recipe.getInputs()) {
-            ItemStackModel stackModel = ItemStackModel.convert(itemStack, modPack);
-            model.setInputAt(rows[index], cols[index], stackModel);
+            if (itemStack != null && itemStack.getItem() != null) {
+                ItemStackModel stackModel = ItemStackModel.convert(itemStack, modPack);
+                model.setInputAt(rows[index], cols[index], stackModel);
+            }
             index++;
         }
 

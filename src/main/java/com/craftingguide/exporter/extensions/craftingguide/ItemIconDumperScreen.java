@@ -12,10 +12,12 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
@@ -28,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
@@ -271,7 +274,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             ItemModel item = this.items.get(drawIndex);
             if (item.isMultiblock()) continue;
-            
+
             int x = i % cols * 18;
             int y = i / cols * 18;
             this.drawItem(item, x + 1, y + 1);
@@ -283,60 +286,110 @@ public class ItemIconDumperScreen extends GuiScreen {
     }
 
     private void drawItem(ItemModel item, int i, int j) {
-        FontRenderer fontRenderer = item.getRawItemStack().getItem().getFontRenderer(item.getRawItemStack());
-        if (fontRenderer == null) {
-            fontRenderer = Minecraft.getMinecraft().fontRenderer;
-        }
-        TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
-        ItemStack itemStack = item.getRawItemStack();
-        List<String> stackTraces = new ArrayList<String>();
-
-        // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
-        // BEGIN NEI
-
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-        float zLevel = DRAW_ITEMS.zLevel += 100;
-
-        try {
-            // Calling `renderItemAndEffectIntoGUI`, for some reason, fails to draw enchanted items properly (either not
-            // drawing them at all, or not drawing certain pieces of them). Calling the simple `renderItemIntoGUI`
-            // instead works as expected.
-            if (item.isEffectRenderable()) {
-                DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-            } else {
-                DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
-                DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, i);
+        if (item.isFluid()) {
+            
+            FluidStack fluid = item.getRawFluidStack();
+            
+            // The following has been borrowed from SleepyTrousers' EnderCore code at http://bit.ly/2x2hhCf
+            // BEGIN EnderCore
+            
+            IIcon icon = fluid.getFluid().getStillIcon();
+            if (icon == null) {
+                icon = fluid.getFluid().getIcon();
+                if (icon == null) {
+                    return;
+                }
             }
 
-            // Disabled because, for Crafting Guide, we don't actually want the overlays.
-            // DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+            int renderAmount = 15;
+            int posY = j;
 
-            if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
-            if (isDrawing()) throw new IllegalStateException("Still drawing");
-        } catch (Exception e) {
-            StringWriter sw = new StringWriter();
-            e.printStackTrace(new PrintWriter(sw));
-            String stackTrace = itemStack + sw.toString();
-            if (!stackTraces.contains(stackTrace)) {
-                System.err.println("Error while rendering: " + itemStack);
-                e.printStackTrace();
-                stackTraces.add(stackTrace);
+            Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.locationBlocksTexture);
+            int color = fluid.getFluid().getColor(fluid);
+            GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
+
+            GL11.glEnable(GL11.GL_BLEND);
+            for (int x = 0; x < 15; x += 16) {
+                for (int y = 0; y < renderAmount; y += 16) {
+                    int drawWidth = (int) Math.min(15 - x, 16);
+                    int drawHeight = Math.min(renderAmount - y, 16);
+
+                    int drawX = (int) (x + i);
+                    int drawY = posY + y;
+
+                    double minU = icon.getMinU();
+                    double maxU = icon.getMaxU();
+                    double minV = icon.getMinV();
+                    double maxV = icon.getMaxV();
+
+                    Tessellator tessellator = Tessellator.instance;
+                    tessellator.startDrawingQuads();
+                    tessellator.addVertexWithUV(drawX, drawY + drawHeight, 0, minU, minV + (maxV - minV) * drawHeight / 16F);
+                    tessellator.addVertexWithUV(drawX + drawWidth, drawY + drawHeight, 0, minU + (maxU - minU) * drawWidth / 16F, minV + (maxV - minV) * drawHeight / 16F);
+                    tessellator.addVertexWithUV(drawX + drawWidth, drawY, 0, minU + (maxU - minU) * drawWidth / 16F, minV);
+                    tessellator.addVertexWithUV(drawX, drawY, 0, minU, minV);
+                    tessellator.draw();
+                }
+            }
+            GL11.glDisable(GL11.GL_BLEND);
+            
+            //END EnderCore
+            
+        } else {
+            FontRenderer fontRenderer = item.getRawItemStack().getItem().getFontRenderer(item.getRawItemStack());
+            if (fontRenderer == null) {
+                fontRenderer = Minecraft.getMinecraft().fontRenderer;
+            }
+            TextureManager renderEngine = Minecraft.getMinecraft().renderEngine;
+            ItemStack itemStack = item.getRawItemStack();
+            List<String> stackTraces = new ArrayList<String>();
+
+            // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2c1dO8z
+            // BEGIN NEI
+
+            GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+
+            float zLevel = DRAW_ITEMS.zLevel += 100;
+
+            try {
+                // Calling `renderItemAndEffectIntoGUI`, for some reason, fails to draw enchanted items properly (either not
+                // drawing them at all, or not drawing certain pieces of them). Calling the simple `renderItemIntoGUI`
+                // instead works as expected.
+                if (item.isEffectRenderable()) {
+                    DRAW_ITEMS.renderItemAndEffectIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+                } else {
+                    DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+                }
+
+                // Disabled because, for Crafting Guide, we don't actually want the overlays.
+                DRAW_ITEMS.renderItemOverlayIntoGUI(fontRenderer, renderEngine, itemStack, i, j);
+
+                if (!checkMatrixStack()) throw new IllegalStateException("Modelview matrix stack too deep");
+                if (isDrawing()) throw new IllegalStateException("Still drawing");
+            } catch (Exception e) {
+                StringWriter sw = new StringWriter();
+                e.printStackTrace(new PrintWriter(sw));
+                String stackTrace = itemStack + sw.toString();
+                if (!stackTraces.contains(stackTrace)) {
+                    System.err.println("Error while rendering: " + itemStack);
+                    e.printStackTrace();
+                    stackTraces.add(stackTrace);
+                }
+
+                restoreMatrixStack();
+                if (isDrawing()) Tessellator.instance.draw();
+
+                DRAW_ITEMS.zLevel = zLevel;
+                DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, new ItemStack(Blocks.fire), i, j);
             }
 
-            restoreMatrixStack();
-            if (isDrawing()) Tessellator.instance.draw();
+            GL11.glDisable(GL11.GL_LIGHTING);
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            DRAW_ITEMS.zLevel = zLevel - 100;
 
-            DRAW_ITEMS.zLevel = zLevel;
-            DRAW_ITEMS.renderItemIntoGUI(fontRenderer, renderEngine, new ItemStack(Blocks.fire), i, j);
+            // END NEI
         }
-
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-        DRAW_ITEMS.zLevel = zLevel - 100;
-
-        // END NEI
     }
 
     private void exportAllItems() {
@@ -354,7 +407,8 @@ public class ItemIconDumperScreen extends GuiScreen {
         int fit = rows * cols;
 
         for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
-            ItemModel item = this.items.removeFirst();
+            ItemModel item = this.items.get(0);
+            this.items.remove(0);
 
             int x = i % cols * boxSize;
             int y = i / cols * boxSize;

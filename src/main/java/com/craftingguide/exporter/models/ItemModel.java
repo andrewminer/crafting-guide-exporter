@@ -34,7 +34,7 @@ public class ItemModel implements Comparable<ItemModel> {
 
         @Override
         public int compare(ItemModel a, ItemModel b) {
-            return a.displayName.compareTo(b.displayName);
+            return a.getDisplayName().compareTo(b.getDisplayName());
         }
     };
 

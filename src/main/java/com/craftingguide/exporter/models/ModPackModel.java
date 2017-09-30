@@ -1,12 +1,15 @@
 package com.craftingguide.exporter.models;
 
+import cpw.mods.fml.common.registry.GameData;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -127,6 +130,29 @@ public class ModPackModel {
 
     public void addRecipe(RecipeModel recipe) {
         ItemModel item = this.getItem(recipe.getOutput().getItem().getId());
+        if (item == null) {
+            ItemStackModel outputStack = recipe.getOutput();
+            ModModel modItemIsFrom = null;
+            if (outputStack.getItem().isFluid() && GameData.findModOwner(FluidRegistry.getDefaultFluidName(outputStack.getItem().getRawFluidStack().getFluid())) == null || outputStack.getItem().getRawItemStack() != null && GameData.findModOwner(GameData.getItemRegistry().getNameForObject(outputStack.getItem().getRawItemStack().getItem())) == null) {
+                modItemIsFrom = this.getMod("Minecraft");
+            }
+            for (ModModel mod : this.getAllMods()) {
+                if (outputStack.getItem().isFluid()) {
+                    FluidStack fluidStack = outputStack.getItem().getRawFluidStack();
+                    if (GameData.findModOwner(FluidRegistry.getDefaultFluidName(fluidStack.getFluid())).getModId() == mod.getId()) {
+                        modItemIsFrom = mod;
+                        break;
+                    }
+                } else {
+                    if (GameData.findModOwner(GameData.getItemRegistry().getNameForObject(outputStack.getItem().getRawItemStack().getItem())).getModId() == mod.getId()) {
+                        modItemIsFrom = mod;
+                    }
+                }
+            }
+            modItemIsFrom.addItem(outputStack.getItem());
+            this.addItem(outputStack.getItem());
+            item = outputStack.getItem();
+        }
         item.addRecipe(recipe);
     }
 

@@ -62,7 +62,11 @@ public class RecipeAdapter {
                 if (inputObj instanceof ItemStack) {
                     results.add((ItemStack) inputObj);
                 } else if (inputObj instanceof List<?>) {
-                    results.add(((List<ItemStack>) inputObj).get(0));
+                    if (!((List<ItemStack>) inputObj).isEmpty()) {
+                        results.add(((List<ItemStack>) inputObj).get(0));
+                    } else {
+                        results.add(null);
+                    }
                 } else if (inputObj == null) {
                     results.add(null);
                 } else {

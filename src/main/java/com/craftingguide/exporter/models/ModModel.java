@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import net.minecraftforge.fluids.FluidRegistry;
 
 public class ModModel {
 
@@ -124,8 +125,14 @@ public class ModModel {
         if (item == null) throw new IllegalArgumentException("item cannot be null");
         if (this.items.contains(item)) return;
 
-        if (!this.containsItemId(item.getId())) {
-            throw new IllegalArgumentException("item " + item.getId() + " does not belong to this mod");
+        if (item.isFluid()) {
+            if (!this.containsItemId(FluidRegistry.getDefaultFluidName(item.getRawFluidStack().getFluid()))) {
+                throw new IllegalArgumentException("item " + item.getId() + " does not belong to this mod");
+            }
+        } else {
+            if (!this.containsItemId(item.getId())) {
+                throw new IllegalArgumentException("item " + item.getId() + " does not belong to this mod");
+            }
         }
 
         this.items.add(item);

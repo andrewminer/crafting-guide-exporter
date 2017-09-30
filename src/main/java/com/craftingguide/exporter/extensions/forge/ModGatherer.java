@@ -19,6 +19,7 @@ public class ModGatherer extends Gatherer {
             //TODO: find some way to get a block to represent the mod
             //TODO: find some way to group the items
             ModModel mod = new ModModel(rawMod);
+            
             mod.setAuthor(mod.getRawMod().getMetadata().getAuthorList());
             mod.setDescription(mod.getRawMod().getMetadata().description);
             mod.setIconicBlock(modPack.getItem(new ItemStack(Blocks.stone)));
