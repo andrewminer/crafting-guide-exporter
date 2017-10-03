@@ -7,6 +7,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -18,6 +19,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.Timer;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
@@ -26,14 +28,17 @@ import java.lang.reflect.Field;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -56,9 +61,11 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void dumpItems(ModModel mod, Collection<ItemModel> items, AsyncStep dumpItemsStep) {
+    public void dumpItems(Map<ModModel, Collection<ItemModel>> items, AsyncStep dumpItemsStep, boolean modIcons) {
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
+
+        this.hasDrawScreenBeenCalled = false;
 
         if (items.isEmpty()) {
             this.setIsExporting(false);
@@ -67,10 +74,16 @@ public class ItemIconDumperScreen extends GuiScreen {
 
         this.setStep(dumpItemsStep);
         this.setImageConsumer(imageConsumer);
-        this.setItems(items);
-        this.setMod(mod);
+        this.setItemsMap(items);
 
         Minecraft.getMinecraft().displayGuiScreen(this);
+
+        //if (!this.hasDrawScreenBeenCalled && !modIcons) {
+            //ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+            //Timer timer = new Timer(20.0F);
+            //timer.updateTimer();
+            //this.drawScreen(Mouse.getX() * scaledResolution.getScaledWidth() / Minecraft.getMinecraft().displayWidth, scaledResolution.getScaledHeight() - Mouse.getY() * Minecraft.getMinecraft().displayHeight - 1, timer.renderPartialTicks);
+        //}
     }
 
     @SubscribeEvent
@@ -118,6 +131,13 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.imageConsumer = imageConsumer;
     }
 
+    private void setItemsMap(Map<ModModel, Collection<ItemModel>> newItemsMap) {
+        if (newItemsMap == null) {
+            newItemsMap = new HashMap<ModModel, Collection<ItemModel>>();
+        }
+        this.itemsMap = new HashMap<ModModel, Collection<ItemModel>>(newItemsMap);
+    }
+    
     private void setItems(Collection<ItemModel> newItems) {
         if (newItems == null) {
             newItems = new LinkedList<ItemModel>();
@@ -139,19 +159,23 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float frame) {
-        try {
-            this.drawAllItems();
-            this.exportAllItems();
-        } catch (Throwable e) {
-            logger.error("Failed to render item icon dump for " + this.mod.getDisplayName(), e);
-            Minecraft.getMinecraft().displayGuiScreen(null);
-        } finally {
-            if (this.items.isEmpty()) {
-                this.setIsExporting(false);
+        this.hasDrawScreenBeenCalled = true;
+        for (ModModel mod : this.itemsMap.keySet()) {
+            this.setMod(mod);
+            this.setItems(this.itemsMap.get(mod));
+            try {
+                while (!this.items.isEmpty()) {
+                    this.drawAllItems();
+                    this.exportAllItems();
+                }
+            } catch (Throwable e) {
+                logger.error("Failed to render item icon dump for " + this.mod.getDisplayName(), e);
                 Minecraft.getMinecraft().displayGuiScreen(null);
-                this.step.done();
             }
         }
+        this.setIsExporting(false);
+        Minecraft.getMinecraft().displayGuiScreen(null);
+        this.step.done();
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
@@ -407,8 +431,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         int fit = rows * cols;
 
         for (int i = 0; !this.items.isEmpty() && i < fit; i++) {
-            ItemModel item = this.items.get(0);
-            this.items.remove(0);
+            ItemModel item = this.items.removeFirst();
 
             int x = i % cols * boxSize;
             int y = i / cols * boxSize;
@@ -423,12 +446,16 @@ public class ItemIconDumperScreen extends GuiScreen {
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
     private ImageConsumer imageConsumer = null;
+    
+    private boolean hasDrawScreenBeenCalled = false;
 
     private int iconSize = 48;
 
     private boolean isExporting = false;
 
-    private LinkedList<ItemModel> items = new LinkedList<>();
+    private Map<ModModel, Collection<ItemModel>> itemsMap = new HashMap<ModModel, Collection<ItemModel>>();
+    
+    private LinkedList<ItemModel> items = new LinkedList<ItemModel>();
 
     private ModModel mod = null;
 
