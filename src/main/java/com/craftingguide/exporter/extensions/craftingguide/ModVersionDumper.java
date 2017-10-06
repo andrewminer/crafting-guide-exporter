@@ -72,7 +72,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.println("gatherable: yes");
         }
 
-        if (item.getRecipes().size() > 0) {
+        if (!item.getRecipes().isEmpty()) {
             List<RecipeModel> recipes = new ArrayList<>(item.getRecipes());
             recipes.sort(null);
 

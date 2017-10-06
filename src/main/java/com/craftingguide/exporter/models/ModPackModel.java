@@ -129,8 +129,8 @@ public class ModPackModel {
     }
 
     public void addRecipe(RecipeModel recipe) {
-        ItemModel item = this.getItem(recipe.getOutput().getItem().getId());
-        if (item == null) {
+        recipe.getOutput().getItem().addRecipe(recipe);
+        /*if (item == null) {
             ItemStackModel outputStack = recipe.getOutput();
             ModModel modItemIsFrom = null;
             if (outputStack.getItem().isFluid() && GameData.findModOwner(FluidRegistry.getDefaultFluidName(outputStack.getItem().getRawFluidStack().getFluid())) == null || outputStack.getItem().getRawItemStack() != null && GameData.findModOwner(GameData.getItemRegistry().getNameForObject(outputStack.getItem().getRawItemStack().getItem())) == null) {
@@ -152,8 +152,7 @@ public class ModPackModel {
             modItemIsFrom.addItem(outputStack.getItem());
             this.addItem(outputStack.getItem());
             item = outputStack.getItem();
-        }
-        item.addRecipe(recipe);
+        }*/
     }
 
     public void removeRecipe(RecipeModel recipe) {
