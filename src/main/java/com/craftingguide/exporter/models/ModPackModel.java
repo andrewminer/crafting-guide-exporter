@@ -129,7 +129,8 @@ public class ModPackModel {
     }
 
     public void addRecipe(RecipeModel recipe) {
-        recipe.getOutput().getItem().addRecipe(recipe);
+        ItemModel item = recipe.getOutput().getItem();
+        item.addRecipe(recipe);
         /*if (item == null) {
             ItemStackModel outputStack = recipe.getOutput();
             ModModel modItemIsFrom = null;

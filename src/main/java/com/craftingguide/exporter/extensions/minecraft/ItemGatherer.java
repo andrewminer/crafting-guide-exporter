@@ -2,7 +2,10 @@ package com.craftingguide.exporter.extensions.minecraft;
 
 import com.craftingguide.exporter.Gatherer;
 import com.craftingguide.exporter.models.ItemModel;
+import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
+import cpw.mods.fml.common.ModContainer;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
@@ -18,6 +21,16 @@ public class ItemGatherer extends Gatherer {
         Set<String> ids = (Set<String>) Item.itemRegistry.getKeys();
         for (String id : ids) {
             Item item = (Item) Item.itemRegistry.getObject(id);
+            
+            ModContainer rawMod = GameData.findModOwner(GameData.getItemRegistry().getNameForObject(item));
+            ModModel mod = rawMod == null ? modPack.getMod("minecraft") : modPack.getMod(rawMod.getModId());
+            //TODO: Buildcraft items are gotten 2 times
+            boolean needToAddItemToModModel = true;
+            for (ItemModel itemModel : mod.getAllItems()) {
+                if (itemModel.getRawItemStack().getItem() == item) {
+                    needToAddItemToModModel = false;
+                }
+            }
             if (item.getHasSubtypes()) {
                 ArrayList<ItemStack> subItemStacks = new ArrayList<ItemStack>();
                 item.getSubItems(item, null, subItemStacks);
@@ -43,11 +56,19 @@ public class ItemGatherer extends Gatherer {
 
                 for (ItemStack stack : subItemStacks) {
                     String subTypeId = id + ":" + stack.getItemDamage();
-                    modPack.addItem(new ItemModel(subTypeId, stack));
+                    ItemModel itemModel = new ItemModel(subTypeId, stack);
+                    if (needToAddItemToModModel) {
+                        mod.addItem(itemModel);
+                    }
+                    modPack.addItem(itemModel);
                 }
             } else {
                 ItemStack stack = new ItemStack(item, 1, 0);
-                modPack.addItem(new ItemModel(id, stack));
+                ItemModel itemModel = new ItemModel(id, stack);
+                if (needToAddItemToModModel) {
+                    mod.addItem(itemModel);
+                }
+                modPack.addItem(itemModel);
             }
         }
     }
