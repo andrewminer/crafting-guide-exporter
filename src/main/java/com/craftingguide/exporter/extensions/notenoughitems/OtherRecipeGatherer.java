@@ -7,7 +7,7 @@ import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
 
 import net.minecraft.item.ItemStack;
-
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,13 +17,15 @@ import java.util.SortedSet;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.IUsageHandler;
+import codechicken.nei.recipe.TemplateRecipeHandler;
+import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
 
 public class OtherRecipeGatherer extends Gatherer {
 
     @Override
-    public void gather(ModPackModel modpack) {
+    public void gather(ModPackModel modPack) {
         ArrayList<IUsageHandler> machines = GuiUsageRecipe.usagehandlers;
-        Iterator<ItemModel> allItems = modpack.getAllItems().iterator();
+        Iterator<ItemModel> allItems = modPack.getAllItems().iterator();
         ArrayList<ItemModel> alreadyRegisteredMachines = new ArrayList<ItemModel>();
         while (allItems.hasNext()) {
             ItemModel item = allItems.next();
@@ -47,11 +49,28 @@ public class OtherRecipeGatherer extends Gatherer {
             if (alreadyRegistered) continue;
             boolean notRealItem = true;
             ItemModel item = null;
-            Iterator<ItemModel> allItemIterator = modpack.getAllItems().iterator();
+            Iterator<ItemModel> allItemIterator = modPack.getAllItems().iterator();
+            
+            String outputID = null;
+            if (machine.numRecipes() == 0 && machine instanceof TemplateRecipeHandler) {
+                TemplateRecipeHandler machineRecipeHandler = (TemplateRecipeHandler) machine;
+                RecipeTransferRect recipeRectangle = machineRecipeHandler.transferRects.getFirst();
+                Field outputIDField = null;
+                try {
+                    outputIDField = RecipeTransferRect.class.getDeclaredField("outputId");
+                    outputIDField.setAccessible(true);
+                    outputID = (String) outputIDField.get(recipeRectangle);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                machineRecipeHandler.loadCraftingRecipes(outputID);
+            }
+
             if (!namedItems.containsKey(machine.getRecipeName())) {
                 while (allItemIterator.hasNext()) {
                     ItemModel oneItem = allItemIterator.next();
-                    if (oneItem.getDisplayName() == machine.getRecipeName()) {
+                    if (oneItem.getDisplayName().equalsIgnoreCase(machine.getRecipeName()) || oneItem.getDisplayName().equalsIgnoreCase(outputID)) {
                         notRealItem = false;
                         item = oneItem;
                         break;
@@ -73,14 +92,26 @@ public class OtherRecipeGatherer extends Gatherer {
                 for (PositionedStack other : others) {
                     otherStacks.add(other.item);
                 }
-                RecipeModel recipeModel = new RecipeModel(new ItemStackModel(modpack.getItem(result), result.stackSize));
+                RecipeModel recipeModel = new RecipeModel(ItemStackModel.convert(result, modPack));
+                int index = 0;
+                int[] rows = { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
+                int[] cols = { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
+                boolean continueThisRecipe = true;
                 for (ItemStack input : ingredientStacks) {
-                    recipeModel.addInput(new ItemStackModel(modpack.getItem(input), input.stackSize));
+                    index++;
+                    if (index > 9) {
+                        continueThisRecipe = false;
+                        break;
+                    }
+                    recipeModel.setInputAt(rows[index - 1], cols[index - 1], ItemStackModel.convert(input, modPack));
                 }
+                recipeModel.addTool(item);
                 for (ItemStack extra : otherStacks) {
-                    recipeModel.addInput(new ItemStackModel(modpack.getItem(extra), extra.stackSize));
+                    if (!item.getId().equals(modPack.getItem(extra).getId())) {
+                        recipeModel.addTool(modPack.getItem(extra));
+                    }
                 }
-                item.addRecipe(recipeModel);
+                modPack.addRecipe(recipeModel);
             }
         }
     }

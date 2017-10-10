@@ -43,10 +43,13 @@ public class ExporterMod implements Registry {
         try {
             LOGGER.info("Starting CraftingGuide export...");
             long start = System.currentTimeMillis();
+            
+            this.modPack = new ModPackModel();
 
             this.executeWorkers(this.gatherers, ()-> {
                 this.executeWorkers(this.editors, ()-> {
                     this.executeWorkers(this.dumpers, ()-> {
+                        
                         long duration = System.currentTimeMillis() - start;
                         LOGGER.info("Finished CraftingGuide export after " + duration + "ms.");
 

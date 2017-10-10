@@ -8,7 +8,7 @@ public class NotEnoughItemsExtension implements ExporterExtension {
 
     @Override
     public void register(Registry registry) {
-        registry.registerWorker("minecraft.OtherRecipeGatherer", Priority.LOWEST);
+        registry.registerWorker("notenoughitems.OtherRecipeGatherer", Priority.LOWEST);
     }
 
 }
