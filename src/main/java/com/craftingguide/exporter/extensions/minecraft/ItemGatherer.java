@@ -6,11 +6,15 @@ import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.registry.GameData;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import codechicken.nei.guihook.GuiContainerManager;
 
@@ -43,7 +47,7 @@ public class ItemGatherer extends Gatherer {
                     for (int damage = 0; damage < 16; damage++) {
                         ItemStack itemstack = new ItemStack(item, 1, damage);
                         IIcon icon = item.getIconIndex(itemstack);
-                        String name = GuiContainerManager.concatenatedDisplayName(itemstack, false);
+                        String name = concatenatedDisplayName(itemstack);
                         String s = name + "@" + (icon == null ? 0 : icon.hashCode());
                         if (!damageIconSet.contains(s)) {
                             damageIconSet.add(s);
@@ -72,4 +76,47 @@ public class ItemGatherer extends Gatherer {
             }
         }
     }
+    
+    // The following has been borrowed from ChickenBones' NEI code at http://bit.ly/2EDkszD and http://bit.ly/2AXj5t7
+    // BEGIN NEI
+    
+    public String concatenatedDisplayName(ItemStack itemstack) {
+        List<String> list = itemDisplayNameMultiline(itemstack);
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (String name : list) {
+            if (first) {
+                first = false;
+            } else {
+                sb.append("#");
+            }
+            sb.append(name);
+        }
+        return EnumChatFormatting.getTextWithoutFormattingCodes(sb.toString());
+    }
+    
+    public List<String> itemDisplayNameMultiline(ItemStack stack) {
+        List<String> namelist = null;
+        try {
+            namelist = stack.getTooltip(Minecraft.getMinecraft().thePlayer, false);
+        } catch (Throwable ignored) {}
+
+        if (namelist == null)
+            namelist = new ArrayList<String>();
+
+        if (namelist.size() == 0)
+            namelist.add("Unnamed");
+
+        if (namelist.get(0) == null || namelist.get(0).equals(""))
+            namelist.set(0, "Unnamed");
+
+        namelist.set(0, stack.getRarity().rarityColor.toString() + namelist.get(0));
+        for (int i = 1; i < namelist.size(); i++)
+            namelist.set(i, "\u00a77" + namelist.get(i));
+
+        return namelist;
+    }
+    
+    //END NEI
+    
 }
