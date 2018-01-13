@@ -77,13 +77,6 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.setItemsMap(items);
 
         Minecraft.getMinecraft().displayGuiScreen(this);
-
-        //if (!this.hasDrawScreenBeenCalled && !modIcons) {
-            //ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
-            //Timer timer = new Timer(20.0F);
-            //timer.updateTimer();
-            //this.drawScreen(Mouse.getX() * scaledResolution.getScaledWidth() / Minecraft.getMinecraft().displayWidth, scaledResolution.getScaledHeight() - Mouse.getY() * Minecraft.getMinecraft().displayHeight - 1, timer.renderPartialTicks);
-        //}
     }
 
     @SubscribeEvent
