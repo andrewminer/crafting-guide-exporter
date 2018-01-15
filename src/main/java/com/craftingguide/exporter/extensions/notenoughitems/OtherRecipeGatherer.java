@@ -5,15 +5,13 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.RecipeModel;
-
-import net.minecraft.item.ItemStack;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
-
+import net.minecraft.item.ItemStack;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.GuiUsageRecipe;
 import codechicken.nei.recipe.IUsageHandler;
@@ -96,11 +94,9 @@ public class OtherRecipeGatherer extends Gatherer {
                 int index = 0;
                 int[] rows = { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
                 int[] cols = { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
-                boolean continueThisRecipe = true;
                 for (ItemStack input : ingredientStacks) {
                     index++;
                     if (index > 9) {
-                        continueThisRecipe = false;
                         break;
                     }
                     recipeModel.setInputAt(rows[index - 1], cols[index - 1], ItemStackModel.convert(input, modPack));

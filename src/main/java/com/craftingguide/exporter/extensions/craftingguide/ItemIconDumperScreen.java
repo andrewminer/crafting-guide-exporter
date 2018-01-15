@@ -4,22 +4,6 @@ import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.Timer;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.PrintWriter;
@@ -32,13 +16,26 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -64,8 +61,6 @@ public class ItemIconDumperScreen extends GuiScreen {
     public void dumpItems(Map<ModModel, Collection<ItemModel>> items, AsyncStep dumpItemsStep, boolean modIcons) {
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
-
-        this.hasDrawScreenBeenCalled = false;
 
         if (items.isEmpty()) {
             this.setIsExporting(false);
@@ -152,7 +147,6 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     @Override
     public void drawScreen(int x, int y, float frame) {
-        this.hasDrawScreenBeenCalled = true;
         for (ModModel mod : this.itemsMap.keySet()) {
             this.setMod(mod);
             this.setItems(this.itemsMap.get(mod));
@@ -439,8 +433,6 @@ public class ItemIconDumperScreen extends GuiScreen {
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
     private ImageConsumer imageConsumer = null;
-    
-    private boolean hasDrawScreenBeenCalled = false;
 
     private int iconSize = 48;
 
