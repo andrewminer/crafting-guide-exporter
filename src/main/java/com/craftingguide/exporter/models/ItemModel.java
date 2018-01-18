@@ -64,6 +64,15 @@ public class ItemModel implements Comparable<ItemModel> {
         if (this.rawItemStack == null) return false;
         return this.rawItemStack.getItem().isPotionIngredient(this.rawItemStack);
     }
+    
+    public String getItemId() {
+        String[] idParts = this.id.split(":");
+        if (idParts.length > 2) {
+            return idParts[1] + ":" + idParts[2];
+        } else {
+            return idParts[1];
+        }
+    }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -65,7 +65,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     }
 
     private void printItem(ItemModel item, Printer printer) throws IOException {
-        printer.println("item: " + item.getId());
+        printer.println("item: " + item.getItemId());
         printer.indent();
 
         printer.println("display name: " + item.getDisplayName());
