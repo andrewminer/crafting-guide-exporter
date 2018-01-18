@@ -127,6 +127,9 @@ public class ModPackModel {
 
     public void addRecipe(RecipeModel recipe) {
         ItemModel item = recipe.getOutput().getItem();
+        if (item.getRecipes().contains(recipe) || recipe.getInputs().isEmpty()) {
+            return;
+        }
         item.addRecipe(recipe);
     }
 

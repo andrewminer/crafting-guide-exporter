@@ -195,6 +195,10 @@ public class RecipeModel implements Comparable<RecipeModel> {
             return (this.getTotalInputsRequired() < that.getTotalInputsRequired()) ? -1 : +1;
         }
 
+        String thisString = this.toString();
+        String differentString = that.toString();
+        int compareNumber = this.toString().compareTo(that.toString());
+        
         return this.toString().compareTo(that.toString());
     }
 

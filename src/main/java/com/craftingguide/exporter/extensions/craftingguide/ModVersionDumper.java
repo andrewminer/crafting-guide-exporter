@@ -65,8 +65,10 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
     }
 
     private void printItem(ItemModel item, Printer printer) throws IOException {
-        printer.println("item: " + item.getDisplayName());
+        printer.println("item: " + item.getId());
         printer.indent();
+
+        printer.println("display name: " + item.getDisplayName());
 
         if (item.isGatherable()) {
             printer.println("gatherable: yes");
@@ -200,7 +202,7 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             for (ItemModel tool : recipe.getTools()) {
                 if (needsDelimiter) printer.print(", ");
                 needsDelimiter = true;
-                printer.print(tool.getDisplayName());
+                printer.print(tool.getId());
             }
             printer.println();
         }
@@ -213,6 +215,6 @@ public class ModVersionDumper extends AbstractCraftingGuideDumper {
             printer.print(stack.getQuantity() + " ");
         }
 
-        printer.print(stack.getItem().getDisplayName());
+        printer.print(stack.getItem().getId());
     }
 }
