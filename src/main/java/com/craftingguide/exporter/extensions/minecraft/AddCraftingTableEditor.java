@@ -15,7 +15,7 @@ public class AddCraftingTableEditor extends Editor {
 
         for (ItemModel item : modPack.getAllItems()) {
             for (RecipeModel recipe : item.getRecipes()) {
-                if (recipe.getTools().size() > 0) continue;
+                if (!recipe.getTools().isEmpty()) continue;
                 if (!recipe.isCraftingTableRequired()) continue;
 
                 recipe.addTool(craftingTable);

@@ -12,6 +12,7 @@ import com.craftingguide.exporter.extensions.craftingguide.CraftingGuideExtensio
 import com.craftingguide.exporter.extensions.debug.DebugExtension;
 import com.craftingguide.exporter.extensions.forge.ForgeExtension;
 import com.craftingguide.exporter.extensions.minecraft.MinecraftExtension;
+import com.craftingguide.exporter.extensions.notenoughitems.NotEnoughItemsExtension;
 import com.craftingguide.exporter.extensions.solarexpansion.SolarExpansionExtension;
 import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.Mod;
@@ -42,10 +43,13 @@ public class ExporterMod implements Registry {
         try {
             LOGGER.info("Starting CraftingGuide export...");
             long start = System.currentTimeMillis();
+            
+            this.modPack = new ModPackModel();
 
             this.executeWorkers(this.gatherers, ()-> {
                 this.executeWorkers(this.editors, ()-> {
                     this.executeWorkers(this.dumpers, ()-> {
+                        
                         long duration = System.currentTimeMillis() - start;
                         LOGGER.info("Finished CraftingGuide export after " + duration + "ms.");
 
@@ -77,6 +81,7 @@ public class ExporterMod implements Registry {
             this.register(new ForgeExtension());
             this.register(new MinecraftExtension());
             this.register(new SolarExpansionExtension());
+            this.register(new NotEnoughItemsExtension());
         } catch (Exception e) {
             System.err.println("Failed to initialize Crafting Guide Export!");
             e.printStackTrace();

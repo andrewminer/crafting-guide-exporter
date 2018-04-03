@@ -8,7 +8,10 @@ import com.craftingguide.exporter.models.ModPackModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +37,29 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
     public void dump(ModPackModel modPack, AsyncStep dumpModIconsStep) {
         this.setModPack(modPack);
         LinkedList<ModModel> mods = new LinkedList<>(modPack.getAllMods());
-        this.processNextMod(mods, dumpModIconsStep);
+        
+        if (mods.isEmpty()) {
+            dumpModIconsStep.done();
+            return;
+        }
+
+        Map<ModModel, Collection<ItemModel>> modsMap = new HashMap<ModModel, Collection<ItemModel>>();
+
+        while (!mods.isEmpty()) {
+            ModModel mod = mods.removeFirst();
+            if (mod.isEnabled()) {
+
+                ItemModel iconicBlock = mod.getIconicBlock();
+                if (iconicBlock == null) {
+                    iconicBlock = this.getModPack().getItem(DEFAULT_ICONIC_BLOCK);
+                }
+                
+                modsMap.put(mod, Arrays.asList(iconicBlock));
+
+            }
+        }
+
+        this.screen.dumpItems(modPack, modsMap, dumpModIconsStep, true);
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,30 +80,6 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
     private static String DEFAULT_ICONIC_BLOCK = "minecraft:stone";
 
     private static int MOD_ICON_SIZE = 160;
-
-    // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private void processNextMod(LinkedList<ModModel> mods, AsyncStep dumpModIconsStep) {
-        if (mods.isEmpty()) {
-            dumpModIconsStep.done();
-            return;
-        }
-
-        ModModel mod = mods.removeFirst();
-        if (!mod.isEnabled()) {
-            this.processNextMod(mods, dumpModIconsStep);
-            return;
-        }
-
-        ItemModel iconicBlock = mod.getIconicBlock();
-        if (iconicBlock == null) {
-            iconicBlock = this.getModPack().getItem(DEFAULT_ICONIC_BLOCK);
-        }
-
-        this.screen.dumpItems(mod, Arrays.asList(iconicBlock), ()-> {
-            this.processNextMod(mods, dumpModIconsStep);
-        });
-    }
 
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 

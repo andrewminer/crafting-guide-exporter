@@ -39,7 +39,7 @@ public class ShapedRecipeGatherer extends Gatherer {
 
         int index = 0;
         for (ItemStack itemStack : recipe.getInputs()) {
-            if (itemStack != null) {
+            if (itemStack != null && itemStack.getItem() != null) {
                 ItemStackModel itemStackModel = ItemStackModel.convert(itemStack, modPack);
                 if (itemStackModel != null) {
                     itemStackModel.setQuantity(1);

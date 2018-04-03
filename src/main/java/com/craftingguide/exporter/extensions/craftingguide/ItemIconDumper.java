@@ -2,11 +2,14 @@ package com.craftingguide.exporter.extensions.craftingguide;
 
 import com.craftingguide.CraftingGuideFileManager;
 import com.craftingguide.exporter.AsyncStep;
+import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,39 +33,25 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
 
     @Override
     public void dump(ModPackModel modPack, AsyncStep dumpAllItemsStep) {
-        this.remainingMods = new LinkedList<ModModel>();
+        this.items = new HashMap<ModModel, Collection<ItemModel>>();
         for (ModModel mod : modPack.getAllMods()) {
+            
             if (!mod.isEnabled()) continue;
 
-            this.remainingMods.add(mod);
+            this.items.put(mod, mod.getAllItems());
         }
-        this.processNextMod(dumpAllItemsStep);
+        
+        this.screen.dumpItems(modPack, items, dumpAllItemsStep, false);
+        
     }
 
     // Private Class Properties ////////////////////////////////////////////////////////////////////////////////////////
 
     private static Logger LOGGER = LogManager.getLogger();
 
-    // Private Methods /////////////////////////////////////////////////////////////////////////////////////////////////
-
-    private void processNextMod(AsyncStep dumpAllItemsStep) {
-        if (this.remainingMods == null) return;
-
-        if (this.remainingMods.isEmpty()) {
-            this.remainingMods = null;
-            dumpAllItemsStep.done();
-            return;
-        }
-
-        ModModel mod = this.remainingMods.removeFirst();
-        this.screen.dumpItems(mod, mod.getAllItems(), ()-> {
-            this.processNextMod(dumpAllItemsStep);
-        });
-    }
-
     // Private Properties //////////////////////////////////////////////////////////////////////////////////////////////
 
-    private LinkedList<ModModel> remainingMods = null;
+    private Map<ModModel, Collection<ItemModel>> items = null;
 
     private ItemIconDumperScreen screen = null;
 }

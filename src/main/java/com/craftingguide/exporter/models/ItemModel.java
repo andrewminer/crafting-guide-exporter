@@ -34,7 +34,7 @@ public class ItemModel implements Comparable<ItemModel> {
 
         @Override
         public int compare(ItemModel a, ItemModel b) {
-            return a.displayName.compareTo(b.displayName);
+            return a.getDisplayName().compareTo(b.getDisplayName());
         }
     };
 
@@ -63,6 +63,15 @@ public class ItemModel implements Comparable<ItemModel> {
     public boolean isPotionIngredient() {
         if (this.rawItemStack == null) return false;
         return this.rawItemStack.getItem().isPotionIngredient(this.rawItemStack);
+    }
+    
+    public String getItemId() {
+        String[] idParts = this.id.split(":");
+        if (idParts.length > 2) {
+            return idParts[1] + ":" + idParts[2];
+        } else {
+            return idParts[1];
+        }
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -172,6 +181,18 @@ public class ItemModel implements Comparable<ItemModel> {
     private void setRawItemStack(ItemStack rawItemStack) {
         this.rawItemStack = rawItemStack;
     }
+    
+    public void setItemStackIcon(ItemStack itemStackIcon) {
+        this.itemStackIcon = itemStackIcon;
+    }
+    
+    public ItemStack getItemStackIcon() {
+        return itemStackIcon;
+    }
+    
+    public boolean hasItemStackIcon() {
+        return itemStackIcon != null;
+    }
 
     // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,4 +240,6 @@ public class ItemModel implements Comparable<ItemModel> {
     private FluidStack rawFluidStack = null;
 
     private ItemStack rawItemStack = null;
+    
+    private ItemStack itemStackIcon = null;
 }

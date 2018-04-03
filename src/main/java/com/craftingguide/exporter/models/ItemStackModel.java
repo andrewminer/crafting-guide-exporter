@@ -1,9 +1,11 @@
 package com.craftingguide.exporter.models;
 
 import java.util.Comparator;
+import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class ItemStackModel implements Comparable<ItemStackModel> {
@@ -21,7 +23,21 @@ public class ItemStackModel implements Comparable<ItemStackModel> {
 
     public static ItemStackModel convert(ItemStack itemStack, ModPackModel modPack) {
         ItemModel item = modPack.getItem(itemStack);
-        if (item == null) return null;
+        if (item == null) {
+            ModModel modItemIsFrom = null;
+            if (GameData.findModOwner(GameData.getItemRegistry().getNameForObject(itemStack.getItem())) == null) {
+                modItemIsFrom = modPack.getMod("Minecraft");
+            } else {
+                for (ModModel mod : modPack.getAllMods()) {
+                    if (GameData.findModOwner(GameData.getItemRegistry().getNameForObject(itemStack.getItem())).getModId() == mod.getId()) {
+                        modItemIsFrom = mod;
+                    }
+                }
+            }
+            item = new ItemModel(GameData.getItemRegistry().getNameForObject(itemStack.getItem()), itemStack);
+            modItemIsFrom.addItem(item);
+            modPack.addItem(item);
+        }
 
         return new ItemStackModel(item, itemStack.stackSize);
     }
@@ -41,7 +57,11 @@ public class ItemStackModel implements Comparable<ItemStackModel> {
             ItemStack rawStack = new ItemStack(fluidItem, fluidStack.amount, 0);
             result = ItemStackModel.convert(rawStack, context);
         } else {
-            ItemModel item = new ItemModel(fluidStack.getFluid().getName(), fluidStack);
+            ItemModel item = context.getItem(FluidRegistry.getDefaultFluidName(fluidStack.getFluid()));
+            if (item == null) {
+                item = new ItemModel(FluidRegistry.getDefaultFluidName(fluidStack.getFluid()), fluidStack);
+                context.addItem(item);
+            }
             result = new ItemStackModel(item, fluidStack.amount);
         }
 
