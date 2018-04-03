@@ -3,6 +3,7 @@ package com.craftingguide.exporter.extensions.craftingguide;
 import com.craftingguide.exporter.AsyncStep;
 import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ModModel;
+import com.craftingguide.exporter.models.ModPackModel;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
@@ -58,7 +59,7 @@ public class ItemIconDumperScreen extends GuiScreen {
 
     // Public Methods //////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public void dumpItems(Map<ModModel, Collection<ItemModel>> items, AsyncStep dumpItemsStep, boolean modIcons) {
+    public void dumpItems(ModPackModel modPack, Map<ModModel, Collection<ItemModel>> items, AsyncStep dumpItemsStep, boolean modIcons) {
         if (this.isExporting()) throw new IllegalStateException("already exporting!");
         this.setIsExporting(true);
 
@@ -70,6 +71,7 @@ public class ItemIconDumperScreen extends GuiScreen {
         this.setStep(dumpItemsStep);
         this.setImageConsumer(imageConsumer);
         this.setItemsMap(items);
+        this.setModPack(modPack);
 
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
@@ -141,6 +143,11 @@ public class ItemIconDumperScreen extends GuiScreen {
     private void setStep(AsyncStep step) {
         if (step == null) throw new IllegalArgumentException("step cannot be null");
         this.step = step;
+    }
+    
+    private void setModPack(ModPackModel modPack) {
+        if (modPack == null) throw new IllegalArgumentException("modPack cannot be null");
+        this.modPack = modPack;
     }
 
     // GuiScreen Overrides /////////////////////////////////////////////////////////////////////////////////////////////
@@ -284,11 +291,12 @@ public class ItemIconDumperScreen extends GuiScreen {
 
         for (int i = 0; drawIndex < this.items.size() && i < fit; drawIndex++, i++) {
             ItemModel item = this.items.get(drawIndex);
-            if (item.isMultiblock()) continue;
+            ItemModel icon = item.hasItemStackIcon() ? this.modPack.getItem(item.getItemStackIcon()) : item.isMultiblock() ? null : item;
+            if (icon == null) continue;
 
             int x = i % cols * 18;
             int y = i / cols * 18;
-            this.drawItem(item, x + 1, y + 1);
+            this.drawItem(icon, x + 1, y + 1);
         }
 
         GL11.glFlush();
@@ -449,4 +457,6 @@ public class ItemIconDumperScreen extends GuiScreen {
     private int[] pixelValues = null;
 
     private AsyncStep step = null;
+    
+    private ModPackModel modPack = null;
 }

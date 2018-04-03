@@ -181,6 +181,18 @@ public class ItemModel implements Comparable<ItemModel> {
     private void setRawItemStack(ItemStack rawItemStack) {
         this.rawItemStack = rawItemStack;
     }
+    
+    public void setItemStackIcon(ItemStack itemStackIcon) {
+        this.itemStackIcon = itemStackIcon;
+    }
+    
+    public ItemStack getItemStackIcon() {
+        return itemStackIcon;
+    }
+    
+    public boolean hasItemStackIcon() {
+        return itemStackIcon != null;
+    }
 
     // Comparable Overrides ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -228,4 +240,6 @@ public class ItemModel implements Comparable<ItemModel> {
     private FluidStack rawFluidStack = null;
 
     private ItemStack rawItemStack = null;
+    
+    private ItemStack itemStackIcon = null;
 }

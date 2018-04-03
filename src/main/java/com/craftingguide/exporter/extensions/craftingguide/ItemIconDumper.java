@@ -41,7 +41,7 @@ public class ItemIconDumper extends AbstractCraftingGuideDumper {
             this.items.put(mod, mod.getAllItems());
         }
         
-        this.screen.dumpItems(items, dumpAllItemsStep, false);
+        this.screen.dumpItems(modPack, items, dumpAllItemsStep, false);
         
     }
 

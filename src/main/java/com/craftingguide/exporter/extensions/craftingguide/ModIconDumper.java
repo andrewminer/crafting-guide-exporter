@@ -59,7 +59,7 @@ public class ModIconDumper extends AbstractCraftingGuideDumper {
             }
         }
 
-        this.screen.dumpItems(modsMap, dumpModIconsStep, true);
+        this.screen.dumpItems(modPack, modsMap, dumpModIconsStep, true);
     }
 
     // Property Methods ////////////////////////////////////////////////////////////////////////////////////////////////

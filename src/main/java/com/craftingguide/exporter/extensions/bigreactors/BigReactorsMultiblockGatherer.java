@@ -5,6 +5,8 @@ import com.craftingguide.exporter.models.ItemModel;
 import com.craftingguide.exporter.models.ItemStackModel;
 import com.craftingguide.exporter.models.ModPackModel;
 import com.craftingguide.exporter.models.MultiblockRecipe;
+import net.minecraft.item.ItemStack;
+import erogenousbeef.bigreactors.common.BigReactors;
 
 public class BigReactorsMultiblockGatherer extends Gatherer {
 
@@ -85,6 +87,7 @@ public class BigReactorsMultiblockGatherer extends Gatherer {
         ItemModel item = new ItemModel(id, "Medium Passive Reactor");
         item.setGroupName("Reactors");
         item.setMultiblock(recipe);
+        item.setItemStackIcon(new ItemStack(BigReactors.blockReactorPart, 1, 1));
         return item;
     }
 
@@ -116,6 +119,7 @@ public class BigReactorsMultiblockGatherer extends Gatherer {
         ItemModel item = new ItemModel(id, "Small Passive Reactor");
         item.setGroupName("Reactors");
         item.setMultiblock(recipe);
+        item.setItemStackIcon(new ItemStack(BigReactors.blockReactorPart, 1, 1));
         return item;
     }
 }
